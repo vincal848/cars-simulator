@@ -47,6 +47,7 @@ DIALOG_KEYS = {
     pygame.K_r: "replay",
     pygame.K_j: "reports",
     pygame.K_u: "roster",
+    pygame.K_d: "diplomacy",
     pygame.K_F10: "settings",
 }
 LAYER_UNIT_KIND = {"land": INFANTRY, "supply": INFANTRY, "naval": FLEET, "air": AIR}
@@ -576,7 +577,7 @@ class GameScreen:
         if destination != unit.location:
             return True
         return unit.kind == FLEET and any(
-            u.kind == FLEET and u.owner != unit.owner and u.location == destination
+            u.kind == FLEET and self.state.at_war(unit.owner, u.owner) and u.location == destination
             for u in self.state.units.values()
         )
 

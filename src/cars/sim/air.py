@@ -99,7 +99,7 @@ def _strike(state: "GameState", unit: "Unit", target: str) -> tuple[bool, str]:
         other
         for other in state.units.values()
         if other.kind == AIR
-        and other.owner != unit.owner
+        and state.at_war(unit.owner, other.owner)
         and other.remaining > 0
         and target in coverage(state, other)
     ]

@@ -6,6 +6,7 @@ import pygame
 
 from cars.ui.dialogs.base import CLOSE_BUTTON, FRAME, Dialog
 from cars.ui.dialogs.chronicle import ChronicleDialog
+from cars.ui.dialogs.diplomacy import DiplomacyDialog
 from cars.ui.dialogs.library import LoadDialog, SaveDialog
 from cars.ui.dialogs.pedia import PediaDialog
 from cars.ui.dialogs.replay_studio import ReplayStudioDialog
@@ -24,6 +25,7 @@ DIALOG_TYPES: dict[str, type[Dialog]] = {
     "settings": SettingsDialog,
     "reports": ChronicleDialog,
     "roster": RosterDialog,
+    "diplomacy": DiplomacyDialog,
     "timeline": TimelineDialog,
     "pedia": PediaDialog,
     "strategy": StrategyDialog,

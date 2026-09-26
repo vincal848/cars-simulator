@@ -72,7 +72,7 @@
   ],
   [
    "menu",
-   "5bfdb55fd1a534fe97674f05e403285221c646a3996a9e70b574084ed7337bde"
+   "9aecb64335d05e91c3af9dd369e331cc697cf7238717bd5c27626ba477518081"
   ],
   [
    "market",
@@ -80,7 +80,7 @@
   ],
   [
    "dialog pedia",
-   "a1b498e80e91b459a6db5927014bd10ba79e299ed72289a2560c6dc081556f02"
+   "42331f2d0a835812912b9427fc23b5884ccd5a847b2e409c42e4d1716c11b8ad"
   ],
   [
    "dialog strategy",
@@ -97,6 +97,10 @@
   [
    "dialog roster",
    "9d5f6d96248886bdd9c0323bf839cdd0357949172cbdba9c74cc4d20064b9c57"
+  ],
+  [
+   "dialog diplomacy",
+   "eba3c241621ce88117501e34bcabbd68ab8817ee07bc5ee0b7e50581d58c20f5"
   ],
   [
    "dialog settings",

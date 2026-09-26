@@ -58,5 +58,7 @@ def threatened_route(state: "GameState", owner: str, route: list[str]) -> set[st
 
     A warning sign only; it does not predict that supply will be lost.
     """
-    enemies = {u.location for u in state.units.values() if u.owner != owner and u.kind in LAND_KINDS}
+    enemies = {
+        u.location for u in state.units.values() if u.kind in LAND_KINDS and state.at_war(owner, u.owner)
+    }
     return {p for p in route if any(n in enemies for n, _ in state.land.neighbors(p))}

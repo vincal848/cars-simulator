@@ -16,6 +16,8 @@ on those graphs. The map you see is only a way to click on them.
   zones of control, supply cut-offs, fog of war and deterministic attrition combat.
 - **Four unit roles plus navy and air**: infantry, scouts, cavalry and field
   artillery; fleets that fight for sea zones; air groups that strike, support or rebase.
+- **Diplomacy**: make peace with rivals that are no stronger than you, and watch
+  for the ones that grow strong enough to break it.
 - **Economy**: regional wood, food and iron; farms, mills, mines, roads, shipyards
   and airfields; unit upkeep; a merchant exchange for gold.
 - **24 regional charters**: named local regiments with their own uniforms and a
@@ -75,7 +77,7 @@ do each thing. To win a campaign, hold three cities for five consecutive rounds.
 | `1` `2` `3` `4` | Land, naval, air and supply layers |
 | `Space` | End turn; the rivals then act one order at a time |
 | `N` / `F` / `Tab` | Next ready unit / centre selection / cycle a stack |
-| `M` / `U` / `J` / `T` | Market / military overview / chronicle / calendar |
+| `M` / `U` / `J` / `T` / `D` | Market / military overview / chronicle / calendar / diplomacy |
 | `F1` / `G` / `R` | CARSapedia / strategy graph / replay studio |
 | `F5` / `F9` | Save / load (three slots plus an end-of-turn autosave) |
 | `F10` / `F11` | Sound and music / fullscreen windowed |

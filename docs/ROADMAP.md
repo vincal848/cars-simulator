@@ -25,7 +25,7 @@
 - Supply capacity: roads, rails and depots, then max-flow allocation over the
   supply graph.
 - Stronger AI: supply awareness, coordinated artillery and invasions.
-- Diplomacy between the rival nations.
+- Diplomacy among the rival nations themselves, alliances and military access.
 
 ## Later
 

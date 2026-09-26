@@ -159,11 +159,23 @@ class UpgradeTests(SaveTestCase):
 
         library = SaveLibrary(self.path.parent)
         save_game(self.state, self.shapes, self.seas, "f0", library.path(0))
-        with patch.object(savegame, "SAVE_VERSION", 2), patch.dict(savegame.UPGRADES, {1: rename_player}):
+        next_version = savegame.SAVE_VERSION + 1
+        upgrades = {savegame.SAVE_VERSION: rename_player}
+        with patch.object(savegame, "SAVE_VERSION", next_version), patch.dict(savegame.UPGRADES, upgrades):
             state, *_ = load_game(library.path(0))
             self.assertIn("Upgraded Union", library.describe(0))
-        self.assertEqual(steps, [1, 1])  # Once for loading, once for the library listing.
+        self.assertEqual(steps, [next_version - 1] * 2)  # Once for loading, once for the library listing.
         self.assertEqual(state.factions["f0"].name, "Upgraded Union")
+
+    def test_version_one_saves_start_at_war_with_everyone(self):
+        def as_version_one(data):
+            data["version"] = 1
+            del data["relations"]
+
+        self.corrupt(as_version_one)
+        state, *_ = load_game(self.path)
+        self.assertEqual(state.relations, {})
+        self.assertTrue(state.at_war("f0", "f1"))
 
     def test_saves_from_a_newer_game_are_refused_clearly(self):
         self.corrupt(lambda data: data.update(version=savegame.SAVE_VERSION + 1))

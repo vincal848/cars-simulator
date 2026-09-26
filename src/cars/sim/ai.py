@@ -10,6 +10,7 @@ from cars.sim.air import STRIKE, STRIKE_TARGET_KINDS, coverage, mission
 from cars.sim.buildings import BUILDINGS, build, quote
 from cars.sim.combat import supply_factor
 from cars.sim.defines import DEFINES
+from cars.sim.diplomacy import declare_war, wants_war
 from cars.sim.entities import AIR, FLEET, LAND_KINDS
 from cars.sim.graph import step_cost
 from cars.sim.movement import reachable
@@ -43,6 +44,7 @@ class RivalCommander:
         self.owner = state.active
 
     def take_turn(self) -> Iterator[Action]:
+        yield from self._consider_war()
         yield from self._command_air_and_fleets()
         yield from self._command_armies()
         yield from self._develop()
@@ -53,6 +55,14 @@ class RivalCommander:
             unit = self.state.units.get(unit_id)
             if unit is not None and unit.owner == self.owner:
                 yield unit
+
+    def _consider_war(self) -> Iterator[Action]:
+        """Break at most one peace per turn, and only against a much weaker nation."""
+        for other in self.state.factions:
+            if other != self.owner and wants_war(self.state, self.owner, other):
+                _, message = declare_war(self.state, self.owner, other)
+                yield None, [], message
+                return
 
     # Air groups and fleets ------------------------------------------------------------
 
@@ -71,7 +81,7 @@ class RivalCommander:
             {
                 other.location
                 for other in self.state.units.values()
-                if other.owner != self.owner
+                if self.state.at_war(self.owner, other.owner)
                 and other.kind in STRIKE_TARGET_KINDS
                 and other.location in in_range
             }
@@ -87,7 +97,9 @@ class RivalCommander:
             route, message = issue_move(state, unit.id, unit.location)
             yield unit.id, route, message
             return
-        hostile = {u.location for u in state.units.values() if u.kind == FLEET and u.owner != self.owner}
+        hostile = {
+            u.location for u in state.units.values() if u.kind == FLEET and state.at_war(self.owner, u.owner)
+        }
         distances = state.naval.shortest_paths(unit.location, step_cost)
         targets = [sea for sea in hostile if sea in distances.costs]
         if not targets:
@@ -108,7 +120,7 @@ class RivalCommander:
     def _front_distance(self) -> dict[str, int]:
         """Land hops from each province to the nearest one this faction does not control."""
         state = self.state
-        distance = {p.id: 0 for p in state.provinces.values() if p.controller != self.owner}
+        distance = {p.id: 0 for p in state.provinces.values() if state.at_war(self.owner, p.controller)}
         queue = deque(distance)
         while queue:
             node = queue.popleft()
@@ -132,7 +144,7 @@ class RivalCommander:
 
     def _score_destination(self, unit: "Unit", paths: "Paths", front: dict[str, int], province: str) -> float:
         """Prefer hostile provinces near the front; refuse attacks the unit cannot win."""
-        hostile = self.state.provinces[province].controller != self.owner
+        hostile = self.state.at_war(self.owner, self.state.provinces[province].controller)
         defenders = self.state.enemy_units_at(province, self.owner, LAND_KINDS)
         resistance = sum(defender.defense_power() for defender in defenders)
         strength = unit.attack_power() * supply_factor(unit)

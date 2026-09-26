@@ -18,6 +18,12 @@
     "body": "You see your own provinces and their neighbours, the ground around each of your units and the sea zones beside your ports and fleets. Enemy forces elsewhere are hidden and shaded provinces mark what you cannot see; the map itself is always known. Order forecasts only cover targets you can see. Scouts are the cheapest way to watch a frontier."
   },
   {
+    "id": "diplomacy",
+    "title": "Diplomacy",
+    "category": "Basics",
+    "body": "Every nation starts at war with every other. Press D to offer peace: a rival accepts only if it is no stronger than you. At peace, neither side may enter the other's provinces, strike its forces or fight its fleets. A truce lasts six rounds; after that either side may declare war, and a rival much stronger than you will. Rivals stay at war with one another."
+  },
+  {
     "id": "movement",
     "title": "Movement and roads",
     "category": "Land",

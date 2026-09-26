@@ -454,7 +454,7 @@ class MapView:
         targets = {
             other.location
             for other in self.state.units.values()
-            if other.owner != unit.owner
+            if self.state.at_war(unit.owner, other.owner)
             and other.kind in STRIKE_TARGET_KINDS
             and other.location in in_range
             and scene.shows(other)

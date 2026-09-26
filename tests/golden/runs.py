@@ -298,6 +298,7 @@ def _screens(screen: pygame.Surface) -> Iterator[tuple[str, pygame.Surface]]:
         "replay",
         "reports",
         "roster",
+        "diplomacy",
         "settings",
         "music",
         "timeline",

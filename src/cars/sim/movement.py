@@ -24,7 +24,7 @@ def hostile_zoc(state: "GameState", owner: str) -> set[str]:
     return {
         neighbor
         for unit in state.units.values()
-        if unit.owner != owner and unit.is_land
+        if unit.is_land and state.at_war(owner, unit.owner)
         for neighbor, _ in state.land.neighbors(unit.location)
     }
 
@@ -40,6 +40,8 @@ def movement_cost(
     if edge.border_type == "closed":
         return inf
     province = state.provinces[destination]
+    if province.controller != unit.owner and not state.at_war(unit.owner, province.controller):
+        return inf  # No military access through a nation at peace.
     terrain = province.terrain
     factor = RULES.terrain_cost[terrain]
     charter = CHARTERS.get(unit.regional)

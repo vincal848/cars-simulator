@@ -20,13 +20,21 @@ from cars.sim.market import RULES as MARKET_RULES
 from cars.sim.objectives import ACTIVE, DEFEAT, VICTORY, begin
 from cars.sim.regional import CHARTERS
 from cars.sim.scenario import LAYERS
-from cars.sim.state import FACTION_COUNT, GameState
+from cars.sim.state import FACTION_COUNT, PEACE, GameState, relation_key
 from cars.sim.supply import refresh_supply
 
-SAVE_VERSION = 1
+SAVE_VERSION = 2
+
+
+def _add_relations(data: dict) -> dict:
+    """Version 2 added diplomacy; every earlier campaign was a war of all against all."""
+    data["relations"] = {}
+    return data
+
+
 # UPGRADES[n] converts a version-n save into version n + 1. When the format changes,
 # bump SAVE_VERSION and register a step here instead of breaking players' saves.
-UPGRADES: dict[int, Callable[[dict], dict]] = {}
+UPGRADES: dict[int, Callable[[dict], dict]] = {1: _add_relations}
 ENTITY_TYPES = {
     "provinces": Province,
     "regions": Region,
@@ -92,6 +100,7 @@ def encode_game(state: GameState, shapes: dict, seas: list, player: str) -> dict
         market=state.market,
         reports=state.reports,
         air_support=state.air_support,
+        relations=state.relations,
         clock=state.clock,
         tutorial=state.tutorial,
     )
@@ -159,6 +168,8 @@ def _decode(data: dict) -> Loaded:
     state.reports = data["reports"]
     _check_journal(state)
     state.reports = state.reports[-DEFINES.journal.entry_limit :]
+    state.relations = data["relations"]
+    _check_relations(state)
     state.air_support = data["air_support"]
     _check_air_support(state)
     state.recruited = data["recruited"]
@@ -285,6 +296,23 @@ def _check_journal(state: GameState) -> None:
 
     if not isinstance(state.reports, list) or not all(valid(entry) for entry in state.reports):
         raise ValueError("Invalid campaign journal.")
+
+
+def _check_relations(state: GameState) -> None:
+    def valid(key: object, relation: object) -> bool:
+        if not isinstance(key, str) or not isinstance(relation, dict):
+            return False
+        parties = key.split("|")
+        return (
+            len(parties) == 2
+            and all(party in state.factions for party in parties)
+            and relation_key(*parties) == key
+            and relation.get("status") == PEACE
+            and type(relation.get("since")) is int
+        )
+
+    if not isinstance(state.relations, dict) or not all(valid(k, v) for k, v in state.relations.items()):
+        raise ValueError("Invalid diplomatic relations.")
 
 
 def _check_air_support(state: GameState) -> None:

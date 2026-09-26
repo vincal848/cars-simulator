@@ -166,3 +166,17 @@ class StudyDialogTests(ScreenTestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class DiplomacyDialogTests(ScreenTestCase):
+    def test_offer_peace_and_see_the_truce(self):
+        self.key(pygame.K_d)
+        self.assertEqual(self.game.dialogs.mode, "diplomacy")
+        dialog = self.game.dialogs.active
+        self.assertNotIn("f0", dialog.buttons)
+        self.click(dialog.buttons["f1"].center)
+        self.assertFalse(self.state.at_war("f0", "f1"))
+        self.assertIn("Peace signed", dialog.notice)
+        self.draw()
+        self.click(dialog.buttons["f1"].center)  # Declaring war during the truce is refused.
+        self.assertFalse(self.state.at_war("f0", "f1"))

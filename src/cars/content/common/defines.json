@@ -59,6 +59,11 @@
     },
     "shortfall_attrition": 1.0
   },
+  "diplomacy": {
+    "peace_strength_ratio": 1.0,
+    "truce_rounds": 6,
+    "war_strength_ratio": 1.5
+  },
   "journal": {
     "entry_limit": 160
   },

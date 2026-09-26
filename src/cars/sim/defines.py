@@ -75,6 +75,13 @@ class UpkeepDefines:
 
 
 @dataclass(frozen=True)
+class DiplomacyDefines:
+    peace_strength_ratio: float
+    truce_rounds: int
+    war_strength_ratio: float
+
+
+@dataclass(frozen=True)
 class JournalDefines:
     entry_limit: int
 
@@ -99,6 +106,7 @@ class Defines:
     recruitment: RecruitmentDefines
     recovery: RecoveryDefines
     upkeep: UpkeepDefines
+    diplomacy: DiplomacyDefines
     journal: JournalDefines
     ai: AIDefines
 
@@ -114,6 +122,7 @@ class Defines:
             recruitment=RecruitmentDefines(**raw["recruitment"]),
             recovery=RecoveryDefines(**raw["recovery"]),
             upkeep=UpkeepDefines(**raw["upkeep"]),
+            diplomacy=DiplomacyDefines(**raw["diplomacy"]),
             journal=JournalDefines(**raw["journal"]),
             ai=AIDefines(**ai),
         )

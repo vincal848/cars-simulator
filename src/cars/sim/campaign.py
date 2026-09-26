@@ -5,7 +5,7 @@ Successful commands are forwarded to a replay recorder when one is attached.
 
 from typing import TYPE_CHECKING, Protocol
 
-from cars.sim import air, buildings, market, recruitment
+from cars.sim import air, buildings, diplomacy, market, recruitment
 from cars.sim.objectives import announce_stage, begin
 from cars.sim.orders import issue_move
 
@@ -66,6 +66,18 @@ class Campaign:
             return False, "Trade on your own turn."
         result = market.trade(self.state, self.player, resource, side)
         return self._recorded("trade", (resource, side), result)
+
+    def propose_peace(self, faction: str) -> tuple[bool, str]:
+        if not self.human_turn:
+            return False, "Wait for your faction turn."
+        result = diplomacy.propose_peace(self.state, self.player, faction)
+        return self._recorded("peace", (faction,), result)
+
+    def declare_war(self, faction: str) -> tuple[bool, str]:
+        if not self.human_turn:
+            return False, "Wait for your faction turn."
+        result = diplomacy.declare_war(self.state, self.player, faction)
+        return self._recorded("war", (faction,), result)
 
     def air_mission(self, unit_id: str, target: str, kind: str) -> tuple[bool, str]:
         if not self.human_turn:

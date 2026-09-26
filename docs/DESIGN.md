@@ -51,6 +51,11 @@ commands, so it cannot make an illegal move.
 | Naval | sea zones | Fleet movement; a sea zone holding an enemy fleet ends the route and starts a battle. |
 | Air | provinces and sea zones | Operational range from a controlled airbase. |
 
+Every pair of factions is at war unless `state.relations` records a peace treaty.
+All hostility checks go through `GameState.at_war`: peace makes the partner's
+provinces impassable and removes its units from combat, zones of control, air
+strikes and interception.
+
 Ownership and control are separate: capturing a province changes its controller,
 never its rightful owner, and buildings stay with the province.
 Damage is not permanent: when a faction's turn begins its units recover strength

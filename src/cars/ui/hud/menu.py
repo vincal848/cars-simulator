@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 class GameMenu:
     button = pygame.Rect(704, 16, 128, 32)
     pedia_button = pygame.Rect(334, 16, 140, 32)
-    panel = pygame.Rect(582, 56, 250, 444)
+    panel = pygame.Rect(582, 56, 250, 484)
 
     def __init__(self, context: "UiContext") -> None:
         self.context = context
@@ -30,9 +30,10 @@ class GameMenu:
             "reports": (pygame.Rect(590, 260, 236, 32), lambda: "Campaign chronicle / J"),
             "settings": (pygame.Rect(590, 300, 236, 32), lambda: "Sound & preferences / F10"),
             "roster": (pygame.Rect(590, 340, 236, 32), lambda: "Military overview / U"),
-            "pedia": (pygame.Rect(590, 380, 236, 32), lambda: "CARSapedia / F1"),
-            "strategy": (pygame.Rect(590, 420, 236, 32), lambda: "Strategy graph / G"),
-            "replay": (pygame.Rect(590, 460, 236, 32), lambda: "Replay studio / R"),
+            "diplomacy": (pygame.Rect(590, 380, 236, 32), lambda: "Diplomacy / D"),
+            "pedia": (pygame.Rect(590, 420, 236, 32), lambda: "CARSapedia / F1"),
+            "strategy": (pygame.Rect(590, 460, 236, 32), lambda: "Strategy graph / G"),
+            "replay": (pygame.Rect(590, 500, 236, 32), lambda: "Replay studio / R"),
         }
 
     def _font_label(self) -> str:

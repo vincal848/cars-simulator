@@ -50,10 +50,11 @@ class ForecastCard:
     def _is_attack(state: "GameState", unit: "Unit", target: str, paths: "Paths | None") -> bool:
         if not paths or target not in paths.costs:
             return False
-        if target in state.provinces and state.provinces[target].controller != unit.owner:
+        if target in state.provinces and state.at_war(unit.owner, state.provinces[target].controller):
             return True
         return any(
-            u.location == target and u.owner != unit.owner and u.kind == FLEET for u in state.units.values()
+            u.location == target and u.kind == FLEET and state.at_war(unit.owner, u.owner)
+            for u in state.units.values()
         )
 
     def _draw_card(self, state: "GameState", unit: "Unit", target: str, result: dict) -> None:

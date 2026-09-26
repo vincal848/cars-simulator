@@ -10,6 +10,10 @@
   and rival AIs only recruit what they can feed.
 - **Fog of war:** enemy forces are only shown near your territory, units, ports
   and fleets; unseen provinces are shaded. Replays and the F3 view show everything.
+- **Diplomacy (D):** offer peace to any rival that is no stronger than you. Peace
+  closes both borders and ends attacks for a six-round truce, after which a much
+  stronger rival may declare war again. Saves move to format version 2; older
+  saves upgrade automatically with every nation at war.
 - Golden-master tests, a crash log for the Windows build, and step-by-step
   upgrades for older save formats.
 - Restructured the code base: `src/` layout; separate `sim`, `persist` and `ui`
