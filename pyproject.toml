@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cars-simulator"
+dynamic = ["version"]
+description = "Combat Arms Region Simulator: the player plays on a map, the simulation plays on graphs."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE", "MUSIC_CREDITS.md"]
+requires-python = ">=3.10"
+dependencies = ["pygame-ce>=2.5.8,<3"]
+
+[project.optional-dependencies]
+dev = ["ruff>=0.6"]
+
+[project.scripts]
+cars = "cars.app:main"
+
+[tool.setuptools.dynamic]
+version = { attr = "cars.__version__" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+cars = ["content/**/*.json", "content/**/*.geojson", "content/**/*.jpg", "content/**/*.ogg"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py310"
+src = ["src", "tests", "tools"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF"]
+ignore = [
+    "RUF001",  # "×" in modifier labels is intentional
+    "SIM108",  # an if/else block often reads better than a chained ternary
+    "UP037",   # quoted annotations keep TYPE_CHECKING imports lazy
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["cars"]

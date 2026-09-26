@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.pytest_cache/
+.ruff_cache/
+
+# Build output
+build/
+dist/
+
+# Local game data (the game writes these to the user profile, but CARS_SAVE_DIR can point here)
+saves/
+replays/
+settings.json
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,11 @@
+# Normalise text to LF in the repository.
+* text=auto eol=lf
+
+# Windows batch files need CRLF: cmd.exe mis-parses labels in LF-only files.
+*.bat text eol=crlf
+
+*.png binary
+*.gif binary
+*.jpg binary
+*.ogg binary
+*.ico binary
