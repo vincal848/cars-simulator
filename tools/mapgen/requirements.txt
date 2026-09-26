@@ -1,0 +1,4 @@
+# Offline map authoring only; the game needs none of these.
+shapely>=2.1,<3
+numpy>=1.26
+pygame-ce>=2.5.8,<3
