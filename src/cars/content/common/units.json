@@ -1,0 +1,38 @@
+{
+  "infantry": {
+    "allowance": 6,
+    "remaining": 6,
+    "attack": 6,
+    "defense": 4
+  },
+  "fleet": {
+    "allowance": 3,
+    "remaining": 3,
+    "attack": 3,
+    "defense": 3
+  },
+  "air": {
+    "allowance": 3,
+    "remaining": 3,
+    "attack": 2,
+    "defense": 1
+  },
+  "scout": {
+    "allowance": 9,
+    "remaining": 9,
+    "attack": 3,
+    "defense": 2
+  },
+  "cavalry": {
+    "allowance": 8,
+    "remaining": 8,
+    "attack": 8,
+    "defense": 3
+  },
+  "artillery": {
+    "allowance": 3,
+    "remaining": 3,
+    "attack": 5,
+    "defense": 2
+  }
+}

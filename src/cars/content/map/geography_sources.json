@@ -1,0 +1,9 @@
+{
+  "downloaded": "2026-09-18",
+  "sha256": {
+    "admin1.geojson": "22d0e3ad85eb3e27f17cabf8ba2d50e554fbc27a87796ff891d958185da62fb5",
+    "landforms.geojson": "b7b26e50ea917d3696aec87f932def2bf5f890f5770e441d59c162c6f4c92a77",
+    "places.geojson": "9b8e3de09048ef00dfc70357dbb9fa324493f214b5e0ae4daf1aa79a8d10116b",
+    "relief.zip": "9e85417223414bbed425aea5dca0f0b4c5661fc94d4f14494140a21a08dfa450"
+  }
+}

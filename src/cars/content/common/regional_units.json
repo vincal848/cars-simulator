@@ -1,0 +1,218 @@
+{
+  "r0": {
+    "name": "Yukon Trail Wardens",
+    "region": "Yukon Region",
+    "kind": "scout",
+    "terrain": "mountains",
+    "discount": 0.2,
+    "history": "Scenario history (fictional): the Yukon Trail Wardens were chartered to patrol the Yukon approaches. Their training favors mountains and local supply routes. These are original game formations, not claims about a historical people or army.",
+    "style": "northern"
+  },
+  "r1": {
+    "name": "Shield Rangers",
+    "region": "Canadian Shield Region",
+    "kind": "scout",
+    "terrain": "forest",
+    "discount": 0.2,
+    "history": "Scenario history (fictional): the Shield Rangers were chartered to patrol the Canadian Shield approaches. Their training favors forest and local supply routes. These are original game formations, not claims about a historical people or army.",
+    "style": "northern"
+  },
+  "r2": {
+    "name": "Cascadian Foresters",
+    "region": "Cascadia Region",
+    "kind": "scout",
+    "terrain": "forest",
+    "discount": 0.2,
+    "history": "Scenario history (fictional): the Cascadian Foresters were chartered to patrol the Cascadia approaches. Their training favors forest and local supply routes. These are original game formations, not claims about a historical people or army.",
+    "style": "northern"
+  },
+  "r3": {
+    "name": "Lakes Fusiliers",
+    "region": "Great Lakes Region",
+    "kind": "infantry",
+    "terrain": "plains",
+    "discount": 0.2,
+    "history": "Scenario history (fictional): the Lakes Fusiliers were chartered to patrol the Great Lakes approaches. Their training favors plains and local supply routes. These are original game formations, not claims about a historical people or army.",
+    "style": "atlantic"
+  },
+  "r4": {
+    "name": "Basin Outriders",
+    "region": "Great Basin Region",
+    "kind": "cavalry",
+    "terrain": "plains",
+    "discount": 0.2,
+    "history": "Scenario history (fictional): the Basin Outriders were chartered to patrol the Great Basin approaches. Their training favors plains and local supply routes. These are original game formations, not claims about a historical people or army.",
+    "style": "atlantic"
+  },
+  "r5": {
+    "name": "Appalachian Riflemen",
+    "region": "Appalachia Region",
+    "kind": "infantry",
+    "terrain": "mountains",
+    "discount": 0.2,
+    "history": "Scenario history (fictional): the Appalachian Riflemen were chartered to patrol the Appalachia approaches. Their training favors mountains and local supply routes. These are original game formations, not claims about a historical people or army.",
+    "style": "atlantic"
+  },
+  "r6": {
+    "name": "Sonoran Lancers",
+    "region": "Sonora Region",
+    "kind": "cavalry",
+    "terrain": "plains",
+    "discount": 0.2,
+    "history": "Scenario history (fictional): the Sonoran Lancers were chartered to patrol the Sonora approaches. Their training favors plains and local supply routes. These are original game formations, not claims about a historical people or army.",
+    "style": "sierra"
+  },
+  "r7": {
+    "name": "Gulf Coast Guard",
+    "region": "Gulf Coast Region",
+    "kind": "infantry",
+    "terrain": "plains",
+    "discount": 0.2,
+    "history": "Scenario history (fictional): the Gulf Coast Guard were chartered to patrol the Gulf Coast approaches. Their training favors plains and local supply routes. These are original game formations, not claims about a historical people or army.",
+    "style": "sierra"
+  },
+  "r8": {
+    "name": "Plateau Grenadiers",
+    "region": "Mexican Plateau Region",
+    "kind": "infantry",
+    "terrain": "mountains",
+    "discount": 0.2,
+    "history": "Scenario history (fictional): the Plateau Grenadiers were chartered to patrol the Mexican Plateau approaches. Their training favors mountains and local supply routes. These are original game formations, not claims about a historical people or army.",
+    "style": "sierra"
+  },
+  "r9": {
+    "name": "Yucatan Pathfinders",
+    "region": "Yucatan Region",
+    "kind": "scout",
+    "terrain": "forest",
+    "discount": 0.2,
+    "history": "Scenario history (fictional): the Yucatan Pathfinders were chartered to patrol the Yucatan approaches. Their training favors forest and local supply routes. These are original game formations, not claims about a historical people or army.",
+    "style": "caribbean"
+  },
+  "r10": {
+    "name": "Highland Scouts",
+    "region": "Guatemala Region",
+    "kind": "scout",
+    "terrain": "mountains",
+    "discount": 0.2,
+    "history": "Scenario history (fictional): the Highland Scouts were chartered to patrol the Guatemala approaches. Their training favors mountains and local supply routes. These are original game formations, not claims about a historical people or army.",
+    "style": "caribbean"
+  },
+  "r11": {
+    "name": "Isthmus Watch",
+    "region": "Panama Region",
+    "kind": "infantry",
+    "terrain": "forest",
+    "discount": 0.2,
+    "history": "Scenario history (fictional): the Isthmus Watch were chartered to patrol the Panama approaches. Their training favors forest and local supply routes. These are original game formations, not claims about a historical people or army.",
+    "style": "caribbean"
+  },
+  "r12": {
+    "name": "Magdalena Rifles",
+    "region": "Colombia Region",
+    "kind": "infantry",
+    "terrain": "forest",
+    "discount": 0.2,
+    "history": "Scenario history (fictional): the Magdalena Rifles were chartered to patrol the Colombia approaches. Their training favors forest and local supply routes. These are original game formations, not claims about a historical people or army.",
+    "style": "andean"
+  },
+  "r13": {
+    "name": "Guiana Rangers",
+    "region": "Guiana Region",
+    "kind": "scout",
+    "terrain": "forest",
+    "discount": 0.2,
+    "history": "Scenario history (fictional): the Guiana Rangers were chartered to patrol the Guiana approaches. Their training favors forest and local supply routes. These are original game formations, not claims about a historical people or army.",
+    "style": "andean"
+  },
+  "r14": {
+    "name": "Sierra Mountaineers",
+    "region": "Peru Region",
+    "kind": "infantry",
+    "terrain": "mountains",
+    "discount": 0.2,
+    "history": "Scenario history (fictional): the Sierra Mountaineers were chartered to patrol the Peru approaches. Their training favors mountains and local supply routes. These are original game formations, not claims about a historical people or army.",
+    "style": "andean"
+  },
+  "r15": {
+    "name": "Amazon River Guard",
+    "region": "Amazonas Region",
+    "kind": "infantry",
+    "terrain": "forest",
+    "discount": 0.2,
+    "history": "Scenario history (fictional): the Amazon River Guard were chartered to patrol the Amazonas approaches. Their training favors forest and local supply routes. These are original game formations, not claims about a historical people or army.",
+    "style": "amazon"
+  },
+  "r16": {
+    "name": "Andean Sentinels",
+    "region": "Andes Region",
+    "kind": "infantry",
+    "terrain": "mountains",
+    "discount": 0.2,
+    "history": "Scenario history (fictional): the Andean Sentinels were chartered to patrol the Andes approaches. Their training favors mountains and local supply routes. These are original game formations, not claims about a historical people or army.",
+    "style": "amazon"
+  },
+  "r17": {
+    "name": "Plateau Horse",
+    "region": "Brazilian Plateau Region",
+    "kind": "cavalry",
+    "terrain": "plains",
+    "discount": 0.2,
+    "history": "Scenario history (fictional): the Plateau Horse were chartered to patrol the Brazilian Plateau approaches. Their training favors plains and local supply routes. These are original game formations, not claims about a historical people or army.",
+    "style": "amazon"
+  },
+  "r18": {
+    "name": "Atacama Scouts",
+    "region": "Atacama Region",
+    "kind": "scout",
+    "terrain": "mountains",
+    "discount": 0.2,
+    "history": "Scenario history (fictional): the Atacama Scouts were chartered to patrol the Atacama approaches. Their training favors mountains and local supply routes. These are original game formations, not claims about a historical people or army.",
+    "style": "southern"
+  },
+  "r19": {
+    "name": "La Plata Dragoons",
+    "region": "La Plata Region",
+    "kind": "cavalry",
+    "terrain": "plains",
+    "discount": 0.2,
+    "history": "Scenario history (fictional): the La Plata Dragoons were chartered to patrol the La Plata approaches. Their training favors plains and local supply routes. These are original game formations, not claims about a historical people or army.",
+    "style": "southern"
+  },
+  "r20": {
+    "name": "Patagonian Riders",
+    "region": "Patagonia Region",
+    "kind": "cavalry",
+    "terrain": "plains",
+    "discount": 0.2,
+    "history": "Scenario history (fictional): the Patagonian Riders were chartered to patrol the Patagonia approaches. Their training favors plains and local supply routes. These are original game formations, not claims about a historical people or army.",
+    "style": "southern"
+  },
+  "r21": {
+    "name": "Pampas Lancers",
+    "region": "Pampas Region",
+    "kind": "cavalry",
+    "terrain": "plains",
+    "discount": 0.2,
+    "history": "Scenario history (fictional): the Pampas Lancers were chartered to patrol the Pampas approaches. Their training favors plains and local supply routes. These are original game formations, not claims about a historical people or army.",
+    "style": "austral"
+  },
+  "r22": {
+    "name": "Austral Mountain Guard",
+    "region": "Austral Andes Region",
+    "kind": "infantry",
+    "terrain": "mountains",
+    "discount": 0.2,
+    "history": "Scenario history (fictional): the Austral Mountain Guard were chartered to patrol the Austral Andes approaches. Their training favors mountains and local supply routes. These are original game formations, not claims about a historical people or army.",
+    "style": "austral"
+  },
+  "r23": {
+    "name": "Fuegian Coast Watch",
+    "region": "Tierra del Fuego Region",
+    "kind": "infantry",
+    "terrain": "forest",
+    "discount": 0.2,
+    "history": "Scenario history (fictional): the Fuegian Coast Watch were chartered to patrol the Tierra del Fuego approaches. Their training favors forest and local supply routes. These are original game formations, not claims about a historical people or army.",
+    "style": "austral"
+  }
+}

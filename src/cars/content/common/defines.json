@@ -1,0 +1,59 @@
+{
+  "movement": {
+    "terrain_cost": {"plains": 1, "forest": 1.4, "mountains": 2.6},
+    "role_terrain_factor": {
+      "scout": {"plains": 0.9, "forest": 0.7, "mountains": 0.7},
+      "cavalry": {"plains": 0.75, "forest": 1.4, "mountains": 1.7},
+      "artillery": {"plains": 1.2, "forest": 1.6, "mountains": 2}
+    },
+    "mountain_pass_factor": 0.7,
+    "road_discount_per_level": 0.05,
+    "max_road_levels": 3,
+    "edge_infrastructure_speedup": 0.2,
+    "river_crossing_cost": 1.0,
+    "zone_of_control_cost": 1,
+    "minimum_step_cost": 0.1,
+    "unsupplied_cost_factor": 1.5
+  },
+  "combat": {
+    "terrain_defense": {"plains": 1, "forest": 1.2, "mountains": 1.5},
+    "river_attack_factor": 0.75,
+    "mountain_origin_bonus": 1.1,
+    "unsupplied_factor": 0.65,
+    "artillery_bonus_per_gun": 0.25,
+    "artillery_bonus_cap": 0.5,
+    "artillery_guns_committed": 2,
+    "minimum_defense": 1,
+    "attacker_loss_ratio": 0.45,
+    "attacker_minimum_loss": 0.5,
+    "defender_loss_ratio": 0.8,
+    "defender_minimum_loss": 1
+  },
+  "naval": {
+    "attacker_loss_ratio": 0.8,
+    "defender_loss_ratio": 1.2,
+    "minimum_loss": 1
+  },
+  "air": {
+    "strike_factor": 1.5,
+    "minimum_strike": 1,
+    "return_fire_ratio": 0.15,
+    "interceptor_factor": 0.5,
+    "support_bonus": 0.25
+  },
+  "recruitment": {
+    "regional_surcharge": 2
+  },
+  "journal": {
+    "entry_limit": 160
+  },
+  "ai": {
+    "attack_margin": 1.1,
+    "hostile_province_score": 12,
+    "front_distance_weight": 2,
+    "unknown_front_distance": 100,
+    "route_cost_weight": 0.15,
+    "rejected_score": -1000,
+    "recruitment_rotation": ["infantry", "scout", "fleet", "cavalry", "air", "artillery"]
+  }
+}

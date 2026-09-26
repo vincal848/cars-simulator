@@ -1,0 +1,82 @@
+[
+  {
+    "id": "f0",
+    "name": "Northern Union",
+    "color": [
+      78,
+      151,
+      191
+    ],
+    "style": "northern"
+  },
+  {
+    "id": "f1",
+    "name": "Atlantic League",
+    "color": [
+      199,
+      111,
+      88
+    ],
+    "style": "atlantic"
+  },
+  {
+    "id": "f2",
+    "name": "Sierra Compact",
+    "color": [
+      197,
+      167,
+      83
+    ],
+    "style": "sierra"
+  },
+  {
+    "id": "f3",
+    "name": "Caribbean Accord",
+    "color": [
+      105,
+      168,
+      118
+    ],
+    "style": "caribbean"
+  },
+  {
+    "id": "f4",
+    "name": "Andean Pact",
+    "color": [
+      153,
+      121,
+      189
+    ],
+    "style": "andean"
+  },
+  {
+    "id": "f5",
+    "name": "Amazon Federation",
+    "color": [
+      69,
+      173,
+      166
+    ],
+    "style": "amazon"
+  },
+  {
+    "id": "f6",
+    "name": "Southern Coalition",
+    "color": [
+      198,
+      137,
+      175
+    ],
+    "style": "southern"
+  },
+  {
+    "id": "f7",
+    "name": "Austral Republic",
+    "color": [
+      148,
+      159,
+      99
+    ],
+    "style": "austral"
+  }
+]

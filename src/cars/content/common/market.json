@@ -1,0 +1,17 @@
+{
+  "lot_size": 10,
+  "starting_gold": 100,
+  "gold_per_city": 2,
+  "starting_stock": 60,
+  "capacity": 100,
+  "replenishment": 20,
+  "base_prices": {
+    "wood": 20,
+    "food": 16,
+    "iron": 30
+  },
+  "minimum_price": 4,
+  "price_step": 2,
+  "stock_step": 10,
+  "sell_ratio": 0.7
+}

@@ -1,0 +1,56 @@
+{
+  "infantry": {
+    "name": "Line infantry",
+    "cost": {
+      "wood": 3,
+      "food": 6,
+      "iron": 4
+    },
+    "role": "Balanced musket regiment"
+  },
+  "scout": {
+    "name": "Scouts",
+    "cost": {
+      "wood": 4,
+      "food": 5,
+      "iron": 2
+    },
+    "role": "Fast movement through rough ground"
+  },
+  "cavalry": {
+    "name": "Cavalry",
+    "cost": {
+      "wood": 6,
+      "food": 8,
+      "iron": 5
+    },
+    "role": "Strong attack; best on open plains"
+  },
+  "artillery": {
+    "name": "Field artillery",
+    "cost": {
+      "wood": 8,
+      "food": 5,
+      "iron": 10
+    },
+    "role": "Support an attack from the same province"
+  },
+  "fleet": {
+    "name": "Fleet",
+    "cost": {
+      "wood": 15,
+      "food": 8,
+      "iron": 12
+    },
+    "role": "Shipyard required; deploys to its connected sea"
+  },
+  "air": {
+    "name": "Air group",
+    "cost": {
+      "wood": 8,
+      "food": 6,
+      "iron": 15
+    },
+    "role": "Airfield required; provides operational coverage"
+  }
+}

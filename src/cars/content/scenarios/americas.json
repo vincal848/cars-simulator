@@ -1,0 +1,1549 @@
+{
+  "geometry": "americas.geojson",
+  "provinces": [
+    {
+      "id": "yukon",
+      "name": "Alberta",
+      "region_id": "r0",
+      "terrain": "forest",
+      "owner": "f0",
+      "controller": "f0",
+      "shape_id": "yukon",
+      "resource_sites": {},
+      "geography": {
+        "admin": "Alberta",
+        "country": "Canada",
+        "anchor": [
+          -118.1012044534413,
+          55.4
+        ],
+        "name_source": "administrative area",
+        "source": "Natural Earth 1:10m"
+      }
+    },
+    {
+      "id": "canadian_shield",
+      "name": "Quebec",
+      "region_id": "r0",
+      "terrain": "forest",
+      "owner": "f0",
+      "controller": "f0",
+      "shape_id": "canadian_shield",
+      "resource_sites": {},
+      "geography": {
+        "admin": "Quebec",
+        "country": "Canada",
+        "anchor": [
+          -83.33305118110236,
+          55.4
+        ],
+        "name_source": "administrative area",
+        "source": "Natural Earth 1:10m"
+      }
+    },
+    {
+      "id": "cascadia",
+      "name": "Montana",
+      "region_id": "r0",
+      "terrain": "mountains",
+      "owner": "f0",
+      "controller": "f0",
+      "shape_id": "cascadia",
+      "resource_sites": {
+        "iron": 2
+      },
+      "geography": {
+        "admin": "Montana",
+        "country": "United States of America",
+        "anchor": [
+          -112.85,
+          45.36
+        ],
+        "name_source": "administrative area",
+        "source": "Natural Earth 1:10m"
+      }
+    },
+    {
+      "id": "great_lakes",
+      "name": "Michigan",
+      "region_id": "r1",
+      "terrain": "plains",
+      "owner": "f1",
+      "controller": "f1",
+      "shape_id": "great_lakes",
+      "resource_sites": {},
+      "geography": {
+        "admin": "Michigan",
+        "country": "United States of America",
+        "anchor": [
+          -84.28490466101695,
+          45.045
+        ],
+        "name_source": "administrative area",
+        "source": "Natural Earth 1:10m"
+      }
+    },
+    {
+      "id": "great_basin",
+      "name": "New Mexico",
+      "region_id": "r1",
+      "terrain": "mountains",
+      "owner": "f1",
+      "controller": "f1",
+      "shape_id": "great_basin",
+      "resource_sites": {},
+      "geography": {
+        "admin": "New Mexico",
+        "country": "United States of America",
+        "anchor": [
+          -108.82444219066937,
+          35.254999999999995
+        ],
+        "name_source": "administrative area",
+        "source": "Natural Earth 1:10m"
+      }
+    },
+    {
+      "id": "appalachia",
+      "name": "Kentucky",
+      "region_id": "r1",
+      "terrain": "plains",
+      "owner": "f1",
+      "controller": "f1",
+      "shape_id": "appalachia",
+      "resource_sites": {},
+      "geography": {
+        "admin": "Kentucky",
+        "country": "United States of America",
+        "anchor": [
+          -87.37142913758876,
+          37.65
+        ],
+        "name_source": "administrative area",
+        "source": "Natural Earth 1:10m"
+      }
+    },
+    {
+      "id": "sonora",
+      "name": "Chihuahua",
+      "region_id": "r2",
+      "terrain": "plains",
+      "owner": "f2",
+      "controller": "f2",
+      "shape_id": "sonora",
+      "resource_sites": {},
+      "geography": {
+        "admin": "Chihuahua",
+        "country": "Mexico",
+        "anchor": [
+          -105.36473628845444,
+          28.615000000000002
+        ],
+        "name_source": "administrative area",
+        "source": "Natural Earth 1:10m"
+      }
+    },
+    {
+      "id": "gulf_coast",
+      "name": "Texas",
+      "region_id": "r2",
+      "terrain": "plains",
+      "owner": "f2",
+      "controller": "f2",
+      "shape_id": "gulf_coast",
+      "resource_sites": {},
+      "geography": {
+        "admin": "Texas",
+        "country": "United States of America",
+        "anchor": [
+          -90.20536859031624,
+          28.755
+        ],
+        "name_source": "administrative area",
+        "source": "Natural Earth 1:10m"
+      }
+    },
+    {
+      "id": "mexican_plateau",
+      "name": "San Luis Potosí",
+      "region_id": "r2",
+      "terrain": "plains",
+      "owner": "f2",
+      "controller": "f2",
+      "shape_id": "mexican_plateau",
+      "resource_sites": {},
+      "geography": {
+        "admin": "San Luis Potosí",
+        "country": "Mexico",
+        "anchor": [
+          -99.91666369313114,
+          22.585
+        ],
+        "name_source": "administrative area",
+        "source": "Natural Earth 1:10m"
+      }
+    },
+    {
+      "id": "yucatan",
+      "name": "Yucatán",
+      "region_id": "r3",
+      "terrain": "plains",
+      "owner": "f3",
+      "controller": "f3",
+      "shape_id": "yucatan",
+      "resource_sites": {},
+      "geography": {
+        "admin": "Yucatán",
+        "country": "Mexico",
+        "anchor": [
+          -89.26720668859649,
+          21.185000000000002
+        ],
+        "name_source": "administrative area",
+        "source": "Natural Earth 1:10m"
+      }
+    },
+    {
+      "id": "guatemala",
+      "name": "Chiapas",
+      "region_id": "r3",
+      "terrain": "plains",
+      "owner": "f3",
+      "controller": "f3",
+      "shape_id": "guatemala",
+      "resource_sites": {},
+      "geography": {
+        "admin": "Chiapas",
+        "country": "Mexico",
+        "anchor": [
+          -92.24429444852044,
+          15.475000000000001
+        ],
+        "name_source": "administrative area",
+        "source": "Natural Earth 1:10m"
+      }
+    },
+    {
+      "id": "panama",
+      "name": "Colón",
+      "region_id": "r3",
+      "terrain": "plains",
+      "owner": "f3",
+      "controller": "f3",
+      "shape_id": "panama",
+      "resource_sites": {},
+      "geography": {
+        "admin": "Colón",
+        "country": "Honduras",
+        "anchor": [
+          -85.3273344775576,
+          15.649999999999999
+        ],
+        "name_source": "administrative area",
+        "source": "Natural Earth 1:10m"
+      }
+    },
+    {
+      "id": "colombia",
+      "name": "Meta",
+      "region_id": "r4",
+      "terrain": "mountains",
+      "owner": "f4",
+      "controller": "f4",
+      "shape_id": "colombia",
+      "resource_sites": {},
+      "geography": {
+        "admin": "Meta",
+        "country": "Colombia",
+        "anchor": [
+          -83.67470990344356,
+          7.475
+        ],
+        "name_source": "administrative area",
+        "source": "Natural Earth 1:10m"
+      }
+    },
+    {
+      "id": "guiana",
+      "name": "Antioquia",
+      "region_id": "r4",
+      "terrain": "forest",
+      "owner": "f4",
+      "controller": "f4",
+      "shape_id": "guiana",
+      "resource_sites": {},
+      "geography": {
+        "admin": "Antioquia",
+        "country": "Colombia",
+        "anchor": [
+          -76.36864985716059,
+          7.3
+        ],
+        "name_source": "administrative area",
+        "source": "Natural Earth 1:10m"
+      }
+    },
+    {
+      "id": "peru",
+      "name": "Acre",
+      "region_id": "r4",
+      "terrain": "mountains",
+      "owner": "f4",
+      "controller": "f4",
+      "shape_id": "peru",
+      "resource_sites": {},
+      "geography": {
+        "admin": "Acre",
+        "country": "Brazil",
+        "anchor": [
+          -73.76098976109215,
+          -7.140000000000001
+        ],
+        "name_source": "administrative area",
+        "source": "Natural Earth 1:10m"
+      }
+    },
+    {
+      "id": "amazonas",
+      "name": "Pará",
+      "region_id": "r5",
+      "terrain": "forest",
+      "owner": "f5",
+      "controller": "f5",
+      "shape_id": "amazonas",
+      "resource_sites": {},
+      "geography": {
+        "admin": "Pará",
+        "country": "Brazil",
+        "anchor": [
+          -56.71941680364142,
+          -4.735
+        ],
+        "name_source": "administrative area",
+        "source": "Natural Earth 1:10m"
+      }
+    },
+    {
+      "id": "andes",
+      "name": "La Paz",
+      "region_id": "r5",
+      "terrain": "mountains",
+      "owner": "f5",
+      "controller": "f5",
+      "shape_id": "andes",
+      "resource_sites": {},
+      "geography": {
+        "admin": "La Paz",
+        "country": "Bolivia",
+        "anchor": [
+          -70.5363111888112,
+          -19.175
+        ],
+        "name_source": "administrative area",
+        "source": "Natural Earth 1:10m"
+      }
+    },
+    {
+      "id": "brazilian_plateau",
+      "name": "Goiás",
+      "region_id": "r5",
+      "terrain": "forest",
+      "owner": "f5",
+      "controller": "f5",
+      "shape_id": "brazilian_plateau",
+      "resource_sites": {},
+      "geography": {
+        "admin": "Goiás",
+        "country": "Brazil",
+        "anchor": [
+          -50.86631118881119,
+          -19.175
+        ],
+        "name_source": "administrative area",
+        "source": "Natural Earth 1:10m"
+      }
+    },
+    {
+      "id": "atacama",
+      "name": "San Juan",
+      "region_id": "r6",
+      "terrain": "mountains",
+      "owner": "f6",
+      "controller": "f6",
+      "shape_id": "atacama",
+      "resource_sites": {},
+      "geography": {
+        "admin": "San Juan",
+        "country": "Argentina",
+        "anchor": [
+          -68.25818600368324,
+          -30.355
+        ],
+        "name_source": "administrative area",
+        "source": "Natural Earth 1:10m"
+      }
+    },
+    {
+      "id": "la_plata",
+      "name": "Rio Grande do Sul",
+      "region_id": "r6",
+      "terrain": "plains",
+      "owner": "f6",
+      "controller": "f6",
+      "shape_id": "la_plata",
+      "resource_sites": {},
+      "geography": {
+        "admin": "Rio Grande do Sul",
+        "country": "Brazil",
+        "anchor": [
+          -52.90938137141329,
+          -27.884999999999998
+        ],
+        "name_source": "administrative area",
+        "source": "Natural Earth 1:10m"
+      }
+    },
+    {
+      "id": "patagonia",
+      "name": "Río Negro",
+      "region_id": "r6",
+      "terrain": "mountains",
+      "owner": "f6",
+      "controller": "f6",
+      "shape_id": "patagonia",
+      "resource_sites": {},
+      "geography": {
+        "admin": "Río Negro",
+        "country": "Argentina",
+        "anchor": [
+          -69.12318600368323,
+          -41.355000000000004
+        ],
+        "name_source": "administrative area",
+        "source": "Natural Earth 1:10m"
+      }
+    },
+    {
+      "id": "pampas",
+      "name": "Buenos Aires",
+      "region_id": "r7",
+      "terrain": "plains",
+      "owner": "f7",
+      "controller": "f7",
+      "shape_id": "pampas",
+      "resource_sites": {},
+      "geography": {
+        "admin": "Buenos Aires",
+        "country": "Argentina",
+        "anchor": [
+          -58.076829418199296,
+          -36.31
+        ],
+        "name_source": "administrative area",
+        "source": "Natural Earth 1:10m"
+      }
+    },
+    {
+      "id": "austral_andes",
+      "name": "Santa Cruz",
+      "region_id": "r7",
+      "terrain": "mountains",
+      "owner": "f7",
+      "controller": "f7",
+      "shape_id": "austral_andes",
+      "resource_sites": {},
+      "geography": {
+        "admin": "Santa Cruz",
+        "country": "Argentina",
+        "anchor": [
+          -69.5126606096377,
+          -49.64
+        ],
+        "name_source": "administrative area",
+        "source": "Natural Earth 1:10m"
+      }
+    },
+    {
+      "id": "tierra_del_fuego",
+      "name": "Tierra del Fuego",
+      "region_id": "r7",
+      "terrain": "plains",
+      "owner": "f7",
+      "controller": "f7",
+      "shape_id": "tierra_del_fuego",
+      "resource_sites": {},
+      "geography": {
+        "admin": "Tierra del Fuego",
+        "country": "Argentina",
+        "anchor": [
+          -64.11608142821659,
+          -46.925
+        ],
+        "name_source": "administrative area",
+        "source": "Natural Earth 1:10m"
+      }
+    }
+  ],
+  "regions": [
+    {
+      "id": "r0",
+      "name": "Yukon Region",
+      "provinces": [
+        "yukon",
+        "canadian_shield",
+        "cascadia"
+      ],
+      "production": {
+        "wood": 3,
+        "food": 5,
+        "iron": 2
+      }
+    },
+    {
+      "id": "r1",
+      "name": "Great Lakes Region",
+      "provinces": [
+        "great_lakes",
+        "great_basin",
+        "appalachia"
+      ],
+      "production": {
+        "wood": 3,
+        "food": 5,
+        "iron": 2
+      }
+    },
+    {
+      "id": "r2",
+      "name": "Sonora Region",
+      "provinces": [
+        "sonora",
+        "gulf_coast",
+        "mexican_plateau"
+      ],
+      "production": {
+        "wood": 3,
+        "food": 5,
+        "iron": 2
+      }
+    },
+    {
+      "id": "r3",
+      "name": "Yucatan Region",
+      "provinces": [
+        "yucatan",
+        "guatemala",
+        "panama"
+      ],
+      "production": {
+        "wood": 3,
+        "food": 5,
+        "iron": 2
+      }
+    },
+    {
+      "id": "r4",
+      "name": "Colombia Region",
+      "provinces": [
+        "colombia",
+        "guiana",
+        "peru"
+      ],
+      "production": {
+        "wood": 3,
+        "food": 5,
+        "iron": 2
+      }
+    },
+    {
+      "id": "r5",
+      "name": "Amazonas Region",
+      "provinces": [
+        "amazonas",
+        "andes",
+        "brazilian_plateau"
+      ],
+      "production": {
+        "wood": 3,
+        "food": 5,
+        "iron": 2
+      }
+    },
+    {
+      "id": "r6",
+      "name": "Atacama Region",
+      "provinces": [
+        "atacama",
+        "la_plata",
+        "patagonia"
+      ],
+      "production": {
+        "wood": 3,
+        "food": 5,
+        "iron": 2
+      }
+    },
+    {
+      "id": "r7",
+      "name": "Pampas Region",
+      "provinces": [
+        "pampas",
+        "austral_andes",
+        "tierra_del_fuego"
+      ],
+      "production": {
+        "wood": 3,
+        "food": 5,
+        "iron": 2
+      }
+    }
+  ],
+  "cities": [
+    {
+      "id": "city0",
+      "name": "Edmonton",
+      "province": "yukon",
+      "port": "north_pacific",
+      "coordinates": [
+        -113.501928,
+        53.551971
+      ],
+      "style": "northern",
+      "location_source": "Natural Earth populated place"
+    },
+    {
+      "id": "city1",
+      "name": "Chicago",
+      "province": "great_lakes",
+      "port": "south_pacific",
+      "coordinates": [
+        -87.635237,
+        41.847961
+      ],
+      "style": "atlantic",
+      "location_source": "Natural Earth populated place"
+    },
+    {
+      "id": "city2",
+      "name": "Monterrey",
+      "province": "sonora",
+      "port": "caribbean_sea",
+      "coordinates": [
+        -100.331931,
+        25.671941
+      ],
+      "style": "sierra",
+      "location_source": "Natural Earth populated place"
+    },
+    {
+      "id": "city3",
+      "name": "Mérida",
+      "province": "yucatan",
+      "port": "north_atlantic",
+      "coordinates": [
+        -89.618579,
+        20.968585
+      ],
+      "style": "caribbean",
+      "location_source": "Natural Earth populated place"
+    },
+    {
+      "id": "city4",
+      "name": "Cali",
+      "province": "colombia",
+      "port": "south_atlantic",
+      "coordinates": [
+        -76.501912,
+        3.401905
+      ],
+      "style": "andean",
+      "location_source": "Natural Earth populated place"
+    },
+    {
+      "id": "city5",
+      "name": "Belém",
+      "province": "amazonas",
+      "port": "north_pacific",
+      "coordinates": [
+        -48.481969,
+        -1.448057
+      ],
+      "style": "amazon",
+      "location_source": "Natural Earth populated place"
+    },
+    {
+      "id": "city6",
+      "name": "Córdoba",
+      "province": "atacama",
+      "port": "south_pacific",
+      "coordinates": [
+        -64.18424,
+        -31.398012
+      ],
+      "style": "southern",
+      "location_source": "Natural Earth populated place"
+    },
+    {
+      "id": "city7",
+      "name": "Buenos Aires",
+      "province": "pampas",
+      "port": "caribbean_sea",
+      "coordinates": [
+        -58.432513,
+        -34.610715
+      ],
+      "style": "austral",
+      "location_source": "Natural Earth populated place"
+    }
+  ],
+  "ports": {
+    "yukon": "north_pacific",
+    "great_lakes": "south_pacific",
+    "sonora": "caribbean_sea",
+    "yucatan": "north_atlantic",
+    "colombia": "south_atlantic",
+    "amazonas": "north_pacific",
+    "atacama": "south_pacific",
+    "pampas": "caribbean_sea"
+  },
+  "sea_zones": [
+    {
+      "id": "north_pacific",
+      "name": "North Pacific",
+      "anchor": [
+        -141,
+        29
+      ]
+    },
+    {
+      "id": "south_pacific",
+      "name": "South Pacific",
+      "anchor": [
+        -96,
+        -24
+      ]
+    },
+    {
+      "id": "caribbean_sea",
+      "name": "Caribbean",
+      "anchor": [
+        -72,
+        20
+      ]
+    },
+    {
+      "id": "north_atlantic",
+      "name": "North Atlantic",
+      "anchor": [
+        -43,
+        39
+      ]
+    },
+    {
+      "id": "south_atlantic",
+      "name": "South Atlantic",
+      "anchor": [
+        -25,
+        -26
+      ]
+    }
+  ],
+  "units": [
+    {
+      "id": "infantry0",
+      "kind": "infantry",
+      "owner": "f0",
+      "location": "yukon"
+    },
+    {
+      "id": "infantry1",
+      "kind": "infantry",
+      "owner": "f1",
+      "location": "great_lakes"
+    },
+    {
+      "id": "infantry2",
+      "kind": "infantry",
+      "owner": "f2",
+      "location": "sonora"
+    },
+    {
+      "id": "infantry3",
+      "kind": "infantry",
+      "owner": "f3",
+      "location": "yucatan"
+    },
+    {
+      "id": "infantry4",
+      "kind": "infantry",
+      "owner": "f4",
+      "location": "colombia"
+    },
+    {
+      "id": "infantry5",
+      "kind": "infantry",
+      "owner": "f5",
+      "location": "amazonas"
+    },
+    {
+      "id": "infantry6",
+      "kind": "infantry",
+      "owner": "f6",
+      "location": "atacama"
+    },
+    {
+      "id": "infantry7",
+      "kind": "infantry",
+      "owner": "f7",
+      "location": "pampas"
+    },
+    {
+      "id": "fleet0",
+      "kind": "fleet",
+      "owner": "f0",
+      "location": "north_pacific"
+    },
+    {
+      "id": "air0",
+      "kind": "air",
+      "owner": "f0",
+      "location": "yukon"
+    }
+  ],
+  "graphs": {
+    "land": {
+      "nodes": [
+        "yukon",
+        "canadian_shield",
+        "cascadia",
+        "great_lakes",
+        "great_basin",
+        "appalachia",
+        "sonora",
+        "gulf_coast",
+        "mexican_plateau",
+        "yucatan",
+        "guatemala",
+        "panama",
+        "colombia",
+        "guiana",
+        "peru",
+        "amazonas",
+        "andes",
+        "brazilian_plateau",
+        "atacama",
+        "la_plata",
+        "patagonia",
+        "pampas",
+        "austral_andes",
+        "tierra_del_fuego"
+      ],
+      "edges": [
+        {
+          "a": "yukon",
+          "b": "canadian_shield",
+          "metadata": {
+            "river_crossing": null,
+            "infrastructure": 1
+          }
+        },
+        {
+          "a": "yukon",
+          "b": "cascadia",
+          "metadata": {
+            "mountain_pass": true,
+            "infrastructure": 0
+          }
+        },
+        {
+          "a": "canadian_shield",
+          "b": "great_lakes",
+          "metadata": {
+            "mountain_pass": false,
+            "infrastructure": 1
+          }
+        },
+        {
+          "a": "cascadia",
+          "b": "great_lakes",
+          "metadata": {
+            "river_crossing": null,
+            "infrastructure": 1
+          }
+        },
+        {
+          "a": "cascadia",
+          "b": "great_basin",
+          "metadata": {
+            "mountain_pass": true,
+            "infrastructure": 0
+          }
+        },
+        {
+          "a": "great_lakes",
+          "b": "appalachia",
+          "metadata": {
+            "mountain_pass": false,
+            "infrastructure": 1
+          }
+        },
+        {
+          "a": "great_basin",
+          "b": "appalachia",
+          "metadata": {
+            "river_crossing": "mississippi",
+            "infrastructure": 1
+          }
+        },
+        {
+          "a": "great_basin",
+          "b": "sonora",
+          "metadata": {
+            "mountain_pass": true,
+            "infrastructure": 0
+          }
+        },
+        {
+          "a": "appalachia",
+          "b": "gulf_coast",
+          "metadata": {
+            "mountain_pass": false,
+            "infrastructure": 1
+          }
+        },
+        {
+          "a": "sonora",
+          "b": "gulf_coast",
+          "metadata": {
+            "river_crossing": null,
+            "infrastructure": 1
+          }
+        },
+        {
+          "a": "sonora",
+          "b": "mexican_plateau",
+          "metadata": {
+            "mountain_pass": true,
+            "infrastructure": 0
+          }
+        },
+        {
+          "a": "gulf_coast",
+          "b": "yucatan",
+          "metadata": {
+            "mountain_pass": false,
+            "infrastructure": 1
+          }
+        },
+        {
+          "a": "mexican_plateau",
+          "b": "yucatan",
+          "metadata": {
+            "river_crossing": null,
+            "infrastructure": 1
+          }
+        },
+        {
+          "a": "mexican_plateau",
+          "b": "guatemala",
+          "metadata": {
+            "mountain_pass": true,
+            "infrastructure": 0
+          }
+        },
+        {
+          "a": "yucatan",
+          "b": "panama",
+          "metadata": {
+            "mountain_pass": false,
+            "infrastructure": 1
+          }
+        },
+        {
+          "a": "guatemala",
+          "b": "panama",
+          "metadata": {
+            "river_crossing": null,
+            "infrastructure": 1
+          }
+        },
+        {
+          "a": "guatemala",
+          "b": "colombia",
+          "metadata": {
+            "mountain_pass": true,
+            "infrastructure": 0
+          }
+        },
+        {
+          "a": "panama",
+          "b": "guiana",
+          "metadata": {
+            "mountain_pass": false,
+            "infrastructure": 1
+          }
+        },
+        {
+          "a": "colombia",
+          "b": "guiana",
+          "metadata": {
+            "river_crossing": null,
+            "infrastructure": 1
+          }
+        },
+        {
+          "a": "colombia",
+          "b": "peru",
+          "metadata": {
+            "mountain_pass": true,
+            "infrastructure": 0
+          }
+        },
+        {
+          "a": "guiana",
+          "b": "amazonas",
+          "metadata": {
+            "mountain_pass": false,
+            "infrastructure": 1
+          }
+        },
+        {
+          "a": "peru",
+          "b": "amazonas",
+          "metadata": {
+            "river_crossing": null,
+            "infrastructure": 1
+          }
+        },
+        {
+          "a": "peru",
+          "b": "andes",
+          "metadata": {
+            "mountain_pass": true,
+            "infrastructure": 0
+          }
+        },
+        {
+          "a": "amazonas",
+          "b": "brazilian_plateau",
+          "metadata": {
+            "mountain_pass": false,
+            "infrastructure": 1
+          }
+        },
+        {
+          "a": "andes",
+          "b": "brazilian_plateau",
+          "metadata": {
+            "river_crossing": null,
+            "infrastructure": 1
+          }
+        },
+        {
+          "a": "andes",
+          "b": "atacama",
+          "metadata": {
+            "mountain_pass": true,
+            "infrastructure": 0
+          }
+        },
+        {
+          "a": "brazilian_plateau",
+          "b": "la_plata",
+          "metadata": {
+            "mountain_pass": false,
+            "infrastructure": 1
+          }
+        },
+        {
+          "a": "atacama",
+          "b": "la_plata",
+          "metadata": {
+            "river_crossing": null,
+            "infrastructure": 1
+          }
+        },
+        {
+          "a": "atacama",
+          "b": "patagonia",
+          "metadata": {
+            "mountain_pass": true,
+            "infrastructure": 0
+          }
+        },
+        {
+          "a": "la_plata",
+          "b": "pampas",
+          "metadata": {
+            "mountain_pass": false,
+            "infrastructure": 1
+          }
+        },
+        {
+          "a": "patagonia",
+          "b": "pampas",
+          "metadata": {
+            "river_crossing": null,
+            "infrastructure": 1
+          }
+        },
+        {
+          "a": "patagonia",
+          "b": "austral_andes",
+          "metadata": {
+            "mountain_pass": true,
+            "infrastructure": 0
+          }
+        },
+        {
+          "a": "pampas",
+          "b": "tierra_del_fuego",
+          "metadata": {
+            "mountain_pass": false,
+            "infrastructure": 1
+          }
+        },
+        {
+          "a": "austral_andes",
+          "b": "tierra_del_fuego",
+          "metadata": {
+            "river_crossing": null,
+            "infrastructure": 1
+          }
+        }
+      ]
+    },
+    "supply": {
+      "nodes": [
+        "yukon",
+        "canadian_shield",
+        "cascadia",
+        "great_lakes",
+        "great_basin",
+        "appalachia",
+        "sonora",
+        "gulf_coast",
+        "mexican_plateau",
+        "yucatan",
+        "guatemala",
+        "panama",
+        "colombia",
+        "guiana",
+        "peru",
+        "amazonas",
+        "andes",
+        "brazilian_plateau",
+        "atacama",
+        "la_plata",
+        "patagonia",
+        "pampas",
+        "austral_andes",
+        "tierra_del_fuego"
+      ],
+      "edges": [
+        {
+          "a": "yukon",
+          "b": "canadian_shield"
+        },
+        {
+          "a": "yukon",
+          "b": "cascadia"
+        },
+        {
+          "a": "canadian_shield",
+          "b": "great_lakes"
+        },
+        {
+          "a": "cascadia",
+          "b": "great_lakes"
+        },
+        {
+          "a": "cascadia",
+          "b": "great_basin"
+        },
+        {
+          "a": "great_lakes",
+          "b": "appalachia"
+        },
+        {
+          "a": "great_basin",
+          "b": "appalachia"
+        },
+        {
+          "a": "great_basin",
+          "b": "sonora"
+        },
+        {
+          "a": "appalachia",
+          "b": "gulf_coast"
+        },
+        {
+          "a": "sonora",
+          "b": "gulf_coast"
+        },
+        {
+          "a": "sonora",
+          "b": "mexican_plateau"
+        },
+        {
+          "a": "gulf_coast",
+          "b": "yucatan"
+        },
+        {
+          "a": "mexican_plateau",
+          "b": "yucatan"
+        },
+        {
+          "a": "mexican_plateau",
+          "b": "guatemala"
+        },
+        {
+          "a": "yucatan",
+          "b": "panama"
+        },
+        {
+          "a": "guatemala",
+          "b": "panama"
+        },
+        {
+          "a": "guatemala",
+          "b": "colombia"
+        },
+        {
+          "a": "panama",
+          "b": "guiana"
+        },
+        {
+          "a": "colombia",
+          "b": "guiana"
+        },
+        {
+          "a": "colombia",
+          "b": "peru"
+        },
+        {
+          "a": "guiana",
+          "b": "amazonas"
+        },
+        {
+          "a": "peru",
+          "b": "amazonas"
+        },
+        {
+          "a": "peru",
+          "b": "andes"
+        },
+        {
+          "a": "amazonas",
+          "b": "brazilian_plateau"
+        },
+        {
+          "a": "andes",
+          "b": "brazilian_plateau"
+        },
+        {
+          "a": "andes",
+          "b": "atacama"
+        },
+        {
+          "a": "brazilian_plateau",
+          "b": "la_plata"
+        },
+        {
+          "a": "atacama",
+          "b": "la_plata"
+        },
+        {
+          "a": "atacama",
+          "b": "patagonia"
+        },
+        {
+          "a": "la_plata",
+          "b": "pampas"
+        },
+        {
+          "a": "patagonia",
+          "b": "pampas"
+        },
+        {
+          "a": "patagonia",
+          "b": "austral_andes"
+        },
+        {
+          "a": "pampas",
+          "b": "tierra_del_fuego"
+        },
+        {
+          "a": "austral_andes",
+          "b": "tierra_del_fuego"
+        }
+      ]
+    },
+    "naval": {
+      "nodes": [
+        "north_pacific",
+        "south_pacific",
+        "caribbean_sea",
+        "north_atlantic",
+        "south_atlantic"
+      ],
+      "edges": [
+        {
+          "a": "north_pacific",
+          "b": "south_pacific"
+        },
+        {
+          "a": "north_pacific",
+          "b": "caribbean_sea"
+        },
+        {
+          "a": "caribbean_sea",
+          "b": "north_atlantic"
+        },
+        {
+          "a": "caribbean_sea",
+          "b": "south_atlantic"
+        },
+        {
+          "a": "north_atlantic",
+          "b": "south_atlantic"
+        },
+        {
+          "a": "south_pacific",
+          "b": "south_atlantic"
+        }
+      ]
+    },
+    "air": {
+      "nodes": [
+        "yukon",
+        "canadian_shield",
+        "cascadia",
+        "great_lakes",
+        "great_basin",
+        "appalachia",
+        "sonora",
+        "gulf_coast",
+        "mexican_plateau",
+        "yucatan",
+        "guatemala",
+        "panama",
+        "colombia",
+        "guiana",
+        "peru",
+        "amazonas",
+        "andes",
+        "brazilian_plateau",
+        "atacama",
+        "la_plata",
+        "patagonia",
+        "pampas",
+        "austral_andes",
+        "tierra_del_fuego",
+        "north_pacific",
+        "south_pacific",
+        "caribbean_sea",
+        "north_atlantic",
+        "south_atlantic"
+      ],
+      "edges": [
+        {
+          "a": "yukon",
+          "b": "canadian_shield"
+        },
+        {
+          "a": "yukon",
+          "b": "cascadia"
+        },
+        {
+          "a": "canadian_shield",
+          "b": "great_lakes"
+        },
+        {
+          "a": "cascadia",
+          "b": "great_lakes"
+        },
+        {
+          "a": "cascadia",
+          "b": "great_basin"
+        },
+        {
+          "a": "great_lakes",
+          "b": "appalachia"
+        },
+        {
+          "a": "great_basin",
+          "b": "appalachia"
+        },
+        {
+          "a": "great_basin",
+          "b": "sonora"
+        },
+        {
+          "a": "appalachia",
+          "b": "gulf_coast"
+        },
+        {
+          "a": "sonora",
+          "b": "gulf_coast"
+        },
+        {
+          "a": "sonora",
+          "b": "mexican_plateau"
+        },
+        {
+          "a": "gulf_coast",
+          "b": "yucatan"
+        },
+        {
+          "a": "mexican_plateau",
+          "b": "yucatan"
+        },
+        {
+          "a": "mexican_plateau",
+          "b": "guatemala"
+        },
+        {
+          "a": "yucatan",
+          "b": "panama"
+        },
+        {
+          "a": "guatemala",
+          "b": "panama"
+        },
+        {
+          "a": "guatemala",
+          "b": "colombia"
+        },
+        {
+          "a": "panama",
+          "b": "guiana"
+        },
+        {
+          "a": "colombia",
+          "b": "guiana"
+        },
+        {
+          "a": "colombia",
+          "b": "peru"
+        },
+        {
+          "a": "guiana",
+          "b": "amazonas"
+        },
+        {
+          "a": "peru",
+          "b": "amazonas"
+        },
+        {
+          "a": "peru",
+          "b": "andes"
+        },
+        {
+          "a": "amazonas",
+          "b": "brazilian_plateau"
+        },
+        {
+          "a": "andes",
+          "b": "brazilian_plateau"
+        },
+        {
+          "a": "andes",
+          "b": "atacama"
+        },
+        {
+          "a": "brazilian_plateau",
+          "b": "la_plata"
+        },
+        {
+          "a": "atacama",
+          "b": "la_plata"
+        },
+        {
+          "a": "atacama",
+          "b": "patagonia"
+        },
+        {
+          "a": "la_plata",
+          "b": "pampas"
+        },
+        {
+          "a": "patagonia",
+          "b": "pampas"
+        },
+        {
+          "a": "patagonia",
+          "b": "austral_andes"
+        },
+        {
+          "a": "pampas",
+          "b": "tierra_del_fuego"
+        },
+        {
+          "a": "austral_andes",
+          "b": "tierra_del_fuego"
+        },
+        {
+          "a": "yukon",
+          "b": "north_pacific"
+        },
+        {
+          "a": "great_lakes",
+          "b": "south_pacific"
+        },
+        {
+          "a": "sonora",
+          "b": "caribbean_sea"
+        },
+        {
+          "a": "yucatan",
+          "b": "north_atlantic"
+        },
+        {
+          "a": "colombia",
+          "b": "south_atlantic"
+        },
+        {
+          "a": "amazonas",
+          "b": "north_pacific"
+        },
+        {
+          "a": "atacama",
+          "b": "south_pacific"
+        },
+        {
+          "a": "pampas",
+          "b": "caribbean_sea"
+        },
+        {
+          "a": "north_pacific",
+          "b": "south_pacific"
+        },
+        {
+          "a": "north_pacific",
+          "b": "caribbean_sea"
+        },
+        {
+          "a": "caribbean_sea",
+          "b": "north_atlantic"
+        },
+        {
+          "a": "caribbean_sea",
+          "b": "south_atlantic"
+        },
+        {
+          "a": "north_atlantic",
+          "b": "south_atlantic"
+        },
+        {
+          "a": "south_pacific",
+          "b": "south_atlantic"
+        }
+      ]
+    }
+  },
+  "objectives": {
+    "cities": 3,
+    "turns": 5
+  }
+}

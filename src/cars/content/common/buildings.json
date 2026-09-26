@@ -1,0 +1,44 @@
+{
+  "farm": {
+    "name": "Farm",
+    "resource": "food",
+    "output": 2,
+    "cost": {"wood": 4, "food": 0, "iron": 2}
+  },
+  "lumber_mill": {
+    "name": "Lumber mill",
+    "resource": "wood",
+    "output": 2,
+    "cost": {"wood": 2, "food": 3, "iron": 3}
+  },
+  "mine": {
+    "name": "Iron mine",
+    "resource": "iron",
+    "output": 2,
+    "cost": {"wood": 5, "food": 3, "iron": 2}
+  },
+  "roads": {
+    "name": "Road network",
+    "group": "infrastructure",
+    "max_level": 3,
+    "cost": {"wood": 5, "food": 2, "iron": 4},
+    "description": "5% lower terrain movement cost per level",
+    "effect": "-5% terrain cost"
+  },
+  "shipyard": {
+    "name": "Shipyard",
+    "group": "infrastructure",
+    "max_level": 1,
+    "cost": {"wood": 12, "food": 4, "iron": 10},
+    "description": "Unlocks fleet production at a port",
+    "effect": "Fleet access"
+  },
+  "airfield": {
+    "name": "Airfield",
+    "group": "infrastructure",
+    "max_level": 1,
+    "cost": {"wood": 8, "food": 4, "iron": 12},
+    "description": "Unlocks air-group production",
+    "effect": "Air access"
+  }
+}
