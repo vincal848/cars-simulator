@@ -15,6 +15,11 @@
   vice versa). The Windows build always uses 3.13; source installs could require 3.12.
 - **The AI ignores the fog of war.** Rivals still see every unit. Enemy zones of
   control also still raise route costs next to hidden armies, which hints at them.
+- **The economy is too loose.** In 40-round AI games stockpiles grow into the
+  thousands and upkeep rarely binds; there is little to spend resources on.
+- **One rival usually snowballs.** A single AI tends to take half the continent
+  while small nations are wiped out early. Catch-up mechanics or AI coalitions
+  against the leader would help.
 - **Save validation is incomplete.** Unknown terrain, building or resource keys
   pass validation and only fail later during play.
 
