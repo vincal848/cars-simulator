@@ -43,7 +43,8 @@ Some rules for changes:
   (`tests/test_architecture.py` enforces this).
 - Put tuning numbers in `content/common/defines.json`, not in code.
 - If a change alters the outcome of any recorded command, bump `RULESET` in
-  `persist/replay.py` and regenerate `examples/opening.json`.
+  `persist/replay.py` (once per release) and re-record the sample with
+  `python tools/rerecord_replay.py examples/opening.json`.
 - Changing an entity field changes the save format. Bump `SAVE_VERSION` in
   `persist/savegame.py` and register an upgrade step in `UPGRADES` that converts
   the previous version, so players' existing saves keep loading.

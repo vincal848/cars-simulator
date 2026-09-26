@@ -53,6 +53,10 @@ commands, so it cannot make an illegal move.
 
 Ownership and control are separate: capturing a province changes its controller,
 never its rightful owner, and buildings stay with the province.
+Damage is not permanent: when a faction's turn begins its units recover strength
+if they are supplied on friendly ground (more in a city), fleets beside a friendly
+port and air groups at a working airbase, so supply lines also decide how fast an
+army can fight again.
 
 | Algorithm | Player-facing effect | Complexity |
 | --- | --- | --- |

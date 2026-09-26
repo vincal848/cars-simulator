@@ -13,7 +13,7 @@ F10: sound, preferences and the music collection.
 Replays: drag examples/opening.json onto CARS.exe to watch a sample.
 The replay studio records this session from faction selection or the last load.
 Export before quitting; each export replaces replays/latest.json, so copy it
-to keep it. Replays play back only on the ruleset they were recorded with (0.23).
+to keep it. Replays play back only on the ruleset they were recorded with (0.25).
 
 Saves:    %LOCALAPPDATA%\CARS\saves
 Replays:  %LOCALAPPDATA%\CARS\replays

@@ -18,7 +18,7 @@
 
 ## Next
 
-- Recruitment and construction queues; reinforcement and healing.
+- Recruitment and construction queues.
 - Amphibious transport, maritime supply and port throughput.
 - Supply capacity: roads, rails and depots, then max-flow allocation over the
   supply graph.

@@ -30,6 +30,12 @@
     "body": "Supply is connectivity from a controlled city hub through controlled provinces on its own network. A disconnected army pays 50% more movement cost and fights at reduced strength. The Supply view traces a selected army to its hub. Strategic inspection colors supplied nodes green and unreachable nodes red. A graph cut point is only a potential choke point: multiple hubs may still keep both sides supplied."
   },
   {
+    "id": "recovery",
+    "title": "Recovery",
+    "category": "Land",
+    "body": "Damaged units regain strength when their faction's turn begins. A supplied land unit inside your own territory recovers 1 strength per turn, or 2 in a city. Fleets recover beside one of your ports and air groups at a controlled airbase. Cut-off armies and units on enemy ground do not recover. The unit card shows the current rate."
+  },
+  {
     "id": "units",
     "title": "Land unit roles",
     "category": "Land",

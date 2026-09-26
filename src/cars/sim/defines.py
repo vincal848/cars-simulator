@@ -63,6 +63,12 @@ class RecruitmentDefines:
 
 
 @dataclass(frozen=True)
+class RecoveryDefines:
+    per_turn: float
+    city_bonus: float
+
+
+@dataclass(frozen=True)
 class JournalDefines:
     entry_limit: int
 
@@ -85,6 +91,7 @@ class Defines:
     naval: NavalDefines
     air: AirDefines
     recruitment: RecruitmentDefines
+    recovery: RecoveryDefines
     journal: JournalDefines
     ai: AIDefines
 
@@ -98,6 +105,7 @@ class Defines:
             naval=NavalDefines(**raw["naval"]),
             air=AirDefines(**raw["air"]),
             recruitment=RecruitmentDefines(**raw["recruitment"]),
+            recovery=RecoveryDefines(**raw["recovery"]),
             journal=JournalDefines(**raw["journal"]),
             ai=AIDefines(**ai),
         )

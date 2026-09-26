@@ -7,6 +7,7 @@ from cars.sim.economy import produce
 from cars.sim.journal import record
 from cars.sim.market import replenish, treasury_income
 from cars.sim.objectives import evaluate
+from cars.sim.recovery import recover
 from cars.sim.supply import refresh_supply
 
 if TYPE_CHECKING:
@@ -36,6 +37,7 @@ def end_turn(state: "GameState") -> dict[str, float]:
     for unit in state.units.values():
         if unit.owner == state.active:
             unit.remaining = unit.allowance
+    recover(state, state.active)
 
     player = state.player
     if state.active == player or (not player and state.active_index == 0):

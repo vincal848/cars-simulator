@@ -6,7 +6,8 @@ from typing import TYPE_CHECKING, ClassVar
 import pygame
 
 from cars.sim.air import MISSIONS
-from cars.sim.entities import AIR
+from cars.sim.entities import AIR, FULL_STRENGTH
+from cars.sim.recovery import recovery_rate
 from cars.sim.regional import unit_name
 from cars.ui.art.emblem import americas_emblem
 from cars.ui.palette import DIM, GOLD, PAPER
@@ -51,19 +52,16 @@ class SelectionCard:
             t.panel((16, 682, 560, 51), True)
             t.text(unit_name(unit) + " / " + unit.id, 30, 688, t.heading, width=335)
             t.text("Tab: cycle / F: focus / U: overview", 590, 707, t.small, DIM, width=215)
+            recovery = recovery_rate(state, unit) if unit.hp < FULL_STRENGTH else 0
+            healing = f"  /  Recovering +{recovery:g}" if recovery else ""
             if unit.kind == AIR:
                 sortie = "Sortie ready" if unit.remaining > 0 else "Sortie spent"
-                t.text(f"{sortie} / Strength {unit.hp:.1f}/10 / {air_mode.title()}", 30, 714, t.small, DIM)
+                status = f"{sortie} / Strength {unit.hp:.1f}/10 / {air_mode.title()}"
                 for mode, rect in self.air_buttons.items():
                     t.button(rect, mode.title(), air_mode == mode)
             else:
-                t.text(
-                    f"Movement {unit.remaining:.1f}/{unit.allowance:.0f}  /  Strength {unit.hp:.1f}/10",
-                    30,
-                    714,
-                    t.small,
-                    DIM,
-                )
+                status = f"Movement {unit.remaining:.1f}/{unit.allowance:.0f}  /  Strength {unit.hp:.1f}/10"
+            t.text(status + healing, 30, 714, t.small, DIM, width=340)
             if paths and hover in paths.costs:
                 t.text(f"Route: {paths.costs[hover]:.2f} MP", 376, 691, t.body, GOLD)
                 if debug:

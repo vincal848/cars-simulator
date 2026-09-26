@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- **Recovery:** damaged units regain strength at the start of their turn: +1 when
+  supplied in friendly territory (+2 in a city), fleets beside a friendly port and
+  air groups at an airbase. The replay ruleset is now 0.25.
+- Golden-master tests, a crash log for the Windows build, and step-by-step
+  upgrades for older save formats.
 - Restructured the code base: `src/` layout; separate `sim`, `persist` and `ui`
   packages with enforced layering; and small classes for the HUD panels, dialogs,
   map view and rival AI in place of two god objects.
@@ -12,9 +17,8 @@
 - The Windows build script now starts from a clean output folder.
 - Dropped support for pre-0.17 saves stored inside the project folder.
 
-Gameplay, rendering, save files and 0.23-ruleset replays are unchanged: a
-50-round simulation trace and 39 reference screenshots match the previous
-version exactly.
+The restructure itself changed no gameplay, rendering or save files: a 50-round
+simulation trace and 39 reference screenshots matched 0.24 exactly.
 
 ## 0.24: The music collection
 

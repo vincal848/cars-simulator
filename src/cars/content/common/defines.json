@@ -44,6 +44,10 @@
   "recruitment": {
     "regional_surcharge": 2
   },
+  "recovery": {
+    "per_turn": 1.0,
+    "city_bonus": 1.0
+  },
   "journal": {
     "entry_limit": 160
   },

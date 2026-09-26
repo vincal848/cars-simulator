@@ -26,7 +26,7 @@ from cars.sim.turn import end_turn
 
 REPLAY_VERSION = 1
 # Bump whenever a rule change would alter the outcome of a recorded command.
-RULESET = "0.23"
+RULESET = "0.25"
 MAX_COMMANDS = 20_000
 MAX_FILE_BYTES = 50_000_000
 
