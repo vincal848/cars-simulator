@@ -1,0 +1,170 @@
+{
+ "environment": {
+  "pygame": "2.5.8",
+  "sdl": "2.32.10",
+  "fonts": {
+   "Palatino": "0dac393917590abedff65a3b27875027bf03de02f56421901729e320e786d20b",
+   "Garamond": "44a7319dfeb7bd5e88a7b9f40163fa482d125b855d774ee108f7662da07f5b6a",
+   "Baskerville": "101d4d70f95ba63e6dcb259cde396f2fecb225d9a8eeba97dc60255a1eb76921",
+   "georgia": "aba0a6902811bd3b4d2fbf97a1d14fbbbae33688c5badc28d71374b57795d39a"
+  }
+ },
+ "screens": [
+  [
+   "title",
+   "8821e8497153a098968202b004bedd703641b13b41343e30c7a1433d08726b5e"
+  ],
+  [
+   "title help",
+   "21a2530e5134c5d4a84c35d9cfae924aed1482b3229fc1c5453a485fbd92f5c0"
+  ],
+  [
+   "faction picker",
+   "ac5a45d7cbb0917eaa103b262c6306fa9d5dacc590f97061d10995bff1935fe5"
+  ],
+  [
+   "campaign map",
+   "76612a3bbeb0c1fce7ddec3babeeff533856e37f8252d1d9c95252ba22cb6041"
+  ],
+  [
+   "objectives collapsed",
+   "31ad69f6a4d664966d756dd9a822faa8f11cdaffcace8e6dda16dc29c1974486"
+  ],
+  [
+   "route and forecast",
+   "bcac50dc02594260a2cea683ec924e8d65e07429df04de1014763ad65662615a"
+  ],
+  [
+   "debug graph",
+   "f0757b86364067915afe3ecf1c1cd2bb267f4e11ffe1a06de27e568c696e7ddf"
+  ],
+  [
+   "province build",
+   "12f07bdd8189a0ef1f7e9b419406ae27751359083187dec348783bf218356ddb"
+  ],
+  [
+   "province infrastructure",
+   "e2de871dbc8e146b67c0852b50e7c5238047288ae45f77620426259894a9638e"
+  ],
+  [
+   "province recruit",
+   "b690f54ea2bed0cb1c955cb90d32c0418ea7bbb8da791cb0dd935e043d8cb867"
+  ],
+  [
+   "recruit sea_air",
+   "cd04e0da995e41a4401be7c2bd3f5b5cd5013f7c59517f8bd8f847e6d9957439"
+  ],
+  [
+   "recruit regional",
+   "4f1df859ee210830bf0a1528717c77dde405f6d4878474f6004342eef69c1653"
+  ],
+  [
+   "layer naval",
+   "27c186a8563b4d5bc95af9ebcd6671db926a1cfaa3a2729a69b2cd70263bbcc2"
+  ],
+  [
+   "layer air",
+   "28fd2e6dcce2ce7804d949946568dfdc690c711411ea1bed5dfe82b6042e20f0"
+  ],
+  [
+   "layer supply",
+   "1b087994f304d59470630ca425912b882f6a21e3f2f6c90a7050acc6e51a23ea"
+  ],
+  [
+   "menu",
+   "1ce4630aaceeae5cedc55a722073bbf6804f2a2fe51b55a2bd5d50ace95ac6e5"
+  ],
+  [
+   "market",
+   "b29decdc823cca65af74f2c1289a5efc26a08e5b0a450dd9b66db557ac89a2ec"
+  ],
+  [
+   "dialog pedia",
+   "c2bb364373cff585652bf0831a546d8fa6b2a18353b47890431ec97a884b6fc0"
+  ],
+  [
+   "dialog strategy",
+   "bdcdf62dfa48619d3d2a484eefc872b7c8169008db08deab04b19a322cb82d3b"
+  ],
+  [
+   "dialog replay",
+   "065e6bbd2ac40fb1db7f89d4eae861c808c8c523aa5a089c7ed1e9ab7aa1c067"
+  ],
+  [
+   "dialog reports",
+   "82e4664444eef4a365ccccdb45c560e6682b6ca0fcfa95eba287a76d49b482fe"
+  ],
+  [
+   "dialog roster",
+   "589be3283ec787253535366e125578139d5e1dda293dcdd3dd4c3bdcdb05fab8"
+  ],
+  [
+   "dialog settings",
+   "157c526e54f806df54458ff19da26c66e632c689916a324dc3fdacc12da81044"
+  ],
+  [
+   "dialog music",
+   "6905dbe0f28b955a70bb3f15c287ed56d7b76e839c3f1f83df837a1a56c962b2"
+  ],
+  [
+   "dialog timeline",
+   "78a4911c0774ed0652fda3ab56ef2b40c359fd680210fc9c375706aa0be7580f"
+  ],
+  [
+   "dialog save",
+   "35e42576874e30c195cf960caef6c828ef32eb6e142a661ea9581cc50b102284"
+  ],
+  [
+   "dialog load",
+   "127b06370e46c5870020d50a15276960f14815dbbb2454355e376075da1a5285"
+  ],
+  [
+   "pedia units",
+   "9f5e5a8fb2eb3a93bb879f55654104ebf8323314e057dc80bdd838a441ea10fc"
+  ],
+  [
+   "pedia history",
+   "f944e3b80c20ae1e85713e73b6aaab65639cc31a4eb5a5feadf736af353161e0"
+  ],
+  [
+   "strategy supply",
+   "7893e1209bd52369797990e0ceb82378d0c961f24e6080ac770fafc8d6306192"
+  ],
+  [
+   "zoomed",
+   "592c3f8156ed15570dd284f952788b75a11fadfb6724f35b874781870524a7dc"
+  ],
+  [
+   "zoomed max",
+   "22255822e0c39a21e8230d23c135c010fc959212739175a2ff5d3b510eddf538"
+  ],
+  [
+   "after rival turns",
+   "52d29568d42c044755b3552870dfd055002cbd07ef76cb097ae34ec6081386a8"
+  ],
+  [
+   "chronicle battles",
+   "3d2d490584b6201f201d814e8bd6ee91d59c576ec33de31233ef787ef73a69ca"
+  ],
+  [
+   "chronicle all",
+   "eeb9e8275dd54d2418deedc19d7dfd646941f0acfafdfd8177aa5cd0b2212733"
+  ],
+  [
+   "roster after rival turns",
+   "41b65a7a3817cb4ebae9fdbeb0f0432502cf3d0b59b881403fe1ade391364bb8"
+  ],
+  [
+   "tutorial",
+   "71fb1f313dbd61429af201b9f3125677ec0375ba720e6e58fd3eeb26c92ea3e4"
+  ],
+  [
+   "replay start",
+   "6996848fa61ec9b5b43e29f65b4d3853df64cc85c83b131741d7da972a45fe7f"
+  ],
+  [
+   "replay stepped",
+   "cc60b03ed6272792408e7d292ee6822173b7f374be480aad1f62d4c7d4369d51"
+  ]
+ ]
+}

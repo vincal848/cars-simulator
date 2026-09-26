@@ -16,6 +16,22 @@ ruff format --check .
 python -m cars --smoke --faction f0 --screenshot frame.png
 ```
 
+### Golden tests
+
+`tests/golden` replays 50 rounds of AI campaigns, a recorded player campaign and 39
+screens, and compares hashes of every step with `tests/golden/reference/`. Any
+change in behaviour or rendering, however small, fails them. After an intentional
+change, regenerate and commit the references in the same commit:
+
+```sh
+python -m tests.golden.update
+python -m tests.golden.update --dump before/   # at the old commit, then --dump after/ at the new one
+```
+
+Diffing the two dump folders shows exactly which step or screen changed. Screen
+references depend on pygame, SDL and the installed fonts, so that test skips
+itself on machines unlike the one that recorded them (including CI).
+
 Tests run headless (`tests/support.py` selects SDL's dummy drivers) and keep
 saves in a temporary folder, never in your real profile. `ScreenTestCase` gives
 you a campaign screen with a faction already chosen, plus helpers to click and

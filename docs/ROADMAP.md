@@ -10,6 +10,9 @@
   use `forecast_order` like the player's forecast card.
 - **Saves and replays are about 1.3 MB** because they embed the map geometry.
   They could reference the scenario and a hash instead.
+- **Replays are tied to the Python version family.** Python 3.12 changed `sum()`
+  over floats, so a replay recorded on 3.12+ may not verify on 3.10 or 3.11 (and
+  vice versa). The Windows build always uses 3.13; source installs could require 3.12.
 - **Save validation is incomplete.** Unknown terrain, building or resource keys
   pass validation and only fail later during play.
 
