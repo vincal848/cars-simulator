@@ -1,7 +1,7 @@
 """Land movement costs and reachability.
 
 A step's cost combines terrain, the unit's role and regional charter, roads, river
-crossings and enemy zones of control, all evaluated at query time. Hostile
+crossings and the zones of control of enemies in sight, all evaluated at query time. Hostile
 provinces can be entered but not passed through.
 """
 
@@ -11,6 +11,7 @@ from typing import TYPE_CHECKING
 from cars.sim.defines import DEFINES
 from cars.sim.graph import Edge, Paths
 from cars.sim.regional import CHARTERS
+from cars.sim.visibility import visible_nodes
 
 if TYPE_CHECKING:
     from cars.sim.entities import Unit
@@ -20,11 +21,16 @@ RULES = DEFINES.movement
 
 
 def hostile_zoc(state: "GameState", owner: str) -> set[str]:
-    """Provinces next to an enemy land unit; entering one costs extra movement."""
+    """Provinces next to an enemy land unit; entering one costs extra movement.
+
+    Only units ``owner`` can see exert a zone of control, so route costs never
+    give away an army hidden by the fog of war.
+    """
+    visible = visible_nodes(state, owner)
     return {
         neighbor
         for unit in state.units.values()
-        if unit.is_land and state.at_war(owner, unit.owner)
+        if unit.is_land and state.at_war(owner, unit.owner) and unit.location in visible
         for neighbor, _ in state.land.neighbors(unit.location)
     }
 

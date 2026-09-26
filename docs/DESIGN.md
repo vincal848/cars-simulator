@@ -40,13 +40,15 @@ how the map is drawn.
 
 Commands validate first and mutate second. A refused order returns a reason and
 changes nothing, which the tests check. The AI goes through exactly the same
-commands, so it cannot make an illegal move.
+commands, so it cannot make an illegal move. It sees only what the fog of war
+shows its faction, and judges attacks with `combat.assess`, the same calculation
+the battle itself uses.
 
 ### The four graphs
 
 | Graph | Nodes | Used for |
 | --- | --- | --- |
-| Land | provinces | Movement. Step cost combines terrain, unit role, regional charter, roads, rivers, passes and enemy zones of control; unsupplied units pay 50% more. Hostile provinces can be entered but not crossed. |
+| Land | provinces | Movement. Step cost combines terrain, unit role, regional charter, roads, rivers, passes and the zones of control of enemies in sight; unsupplied units pay 50% more. Hostile provinces can be entered but not crossed. |
 | Supply | provinces | A land unit is supplied if a chain of provinces its faction controls links it to a controlled supply hub. |
 | Naval | sea zones | Fleet movement; a sea zone holding an enemy fleet ends the route and starts a battle. |
 | Air | provinces and sea zones | Operational range from a controlled airbase. |

@@ -17,6 +17,11 @@
 - **Scripted events:** eight events defined as data in `content/events/`, each
   with a trigger and choices. They are offered when your turn begins, must be
   answered, and are saved and replayed. Saves move to format version 3.
+- **Smarter, fairer rivals:** the AI judges each attack with the battle rules
+  themselves (terrain, rivers, high ground, supply, artillery and air support) and
+  only attacks when the province would fall or the exchange favours it. It plays
+  under the fog of war, and only enemies in sight exert a zone of control, so route
+  costs no longer reveal hidden armies.
 - **Mods:** folders in the user-data `mods` directory layer over the bundled
   content: objects merge key by key, lists replace, events are added. See
   `docs/MODDING.md`.

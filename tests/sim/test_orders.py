@@ -6,7 +6,6 @@ from cars.sim.combat import resolve
 from cars.sim.entities import LAND_KINDS, Unit
 from cars.sim.graph import Edge, Graph
 from cars.sim.journal import record
-from cars.sim.movement import hostile_zoc
 from cars.sim.naval import reachable_seas
 from cars.sim.orders import issue_move
 from cars.sim.supply import refresh_supply
@@ -54,7 +53,7 @@ class LandOrderTests(unittest.TestCase):
         self.assertLess(self.unit.hp, 10)
         self.assertEqual(self.unit.remaining, 0)
 
-    def test_every_land_role_moves_and_captures_use_supply_zoc_and_land_paths(self):
+    def test_every_land_role_moves_along_supplied_land_paths(self):
         for kind in LAND_KINDS:
             with self.subTest(kind=kind):
                 state, _, _ = compact()
@@ -62,7 +61,6 @@ class LandOrderTests(unittest.TestCase):
                 unit.kind = kind
                 refresh_supply(state)
                 self.assertTrue(unit.supplied)
-                self.assertIn("cascadia", hostile_zoc(state, "f1"))
                 route, _ = issue_move(state, unit.id, "cascadia")
                 self.assertGreater(len(route), 1)
                 self.assertIn(unit.id, state.provinces["cascadia"].units)

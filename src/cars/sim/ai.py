@@ -1,5 +1,6 @@
 """Rival factions. A small deterministic commander that issues the same validated
-commands a human player uses, so it can never make an illegal move."""
+commands a human player uses, so it can never make an illegal move. It plays
+under the same fog of war as the player: it only reacts to enemy forces it can see."""
 
 from collections import deque
 from collections.abc import Iterator
@@ -8,7 +9,7 @@ from typing import TYPE_CHECKING
 
 from cars.sim.air import STRIKE, STRIKE_TARGET_KINDS, coverage, mission
 from cars.sim.buildings import BUILDINGS, build, quote
-from cars.sim.combat import supply_factor
+from cars.sim.combat import assess
 from cars.sim.defines import DEFINES
 from cars.sim.diplomacy import declare_war, wants_war
 from cars.sim.entities import AIR, FLEET, LAND_KINDS
@@ -18,6 +19,7 @@ from cars.sim.naval import enemy_fleets, reachable_seas
 from cars.sim.orders import issue_move
 from cars.sim.recruitment import REQUIRED_FACILITY, quote_recruit, recruit
 from cars.sim.upkeep import net_income, unit_upkeep
+from cars.sim.visibility import visible_nodes
 
 if TYPE_CHECKING:
     from cars.sim.entities import Unit
@@ -75,8 +77,11 @@ class RivalCommander:
             elif unit.kind == FLEET:
                 yield from self._hunt_fleets(unit)
 
+    def _visible(self) -> set[str]:
+        return visible_nodes(self.state, self.owner)
+
     def _strike_nearest(self, unit: "Unit") -> Iterator[Action]:
-        in_range = coverage(self.state, unit)
+        in_range = coverage(self.state, unit) & self._visible()
         targets = sorted(
             {
                 other.location
@@ -97,8 +102,11 @@ class RivalCommander:
             route, message = issue_move(state, unit.id, unit.location)
             yield unit.id, route, message
             return
+        visible = self._visible()
         hostile = {
-            u.location for u in state.units.values() if u.kind == FLEET and state.at_war(self.owner, u.owner)
+            u.location
+            for u in state.units.values()
+            if u.kind == FLEET and state.at_war(self.owner, u.owner) and u.location in visible
         }
         distances = state.naval.shortest_paths(unit.location, step_cost)
         targets = [sea for sea in hostile if sea in distances.costs]
@@ -136,25 +144,44 @@ class RivalCommander:
             if unit.kind not in LAND_KINDS:
                 continue
             paths = reachable(self.state, unit)
-            score = partial(self._score_destination, unit, paths, front)
+            score = partial(self._score_destination, unit, paths, front, self._visible())
             destination = max(sorted(paths.costs), key=score)
             if destination != unit.location and score(destination) > score(unit.location):
                 route, message = issue_move(self.state, unit.id, destination)
                 yield unit.id, route, message
 
-    def _score_destination(self, unit: "Unit", paths: "Paths", front: dict[str, int], province: str) -> float:
-        """Prefer hostile provinces near the front; refuse attacks the unit cannot win."""
+    def _score_destination(
+        self, unit: "Unit", paths: "Paths", front: dict[str, int], visible: set[str], province: str
+    ) -> float:
+        """Prefer hostile provinces near the front; refuse attacks that are not worth fighting."""
         hostile = self.state.at_war(self.owner, self.state.provinces[province].controller)
-        defenders = self.state.enemy_units_at(province, self.owner, LAND_KINDS)
-        resistance = sum(defender.defense_power() for defender in defenders)
-        strength = unit.attack_power() * supply_factor(unit)
-        if hostile and defenders and strength < resistance * RULES.attack_margin:
+        if hostile and not self._worth_attacking(unit, paths.path(province), visible):
             return RULES.rejected_score
         bonus = RULES.hostile_province_score if hostile else 0
         distance = front.get(province, RULES.unknown_front_distance)
         return (
             bonus - distance * RULES.front_distance_weight - paths.costs[province] * RULES.route_cost_weight
         )
+
+    def _worth_attacking(self, unit: "Unit", route: list[str], visible: set[str]) -> bool:
+        """Judge an attack with the battle rules themselves, against the defenders in sight.
+
+        Worth it when the province would fall, or when the attacker survives and
+        trades damage favourably by at least ``attack_margin``.
+        """
+        if len(route) < 2:
+            return False
+        origin, target = route[-2], route[-1]
+        state = self.state
+        defenders = state.enemy_units_at(target, self.owner, LAND_KINDS) if target in visible else []
+        odds = assess(state, unit, origin, target, state.land.edge(origin, target), defenders)
+        if odds.captures(unit, defenders):
+            return True
+        taken = odds.attacker_loss()
+        if taken >= unit.hp:
+            return False
+        dealt = sum(min(defender.hp, odds.defender_loss(len(defenders))) for defender in defenders)
+        return dealt >= taken * RULES.attack_margin
 
     # Recruitment and construction -----------------------------------------------------
 

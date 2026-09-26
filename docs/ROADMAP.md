@@ -5,11 +5,6 @@
 - **Panning is slow on large windows.** Every drag event re-projects the relief
   raster at full resolution. It should be scaled once per zoom level and shifted
   while panning.
-- **The AI misjudges attacks.** Its attack estimate ignores terrain, rivers,
-  artillery and air support, so it sometimes launches attacks it loses. It should
-  use `forecast_order` like the player's forecast card.
-- **The AI ignores the fog of war.** Rivals still see every unit. Enemy zones of
-  control also still raise route costs next to hidden armies, which hints at them.
 - **The economy is too loose.** In 40-round AI games stockpiles grow into the
   thousands and upkeep rarely binds; there is little to spend resources on.
 - **One rival usually snowballs.** A single AI tends to take half the continent

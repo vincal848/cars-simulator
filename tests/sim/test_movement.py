@@ -30,6 +30,13 @@ class MovementCostTests(unittest.TestCase):
         self.unit.supplied = False
         self.assertAlmostEqual(self.cost(), mountain * 1.5)
 
+    def test_only_enemies_in_sight_exert_a_zone_of_control(self):
+        self.state.units["hidden"] = Unit("hidden", "f7", "tierra_del_fuego")
+        zoc = hostile_zoc(self.state, "f0")
+        self.assertNotIn("pampas", zoc)
+        self.state.units["scout"] = Unit("scout", "f0", "austral_andes", "scout")
+        self.assertIn("pampas", hostile_zoc(self.state, "f0"))
+
     def test_closed_border_is_impassable(self):
         self.assertEqual(
             movement_cost("yukon", "cascadia", Edge(border_type="closed"), self.unit, self.state), inf

@@ -15,7 +15,7 @@
     "id": "fog",
     "title": "Fog of war",
     "category": "Basics",
-    "body": "You see your own provinces and their neighbours, the ground around each of your units and the sea zones beside your ports and fleets. Enemy forces elsewhere are hidden and shaded provinces mark what you cannot see; the map itself is always known. Order forecasts only cover targets you can see. Scouts are the cheapest way to watch a frontier."
+    "body": "You see your own provinces and their neighbours, the ground around each of your units and the sea zones beside your ports and fleets. Enemy forces elsewhere are hidden and shaded provinces mark what you cannot see; the map itself is always known. Order forecasts only cover targets you can see, and only enemies in sight exert a zone of control. Rivals play under the same fog. Scouts are the cheapest way to watch a frontier."
   },
   {
     "id": "diplomacy",
