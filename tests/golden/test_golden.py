@@ -5,7 +5,6 @@ If one of these fails after an intentional change, inspect the difference with
 regenerated references together with the change.
 """
 
-import sys
 import unittest
 
 from tests.golden.reference import SCREENS_FILE, SIMULATION_FILE, load, screen_hashes, simulation_hashes
@@ -21,8 +20,6 @@ def first_difference(expected: list, actual: list) -> str:
 
 
 class GoldenSimulationTest(unittest.TestCase):
-    # Python 3.12 made sum() of floats compensated, which changes combat results slightly.
-    @unittest.skipIf(sys.version_info < (3, 12), "references are recorded with Python 3.12+ float summation")
     def test_simulation_matches_reference(self):
         expected = load(SIMULATION_FILE)["steps"]
         actual = simulation_hashes()

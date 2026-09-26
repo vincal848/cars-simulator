@@ -9,7 +9,7 @@ description = "Combat Arms Region Simulator: the player plays on a map, the simu
 readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE", "MUSIC_CREDITS.md"]
-requires-python = ">=3.10"
+requires-python = ">=3.12"
 dependencies = ["pygame-ce>=2.5.8,<3"]
 
 [project.optional-dependencies]
@@ -29,7 +29,7 @@ cars = ["content/**/*.json", "content/**/*.geojson", "content/**/*.jpg", "conten
 
 [tool.ruff]
 line-length = 110
-target-version = "py310"
+target-version = "py312"
 src = ["src", "tests", "tools"]
 
 [tool.ruff.lint]

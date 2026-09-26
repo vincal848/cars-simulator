@@ -23,6 +23,8 @@
 - **Smaller saves:** saves and replays on a bundled map refer to it by name and
   digest instead of copying it, shrinking them from about 1.3 MB to 100 KB. Saves
   move to format version 4; older saves upgrade automatically.
+- Python 3.12 or newer is now required. Python 3.12 changed how `sum()` adds
+  floats, so replays recorded on older versions could not be verified reliably.
 - Saves naming an unknown terrain, building or resource are rejected when opened.
 - Golden-master tests, a crash log for the Windows build, and step-by-step
   upgrades for older save formats.

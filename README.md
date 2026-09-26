@@ -49,7 +49,7 @@ Windows may ask for confirmation the first time.
 
 ### From source (Windows, macOS, Linux)
 
-Requires Python 3.10 or newer.
+Requires Python 3.12 or newer.
 
 ```sh
 git clone <this repository> && cd CARS
@@ -122,7 +122,7 @@ python -m cars --smoke                       # render three frames without a win
 ruff check . && ruff format --check .
 ```
 
-CI runs the suite on Windows, macOS and Linux with Python 3.10 and 3.13. Tagging
+CI runs the suite on Windows, macOS and Linux with Python 3.12 and 3.13. Tagging
 a `v*` release builds the Windows download; see
 [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) for the release checklist and
 [docs/ROADMAP.md](docs/ROADMAP.md) for what's next.
