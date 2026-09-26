@@ -177,6 +177,20 @@ class UpgradeTests(SaveTestCase):
         self.assertEqual(state.relations, {})
         self.assertTrue(state.at_war("f0", "f1"))
 
+    def test_version_two_saves_gain_an_empty_event_log(self):
+        def as_version_two(data):
+            data["version"] = 2
+            del data["events"]
+
+        self.corrupt(as_version_two)
+        state, *_ = load_game(self.path)
+        self.assertEqual(state.events, {"pending": [], "fired": []})
+
+    def test_unknown_events_are_rejected(self):
+        self.corrupt(lambda data: data.update(events={"pending": [], "fired": ["no_such_event"]}))
+        with self.assertRaises(ValueError):
+            load_game(self.path)
+
     def test_saves_from_a_newer_game_are_refused_clearly(self):
         self.corrupt(lambda data: data.update(version=savegame.SAVE_VERSION + 1))
         with self.assertRaisesRegex(ValueError, "newer version"):

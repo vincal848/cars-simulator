@@ -180,3 +180,20 @@ class DiplomacyDialogTests(ScreenTestCase):
         self.draw()
         self.click(dialog.buttons["f1"].center)  # Declaring war during the truce is refused.
         self.assertFalse(self.state.at_war("f0", "f1"))
+
+
+class EventDialogTests(ScreenTestCase):
+    def test_a_pending_event_demands_a_decision(self):
+        self.state.events["pending"].append("bountiful_harvest")
+        self.state.events["fired"].append("bountiful_harvest")
+        self.game.update(0.1)
+        self.assertEqual(self.game.dialogs.mode, "event")
+        self.draw()
+        self.key(pygame.K_ESCAPE)
+        self.assertEqual(self.game.dialogs.mode, "event")
+        gold = self.state.factions["f0"].gold
+        self.click(self.game.dialogs.active.buttons["option1"].center)
+        self.assertIsNone(self.game.dialogs.mode)
+        self.assertEqual(self.state.factions["f0"].gold, gold + 35)
+        self.game.update(0.1)
+        self.assertIsNone(self.game.dialogs.mode)

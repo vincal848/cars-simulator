@@ -15,6 +15,7 @@ from cars.paths import read_json, saves_dir, write_text_atomic
 from cars.sim.calendar import date_label, validate_clock
 from cars.sim.defines import DEFINES
 from cars.sim.entities import AIR, FLEET, UNIT_KINDS, City, Faction, Province, Region, Unit
+from cars.sim.events import EVENTS
 from cars.sim.graph import Edge, Graph
 from cars.sim.market import RULES as MARKET_RULES
 from cars.sim.objectives import ACTIVE, DEFEAT, VICTORY, begin
@@ -23,7 +24,7 @@ from cars.sim.scenario import LAYERS
 from cars.sim.state import FACTION_COUNT, PEACE, GameState, relation_key
 from cars.sim.supply import refresh_supply
 
-SAVE_VERSION = 2
+SAVE_VERSION = 3
 
 
 def _add_relations(data: dict) -> dict:
@@ -32,9 +33,15 @@ def _add_relations(data: dict) -> dict:
     return data
 
 
+def _add_event_log(data: dict) -> dict:
+    """Version 3 added scripted events; nothing had fired yet."""
+    data["events"] = {"pending": [], "fired": []}
+    return data
+
+
 # UPGRADES[n] converts a version-n save into version n + 1. When the format changes,
 # bump SAVE_VERSION and register a step here instead of breaking players' saves.
-UPGRADES: dict[int, Callable[[dict], dict]] = {1: _add_relations}
+UPGRADES: dict[int, Callable[[dict], dict]] = {1: _add_relations, 2: _add_event_log}
 ENTITY_TYPES = {
     "provinces": Province,
     "regions": Region,
@@ -101,6 +108,7 @@ def encode_game(state: GameState, shapes: dict, seas: list, player: str) -> dict
         reports=state.reports,
         air_support=state.air_support,
         relations=state.relations,
+        events=state.events,
         clock=state.clock,
         tutorial=state.tutorial,
     )
@@ -170,6 +178,8 @@ def _decode(data: dict) -> Loaded:
     state.reports = state.reports[-DEFINES.journal.entry_limit :]
     state.relations = data["relations"]
     _check_relations(state)
+    state.events = data["events"]
+    _check_event_log(state.events)
     state.air_support = data["air_support"]
     _check_air_support(state)
     state.recruited = data["recruited"]
@@ -296,6 +306,17 @@ def _check_journal(state: GameState) -> None:
 
     if not isinstance(state.reports, list) or not all(valid(entry) for entry in state.reports):
         raise ValueError("Invalid campaign journal.")
+
+
+def _check_event_log(log: object) -> None:
+    valid = (
+        isinstance(log, dict)
+        and set(log) == {"pending", "fired"}
+        and all(isinstance(ids, list) and all(i in EVENTS for i in ids) for ids in log.values())
+        and set(log["pending"]) <= set(log["fired"])
+    )
+    if not valid:
+        raise ValueError("Invalid event log.")
 
 
 def _check_relations(state: GameState) -> None:

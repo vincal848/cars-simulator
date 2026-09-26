@@ -1,0 +1,82 @@
+[
+  {
+    "id": "bountiful_harvest",
+    "title": "A Bountiful Harvest",
+    "text": "The autumn fields have yielded more than the granaries can hold. The stewards ask whether the surplus should be stored against lean seasons or sold to the coastal merchants while prices are high.",
+    "trigger": {"round_at_least": 3, "cities_at_least": 2},
+    "options": [
+      {"label": "Fill the granaries (+25 food)", "effects": {"add_resources": {"food": 25}}},
+      {"label": "Sell the surplus (+35 gold)", "effects": {"add_gold": 35}}
+    ]
+  },
+  {
+    "id": "veteran_volunteers",
+    "title": "Veterans Offer Their Service",
+    "text": "Old soldiers from the frontier wars have gathered at the capital, asking to serve once more. Their captains want provisions; a few would settle for land grants instead.",
+    "trigger": {"round_at_least": 4, "stock_at_least": {"food": 20}},
+    "options": [
+      {"label": "Muster them (a free infantry regiment, -15 food)", "effects": {"raise_unit": "infantry", "add_resources": {"food": -15}}},
+      {"label": "Grant them land (+10 wood, +10 food)", "effects": {"add_resources": {"wood": 10, "food": 10}}}
+    ]
+  },
+  {
+    "id": "camp_fever",
+    "title": "Fever in the Camps",
+    "text": "A fever is spreading through the encampments of your wounded regiments. The surgeons can contain it, but only with food and clean quarters the treasury must pay for.",
+    "trigger": {"round_at_least": 5, "damaged_units_at_least": 3},
+    "options": [
+      {"label": "Pay for quarters and physicians (-20 food, -20 gold, units recover)", "effects": {"add_resources": {"food": -20}, "add_gold": -20, "heal_units": 2}},
+      {"label": "Let it run its course (land units lose strength)", "effects": {"weaken_units": 2}}
+    ]
+  },
+  {
+    "id": "iron_seam",
+    "title": "A New Seam of Iron",
+    "text": "Prospectors in the hills report a rich seam of iron ore close to the surface. Working it quickly will take timber for shafts and wagons.",
+    "trigger": {"round_at_least": 6, "stock_at_least": {"wood": 15}},
+    "options": [
+      {"label": "Open the workings (-15 wood, +30 iron)", "effects": {"add_resources": {"wood": -15, "iron": 30}}},
+      {"label": "Sell the claim (+25 gold)", "effects": {"add_gold": 25}}
+    ]
+  },
+  {
+    "id": "merchant_convoy",
+    "title": "A Merchant Convoy Arrives",
+    "text": "A convoy of foreign merchantmen has anchored off your coast, holds full of timber, grain and pig iron. Their factor offers a generous price for exclusive rights to the harbour.",
+    "trigger": {"round_at_least": 5, "gold_at_least": 60},
+    "options": [
+      {"label": "Grant the rights (+30 gold, the exchange restocks)", "effects": {"add_gold": 30, "merchant_stock": {"wood": 20, "food": 20, "iron": 20}}},
+      {"label": "Buy their cargo outright (-40 gold, +15 of each resource)", "effects": {"add_gold": -40, "add_resources": {"wood": 15, "food": 15, "iron": 15}}}
+    ]
+  },
+  {
+    "id": "envoys_of_peace",
+    "title": "Envoys at Court",
+    "text": "With the border quiet, envoys from your new partners propose a trade fair in the capital. Some councillors warn that open markets will empty your own storehouses.",
+    "trigger": {"at_peace_with_any": true},
+    "options": [
+      {"label": "Hold the fair (+40 gold)", "effects": {"add_gold": 40}},
+      {"label": "Exchange provisions instead (+10 of each resource)", "effects": {"add_resources": {"wood": 10, "food": 10, "iron": 10}}}
+    ]
+  },
+  {
+    "id": "lean_winter",
+    "title": "A Lean Winter",
+    "text": "Stores are running low and the quartermasters warn that the regiments will go hungry before spring. Levies from the provinces would fill the wagons but anger the landholders.",
+    "trigger": {"round_at_least": 3, "stock_below": {"food": 8}},
+    "options": [
+      {"label": "Requisition from the provinces (+20 food, -10 wood)", "effects": {"add_resources": {"food": 20, "wood": -10}}},
+      {"label": "Buy grain abroad (-30 gold, +20 food)", "effects": {"add_gold": -30, "add_resources": {"food": 20}}}
+    ]
+  },
+  {
+    "id": "last_stand",
+    "title": "The Realm at Bay",
+    "text": "Your realm has been driven back to its last strongholds. The loyal remnant of the court offers its silver plate to raise one more regiment.",
+    "trigger": {"round_at_least": 2, "cities_below": 2},
+    "options": [
+      {"label": "Melt the plate (a free infantry regiment)", "effects": {"raise_unit": "infantry"}},
+      {"label": "Buy time with gifts (+30 gold)", "effects": {"add_gold": 30}}
+    ]
+  }
+]

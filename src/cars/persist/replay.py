@@ -19,6 +19,7 @@ from cars.sim.ai import faction_actions
 from cars.sim.air import mission
 from cars.sim.buildings import build
 from cars.sim.diplomacy import declare_war, propose_peace
+from cars.sim.events import choose_option
 from cars.sim.market import trade
 from cars.sim.orders import issue_move
 from cars.sim.recruitment import recruit
@@ -48,6 +49,7 @@ def digest(state: GameState) -> str:
         air_support=state.air_support,
         reports=state.reports,
         relations=state.relations,
+        events=state.events,
     )
     encoded = json.dumps(data, sort_keys=True, allow_nan=False).encode()
     return hashlib.sha256(encoded).hexdigest()
@@ -74,6 +76,7 @@ COMMANDS: dict[str, tuple[int, Callable[..., object]]] = {
     "trade": (2, lambda state, resource, side: trade(state, state.active, resource, side)),
     "peace": (1, lambda state, faction: propose_peace(state, state.active, faction)),
     "war": (1, lambda state, faction: declare_war(state, state.active, faction)),
+    "event": (2, lambda state, event_id, index: choose_option(state, state.active, event_id, int(index))),
     "end_turn": (0, _end_round),
 }
 

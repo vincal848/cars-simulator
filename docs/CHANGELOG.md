@@ -14,6 +14,9 @@
   closes both borders and ends attacks for a six-round truce, after which a much
   stronger rival may declare war again. Saves move to format version 2; older
   saves upgrade automatically with every nation at war.
+- **Scripted events:** eight events defined as data in `content/events/`, each
+  with a trigger and choices. They are offered when your turn begins, must be
+  answered, and are saved and replayed. Saves move to format version 3.
 - Golden-master tests, a crash log for the Windows build, and step-by-step
   upgrades for older save formats.
 - Restructured the code base: `src/` layout; separate `sim`, `persist` and `ui`

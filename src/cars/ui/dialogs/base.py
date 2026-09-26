@@ -21,6 +21,8 @@ class Dialog:
     title = ""
     seal = "reports"
     text_input = False
+    # Dialogs that demand a decision cannot be dismissed with Esc or a close button.
+    closable = True
 
     def __init__(self, game: "GameScreen") -> None:
         self.game = game
@@ -36,7 +38,7 @@ class Dialog:
         self.page = 0
         self.notice = ""
         # The close button comes first so it wins over anything beneath it.
-        self.buttons = {"close": CLOSE_BUTTON, **self.layout()}
+        self.buttons = {"close": CLOSE_BUTTON, **self.layout()} if self.closable else self.layout()
 
     def layout(self) -> dict[str, pygame.Rect]:
         return {}

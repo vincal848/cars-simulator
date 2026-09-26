@@ -128,6 +128,10 @@ Everything a designer would tune is data under `src/cars/content/`:
   `factions.json`, `regional_units.json`, `calendar.json`
 - `gfx/uniform_styles.json`: the eight regional uniform styles
 - `text/`: CARSapedia entries, unit notes and tutorial lessons
+- `events/`: scripted events. Each has a `trigger` (all conditions must hold) and
+  two or more `options` with `effects`. The available trigger and effect names are
+  the `TRIGGERS` and `EFFECTS` tables in `sim/events.py`; an unknown name fails
+  at start-up rather than in the middle of a campaign.
 - `scenarios/`: scenario JSON (provinces, regions, cities, units, graphs,
   objectives) with a sibling GeoJSON for province shapes
 

@@ -240,6 +240,9 @@ class GameScreen:
         self.tutorial.observe()
         if self.dialogs.mode:
             return
+        if self.campaign.human_turn and self.state.events["pending"] and not self.view.animation:
+            self.dialogs.open("event")
+            return
         renderer = self.renderer
         renderer.time += dt
         renderer.build_effects = {

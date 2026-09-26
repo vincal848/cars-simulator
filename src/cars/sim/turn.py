@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 
 from cars.sim.calendar import date_label
 from cars.sim.economy import produce
+from cars.sim.events import check_events
 from cars.sim.journal import record
 from cars.sim.market import replenish, treasury_income
 from cars.sim.objectives import evaluate
@@ -53,4 +54,6 @@ def end_turn(state: "GameState") -> dict[str, float]:
                 participants=[player],
             )
     evaluate(state, tick=state.active == player)
+    if player and state.active == player:
+        check_events(state, player)
     return gains

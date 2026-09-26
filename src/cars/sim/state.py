@@ -39,6 +39,8 @@ class GameState:
     air_support: list[dict] = field(default_factory=list)
     # Peace treaties keyed by relation_key(a, b); any pair without one is at war.
     relations: dict[str, dict] = field(default_factory=dict)
+    # Scripted events: ids fired this campaign and those awaiting the player's choice.
+    events: dict[str, list[str]] = field(default_factory=lambda: {"pending": [], "fired": []})
 
     @property
     def active(self) -> str:

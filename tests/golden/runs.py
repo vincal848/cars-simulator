@@ -308,6 +308,11 @@ def _screens(screen: pygame.Surface) -> Iterator[tuple[str, pygame.Surface]]:
     for mode in dialogs:
         game.dialogs.open(mode)
         yield f"dialog {mode}", camera.frame(game)
+    state.events["fired"].append("bountiful_harvest")
+    state.events["pending"].append("bountiful_harvest")
+    game.dialogs.open("event")
+    yield "dialog event", camera.frame(game)
+    state.events["pending"].clear()
     pedia = game.dialogs.dialogs["pedia"]
     game.dialogs.open("pedia")
     pedia.section, pedia.index = "Units", 2

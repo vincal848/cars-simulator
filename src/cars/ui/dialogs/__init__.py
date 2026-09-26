@@ -7,6 +7,7 @@ import pygame
 from cars.ui.dialogs.base import CLOSE_BUTTON, FRAME, Dialog
 from cars.ui.dialogs.chronicle import ChronicleDialog
 from cars.ui.dialogs.diplomacy import DiplomacyDialog
+from cars.ui.dialogs.event import EventDialog
 from cars.ui.dialogs.library import LoadDialog, SaveDialog
 from cars.ui.dialogs.pedia import PediaDialog
 from cars.ui.dialogs.replay_studio import ReplayStudioDialog
@@ -30,6 +31,7 @@ DIALOG_TYPES: dict[str, type[Dialog]] = {
     "pedia": PediaDialog,
     "strategy": StrategyDialog,
     "replay": ReplayStudioDialog,
+    "event": EventDialog,
 }
 SHADE = (6, 10, 16, 190)
 
@@ -61,7 +63,7 @@ class Dialogs:
         return self.mode is not None
 
     def event(self, event: pygame.event.Event) -> bool:
-        if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE and self.active.closable:
             self.close()
         else:
             self.active.handle(event)
@@ -78,5 +80,6 @@ class Dialogs:
         t.seal(dialog.seal, (284, 141), 39)
         t.text(dialog.title, 315, 127, t.serif)
         t.rule(268, 169, 664)
-        t.button(CLOSE_BUTTON, "x")
+        if dialog.closable:
+            t.button(CLOSE_BUTTON, "x")
         dialog.draw()

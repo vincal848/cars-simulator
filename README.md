@@ -16,6 +16,8 @@ on those graphs. The map you see is only a way to click on them.
   zones of control, supply cut-offs, fog of war and deterministic attrition combat.
 - **Four unit roles plus navy and air**: infantry, scouts, cavalry and field
   artillery; fleets that fight for sea zones; air groups that strike, support or rebase.
+- **Scripted events** defined in data files: harvests, veterans, fevers,
+  convoys and more, each with a real choice.
 - **Diplomacy**: make peace with rivals that are no stronger than you, and watch
   for the ones that grow strong enough to break it.
 - **Economy**: regional wood, food and iron; farms, mills, mines, roads, shipyards
@@ -99,6 +101,7 @@ src/cars/
     map/        shaded relief and source hashes
     scenarios/  scenario JSON and province GeoJSON
     text/       CARSapedia entries, unit notes and tutorial lessons
+    events/     scripted events with triggers, choices and effects
     music/      bundled recordings
 tests/        unit and UI tests, mirroring src/
 tools/mapgen/ offline scripts that rebuild the map from Natural Earth
