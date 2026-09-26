@@ -1,0 +1,52 @@
+name: Bug report
+description: Something went wrong while playing or building the game.
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you do, what did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Shown at the bottom of the title screen, e.g. "Prototype 0.24".
+    validations:
+      required: true
+  - type: dropdown
+    id: install
+    attributes:
+      label: How do you run the game?
+      options:
+        - Windows download (CARS.exe)
+        - From source
+    validations:
+      required: true
+  - type: input
+    id: system
+    attributes:
+      label: Operating system
+      placeholder: Windows 11, macOS 15, Ubuntu 24.04...
+  - type: textarea
+    id: crash
+    attributes:
+      label: Crash log
+      description: >
+        If the game closed unexpectedly, paste the newest entry from crash.log
+        (Windows: %LOCALAPPDATA%\CARS\crash.log).
+      render: text
+  - type: textarea
+    id: save
+    attributes:
+      label: Save file or replay
+      description: >
+        If you can, attach the save (%LOCALAPPDATA%\CARS\saves) or an exported replay
+        (Replay studio, R) that shows the problem. Replays let us reproduce it exactly.
+  - type: input
+    id: mods
+    attributes:
+      label: Active mods
+      description: Listed on the title screen, if any.

@@ -1,4 +1,4 @@
-include LICENSE MUSIC_CREDITS.md MAP_SOURCES.md THIRD_PARTY.md README.md
+include LICENSE MUSIC_CREDITS.md MAP_SOURCES.md THIRD_PARTY.md README.md CONTRIBUTING.md
 graft docs
 graft examples
 graft scripts
