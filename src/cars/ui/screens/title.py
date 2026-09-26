@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING, ClassVar
 import pygame
 
 from cars import __version__
+from cars.paths import active_mods
 from cars.persist.savegame import SaveLibrary
 from cars.ui.art.ornament import branch, crown, fleur
 from cars.ui.palette import CANVAS_SIZE, DIM, GOLD, PAPER
@@ -147,6 +148,9 @@ class TitleScreen:
             t.button(rect, labels[name], enabled=name != "load" or has_save)
         t.centered("Eight nations / One Americas", MENU_CENTER_X, 657, t.body, GOLD)
         t.centered(f"Prototype {RELEASE} / Choose your realm", MENU_CENTER_X, 682, t.small, DIM)
+        mods = active_mods()
+        if mods:
+            t.text("Mods: " + ", ".join(mod.name for mod in mods), 130, 735, t.small, DIM, width=540)
         if self.message:
             t.text(self.message, 702, 716, t.body, width=516)
         if self.help:

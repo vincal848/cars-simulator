@@ -13,7 +13,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
-from cars.paths import CONTENT_DIR, read_json
+from cars.paths import CONTENT_DIR, mod_files, read_json
 from cars.sim.entities import FLEET, FULL_STRENGTH, RESOURCES, UNIT_KINDS, UNIT_STATS, Unit
 from cars.sim.journal import record
 from cars.sim.market import RULES as MARKET_RULES
@@ -166,12 +166,17 @@ def parse_event(raw: dict) -> Event:
 
 
 def load_events() -> dict[str, Event]:
+    """Bundled events, then mod events; a mod event replaces a bundled one with the same id."""
     events: dict[str, Event] = {}
     for path in sorted((CONTENT_DIR / "events").glob("*.json")):
         for raw in read_json(path):
             event = parse_event(raw)
             if event.id in events:
                 raise ValueError(f"Duplicate event id {event.id!r} in {path.name}")
+            events[event.id] = event
+    for path in mod_files("events"):
+        for raw in read_json(path):
+            event = parse_event(raw)
             events[event.id] = event
     return events
 

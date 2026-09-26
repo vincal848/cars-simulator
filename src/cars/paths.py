@@ -1,4 +1,9 @@
-"""Filesystem locations for bundled game content and per-user data."""
+"""Filesystem locations for bundled game content, mods and per-user data.
+
+Mods are folders in ``<user data>/mods/`` that mirror the ``content`` layout. They
+load alphabetically: JSON objects are merged key by key over the bundled file
+(so a mod can change a single define), anything else replaces it outright.
+"""
 
 import json
 import os
@@ -17,9 +22,43 @@ def read_json(path: Path) -> Any:
     return json.loads(Path(path).read_text(encoding="utf-8"))
 
 
+def merge(base: Any, override: Any) -> Any:
+    """Deep-merge JSON objects; any other value in ``override`` replaces ``base``."""
+    if isinstance(base, dict) and isinstance(override, dict):
+        merged = dict(base)
+        for key, value in override.items():
+            merged[key] = merge(base[key], value) if key in base else value
+        return merged
+    return override
+
+
 def load_content(*parts: str) -> Any:
-    """Parse a bundled JSON file, e.g. ``load_content("common", "units.json")``."""
-    return read_json(content_path(*parts))
+    """Parse a content JSON file with every active mod layered on top.
+
+    For example ``load_content("common", "units.json")``.
+    """
+    data = read_json(content_path(*parts))
+    for mod in active_mods():
+        override = mod.joinpath(*parts)
+        if override.is_file():
+            data = merge(data, read_json(override))
+    return data
+
+
+def mods_dir() -> Path:
+    return saves_dir().parent / "mods"
+
+
+def active_mods() -> list[Path]:
+    folder = mods_dir()
+    if not folder.is_dir():
+        return []
+    return sorted(path for path in folder.iterdir() if path.is_dir())
+
+
+def mod_files(folder: str, pattern: str = "*.json") -> list[Path]:
+    """Files that mods add to a content folder, in load order."""
+    return [path for mod in active_mods() for path in sorted((mod / folder).glob(pattern))]
 
 
 def write_text_atomic(path: Path, text: str) -> None:
