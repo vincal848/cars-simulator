@@ -1,8 +1,11 @@
 """Command-line entry point and main loop."""
 
 import argparse
+import contextlib
 import os
 from pathlib import Path
+
+from cars.crash import write_report
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -31,8 +34,18 @@ def main(argv: list[str] | None = None) -> None:
     from cars.ui.app import App
 
     pygame.init()
-    App(args).run()
-    pygame.quit()
+    try:
+        App(args).run()
+    except Exception as error:
+        report = write_report(error)
+        # Without a console this dialog is the player's only sign of what happened.
+        with contextlib.suppress(pygame.error):
+            pygame.display.message_box(
+                "C.A.R.S. has stopped", f"Something went wrong. Details were saved to:\n{report}", "error"
+            )
+        raise
+    finally:
+        pygame.quit()
 
 
 if __name__ == "__main__":

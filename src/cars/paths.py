@@ -53,3 +53,7 @@ def replays_dir() -> Path:
 
 def settings_path() -> Path:
     return saves_dir().parent / "settings.json"
+
+
+def crash_log_path() -> Path:
+    return saves_dir().parent / "crash.log"

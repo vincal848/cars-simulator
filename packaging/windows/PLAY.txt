@@ -19,6 +19,7 @@ Saves:    %LOCALAPPDATA%\CARS\saves
 Replays:  %LOCALAPPDATA%\CARS\replays
 Settings: %LOCALAPPDATA%\CARS\settings.json
 Replacing or moving the game folder never touches your saves.
+If the game ever closes unexpectedly, the details are in %LOCALAPPDATA%\CARS\crash.log.
 
 Original code and art: MIT (LICENSE). Maps: Natural Earth (MAP_SOURCES.md).
 Music: see MUSIC_CREDITS.md. Bundled software: THIRD_PARTY.md and licenses/.
