@@ -3,7 +3,9 @@ import tempfile
 import unittest
 from dataclasses import asdict
 from pathlib import Path
+from unittest.mock import patch
 
+from cars.persist import savegame
 from cars.persist.savegame import SaveLibrary, load_game, save_game
 from cars.sim.air import coverage, mission
 from cars.sim.campaign import Campaign
@@ -139,6 +141,34 @@ class ValidationTests(SaveTestCase):
         self.corrupt(add_capacity)
         state, *_ = load_game(self.path)
         self.assertEqual(state.supply.adj.keys(), self.state.supply.adj.keys())
+
+
+class UpgradeTests(SaveTestCase):
+    def setUp(self):
+        super().setUp()
+        self.state, self.shapes, self.seas = compact()
+        save_game(self.state, self.shapes, self.seas, "f0", self.path)
+
+    def test_older_saves_are_upgraded_step_by_step(self):
+        steps = []
+
+        def rename_player(data):
+            steps.append(data["version"])
+            data["factions"][0]["name"] = "Upgraded Union"
+            return data
+
+        library = SaveLibrary(self.path.parent)
+        save_game(self.state, self.shapes, self.seas, "f0", library.path(0))
+        with patch.object(savegame, "SAVE_VERSION", 2), patch.dict(savegame.UPGRADES, {1: rename_player}):
+            state, *_ = load_game(library.path(0))
+            self.assertIn("Upgraded Union", library.describe(0))
+        self.assertEqual(steps, [1, 1])  # Once for loading, once for the library listing.
+        self.assertEqual(state.factions["f0"].name, "Upgraded Union")
+
+    def test_saves_from_a_newer_game_are_refused_clearly(self):
+        self.corrupt(lambda data: data.update(version=savegame.SAVE_VERSION + 1))
+        with self.assertRaisesRegex(ValueError, "newer version"):
+            load_game(self.path)
 
 
 class SaveLibraryTests(unittest.TestCase):

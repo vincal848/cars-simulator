@@ -44,8 +44,9 @@ Some rules for changes:
 - Put tuning numbers in `content/common/defines.json`, not in code.
 - If a change alters the outcome of any recorded command, bump `RULESET` in
   `persist/replay.py` and regenerate `examples/opening.json`.
-- Changing an entity field changes the save format; bump `SAVE_VERSION` in
-  `persist/savegame.py` if old saves can no longer load.
+- Changing an entity field changes the save format. Bump `SAVE_VERSION` in
+  `persist/savegame.py` and register an upgrade step in `UPGRADES` that converts
+  the previous version, so players' existing saves keep loading.
 
 ## Releasing the Windows download
 

@@ -7,6 +7,7 @@ the state is used; a malformed file raises ``ValueError``.
 
 import json
 import math
+from collections.abc import Callable
 from dataclasses import asdict
 from pathlib import Path
 
@@ -23,6 +24,9 @@ from cars.sim.state import FACTION_COUNT, GameState
 from cars.sim.supply import refresh_supply
 
 SAVE_VERSION = 1
+# UPGRADES[n] converts a version-n save into version n + 1. When the format changes,
+# bump SAVE_VERSION and register a step here instead of breaking players' saves.
+UPGRADES: dict[int, Callable[[dict], dict]] = {}
 ENTITY_TYPES = {
     "provinces": Province,
     "regions": Region,
@@ -64,7 +68,7 @@ class SaveLibrary:
         if not path.exists():
             return "Empty slot"
         try:
-            data = read_json(path)
+            data = upgrade(read_json(path))
             faction = next(f["name"] for f in data["factions"] if f["id"] == data["player"])
             validate_clock(data["clock"])
             return f"{faction} / {date_label(data['clock'])}"
@@ -112,8 +116,23 @@ def load_game(path: Path) -> Loaded:
     return decode_game(read_json(path))
 
 
+def upgrade(data: dict) -> dict:
+    """Bring save data from any earlier format up to SAVE_VERSION, one step at a time."""
+    version = data.get("version") if isinstance(data, dict) else None
+    if type(version) is not int or version < 1:
+        raise ValueError("Unsupported save version.")
+    if version > SAVE_VERSION:
+        raise ValueError("This save was made by a newer version of C.A.R.S.")
+    while version < SAVE_VERSION:
+        data = UPGRADES[version](data)
+        version += 1
+        data["version"] = version
+    return data
+
+
 def decode_game(data: dict) -> Loaded:
     """Rebuild a campaign from save data, rejecting anything inconsistent."""
+    data = upgrade(data)
     try:
         return _decode(data)
     except (KeyError, TypeError, AttributeError, IndexError) as exc:
@@ -121,8 +140,6 @@ def decode_game(data: dict) -> Loaded:
 
 
 def _decode(data: dict) -> Loaded:
-    if data.get("version") != SAVE_VERSION:
-        raise ValueError("Unsupported save version.")
     entities = {name: {item["id"]: cls(**item) for item in data[name]} for name, cls in ENTITY_TYPES.items()}
     graphs = {layer: _decode_graph(data["graphs"][layer]) for layer in LAYERS}
     state = GameState(
