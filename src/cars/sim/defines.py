@@ -69,6 +69,12 @@ class RecoveryDefines:
 
 
 @dataclass(frozen=True)
+class UpkeepDefines:
+    per_unit: Mapping[str, Mapping[str, float]]
+    shortfall_attrition: float
+
+
+@dataclass(frozen=True)
 class JournalDefines:
     entry_limit: int
 
@@ -92,6 +98,7 @@ class Defines:
     air: AirDefines
     recruitment: RecruitmentDefines
     recovery: RecoveryDefines
+    upkeep: UpkeepDefines
     journal: JournalDefines
     ai: AIDefines
 
@@ -106,6 +113,7 @@ class Defines:
             air=AirDefines(**raw["air"]),
             recruitment=RecruitmentDefines(**raw["recruitment"]),
             recovery=RecoveryDefines(**raw["recovery"]),
+            upkeep=UpkeepDefines(**raw["upkeep"]),
             journal=JournalDefines(**raw["journal"]),
             ai=AIDefines(**ai),
         )

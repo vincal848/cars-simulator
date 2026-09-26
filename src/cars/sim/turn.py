@@ -9,6 +9,7 @@ from cars.sim.market import replenish, treasury_income
 from cars.sim.objectives import evaluate
 from cars.sim.recovery import recover
 from cars.sim.supply import refresh_supply
+from cars.sim.upkeep import pay_upkeep
 
 if TYPE_CHECKING:
     from cars.sim.state import GameState
@@ -21,6 +22,7 @@ def end_turn(state: "GameState") -> dict[str, float]:
     gains = produce(state, state.active)
     details = [f"{resource}: +{amount:.1f}" for resource, amount in gains.items()]
     record(state, "economy", "Turn completed; production collected.", details=details)
+    pay_upkeep(state, state.active)
     state.recruited.clear()
 
     state.active_index = (state.active_index + 1) % len(state.factions)

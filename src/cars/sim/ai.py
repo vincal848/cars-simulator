@@ -10,13 +10,13 @@ from cars.sim.air import STRIKE, STRIKE_TARGET_KINDS, coverage, mission
 from cars.sim.buildings import BUILDINGS, build, quote
 from cars.sim.combat import supply_factor
 from cars.sim.defines import DEFINES
-from cars.sim.economy import forecast
 from cars.sim.entities import AIR, FLEET, LAND_KINDS
 from cars.sim.graph import step_cost
 from cars.sim.movement import reachable
 from cars.sim.naval import enemy_fleets, reachable_seas
 from cars.sim.orders import issue_move
 from cars.sim.recruitment import REQUIRED_FACILITY, quote_recruit, recruit
+from cars.sim.upkeep import net_income, unit_upkeep
 
 if TYPE_CHECKING:
     from cars.sim.entities import Unit
@@ -146,16 +146,22 @@ class RivalCommander:
 
     # Recruitment and construction -----------------------------------------------------
 
+    def _can_support(self, kind: str) -> bool:
+        """Whether income still covers upkeep with one more unit of ``kind``."""
+        income = net_income(self.state, self.owner)
+        return all(income[resource] >= cost for resource, cost in unit_upkeep(kind).items())
+
     def _develop(self) -> Iterator[Action]:
-        """Recruit one unit of this turn's rotation, then build one thing."""
+        """Recruit one unit of this turn's rotation if it can be fed, then build one thing."""
         state = self.state
         rotation = RULES.recruitment_rotation
         kind = rotation[(state.round + state.active_index) % len(rotation)]
-        for city in state.cities.values():
-            if not quote_recruit(state, city.province, kind)[1]:
-                unit_id, message = recruit(state, city.province, kind)
-                yield unit_id, [], message
-                break
+        if self._can_support(kind):
+            for city in state.cities.values():
+                if not quote_recruit(state, city.province, kind)[1]:
+                    unit_id, message = recruit(state, city.province, kind)
+                    yield unit_id, [], message
+                    break
 
         # A service turn first tries to build the facility that branch needs.
         facility = REQUIRED_FACILITY.get(kind)
@@ -166,8 +172,8 @@ class RivalCommander:
                     yield None, [], message
                     return
 
-        # Otherwise improve whichever resource currently has the lowest income.
-        income = forecast(state, self.owner)
+        # Otherwise improve whichever resource currently has the lowest net income.
+        income = net_income(state, self.owner)
         producers = [spec for spec in BUILDINGS.values() if spec.produces]
         for spec in sorted(producers, key=lambda spec: income[spec.resource]):
             for province in sorted(state.provinces):

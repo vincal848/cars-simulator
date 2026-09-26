@@ -17,7 +17,7 @@ on those graphs. The map you see is only a way to click on them.
 - **Four unit roles plus navy and air**: infantry, scouts, cavalry and field
   artillery; fleets that fight for sea zones; air groups that strike, support or rebase.
 - **Economy**: regional wood, food and iron; farms, mills, mines, roads, shipyards
-  and airfields; a merchant exchange for gold.
+  and airfields; unit upkeep; a merchant exchange for gold.
 - **24 regional charters**: named local regiments with their own uniforms and a
   terrain specialty.
 - **Order forecasts** that run the real combat rules on a copy of the game, so the

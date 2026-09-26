@@ -7,9 +7,10 @@ import pygame
 from cars.sim.calendar import date_label
 from cars.sim.economy import forecast
 from cars.sim.entities import AIR, FLEET, RESOURCES
+from cars.sim.upkeep import upkeep
 from cars.ui.art.icons import draw_resource_icon
 from cars.ui.art.ornament import branch, crown
-from cars.ui.palette import DIM, GOLD, GREEN
+from cars.ui.palette import DIM, GOLD, GREEN, HOSTILE
 
 if TYPE_CHECKING:
     from cars.sim.state import GameState
@@ -102,20 +103,23 @@ class CouncilPanel:
         t = self.theme
         stock = state.factions[player].resources
         gains = forecast(state, player)
+        costs = upkeep(state, player)
         for i, resource in enumerate(RESOURCES):
+            net = gains[resource] - costs[resource]
             left = x + 20 + i * 110
             well = (left, y + 121, 104, 82)
             t.inset(well)
             draw_resource_icon(t.screen, resource, left + 9, y + 145, 23)
             t.text(resource.upper(), left + 10, y + 128, t.small, GOLD)
             t.text(f"{stock[resource]:,.0f}", left + 38, y + 142, t.number, width=61)
-            t.text(f"+{gains[resource]:.1f} / turn", left + 10, y + 180, t.small, GREEN)
+            t.text(f"{net:+.1f} / turn", left + 10, y + 180, t.small, GREEN if net >= 0 else HOSTILE)
             t.hint(
                 well,
                 resource.title(),
-                f"Stock: {stock[resource]:g}. Expected production: {gains[resource]:.1f} on your "
-                "faction turn. Production depends on controlled provinces, regional output and local "
-                "improvements.",
+                f"Stock: {stock[resource]:g}. Production {gains[resource]:.1f}, "
+                f"upkeep {costs[resource]:.1f}: net {net:+.1f} on your faction turn. Production depends on "
+                "controlled provinces, regional output and local improvements. If upkeep cannot be paid, "
+                "the units that need it lose strength.",
             )
 
     def _draw_forces(self, state: "GameState", player: str, x: int, y: int) -> None:

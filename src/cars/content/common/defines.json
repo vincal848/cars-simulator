@@ -48,6 +48,17 @@
     "per_turn": 1.0,
     "city_bonus": 1.0
   },
+  "upkeep": {
+    "per_unit": {
+      "infantry": {"food": 1},
+      "scout": {"food": 1},
+      "cavalry": {"food": 1.5},
+      "artillery": {"food": 1, "iron": 0.5},
+      "fleet": {"wood": 1},
+      "air": {"iron": 1}
+    },
+    "shortfall_attrition": 1.0
+  },
   "journal": {
     "entry_limit": 160
   },

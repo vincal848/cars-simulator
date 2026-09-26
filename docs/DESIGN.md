@@ -56,7 +56,8 @@ never its rightful owner, and buildings stay with the province.
 Damage is not permanent: when a faction's turn begins its units recover strength
 if they are supplied on friendly ground (more in a city), fleets beside a friendly
 port and air groups at a working airbase, so supply lines also decide how fast an
-army can fight again.
+army can fight again. Armies also cost upkeep every turn, so the size of a realm's
+forces is bounded by what it produces.
 
 | Algorithm | Player-facing effect | Complexity |
 | --- | --- | --- |

@@ -8,6 +8,7 @@ from cars.sim.buildings import BUILDINGS, quote
 from cars.sim.entities import AIR, LAND_KINDS
 from cars.sim.recruitment import RECRUITS, REGIONAL, quote_recruit, recruit_option
 from cars.sim.regional import CHARTERS
+from cars.sim.upkeep import unit_upkeep
 from cars.ui.art.buildings import celebration, draw_building
 from cars.ui.art.cities import city_sprite
 from cars.ui.art.landscape import landscape
@@ -268,6 +269,11 @@ class ProvinceWindow:
                 + option.role
                 + "\nCost: "
                 + full_cost
+                + "\nUpkeep: "
+                + " / ".join(
+                    f"{amount:g} {resource}" for resource, amount in unit_upkeep(option.base_kind).items()
+                )
+                + " per turn"
                 + "\nOne unit per city per turn. Newly formed units act next turn.",
             )
 

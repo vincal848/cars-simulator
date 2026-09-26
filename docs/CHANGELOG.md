@@ -5,6 +5,9 @@
 - **Recovery:** damaged units regain strength at the start of their turn: +1 when
   supplied in friendly territory (+2 in a city), fleets beside a friendly port and
   air groups at an airbase. The replay ruleset is now 0.25.
+- **Upkeep:** units consume food, wood or iron each turn. Shortfalls cost the
+  affected units strength and can disband them. The council shows net income,
+  and rival AIs only recruit what they can feed.
 - Golden-master tests, a crash log for the Windows build, and step-by-step
   upgrades for older save formats.
 - Restructured the code base: `src/` layout; separate `sim`, `persist` and `ui`
