@@ -1,0 +1,8 @@
+include LICENSE MUSIC_CREDITS.md MAP_SOURCES.md THIRD_PARTY.md README.md
+graft docs
+graft examples
+graft scripts
+graft tests
+graft tools
+graft packaging
+global-exclude __pycache__ *.py[cod]
