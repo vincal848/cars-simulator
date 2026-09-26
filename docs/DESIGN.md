@@ -68,6 +68,11 @@ forces is bounded by what it produces.
 
 The inspector's cut points and bridges are structural hints, not combat bonuses.
 
+Fog of war is also computed on the graphs: `sim/visibility.py` returns the nodes a
+faction can see (its provinces and their land neighbours, the neighbours of each
+unit, and sea zones beside its ports and fleets). The renderer hides enemy units
+outside that set and shades those provinces; the rules themselves are unaffected.
+
 ## Determinism and replays
 
 The rules use no randomness, and every tie-break is explicit (sorted IDs, stable

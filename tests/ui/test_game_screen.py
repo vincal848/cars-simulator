@@ -8,6 +8,8 @@ from cars.sim.air import coverage
 from cars.sim.entities import Unit
 from cars.sim.movement import reachable
 from cars.sim.scenario import DETAILED_SCENARIO
+from cars.ui.map.map_view import Scene
+from cars.ui.screens.replay import ReplayScreen
 from tests.ui.screen_case import ScreenTestCase
 
 
@@ -229,3 +231,19 @@ class HudTests(ScreenTestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class FogOfWarTests(ScreenTestCase):
+    def shown(self) -> set[str]:
+        scene = Scene(layer="land", viewer="f0", visible=self.renderer.visible(self.game.view))
+        return {unit.id for unit in self.map.visible_units(scene)}
+
+    def test_distant_enemies_are_hidden_until_debug_reveals_them(self):
+        self.assertIn("infantry0", self.shown())
+        self.assertNotIn("infantry7", self.shown())  # In Pampas, far from the Northern Union.
+        self.game.view.debug = True
+        self.assertIn("infantry7", self.shown())
+
+    def test_replays_are_watched_without_fog(self):
+        viewer = ReplayScreen(self.context, self.game, self.game.campaign.recorder.data())
+        self.assertIsNone(viewer.renderer.visible(viewer.view))

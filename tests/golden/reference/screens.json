@@ -24,15 +24,15 @@
   ],
   [
    "campaign map",
-   "53b0ec904fdaff9c6d1308bd1b868ebd095fabba8faecf050846ef36a0e0ebff"
+   "29d84e7651778cf4bcafb572e79d4aa20751ea1bf077f5b45254532b6a77c178"
   ],
   [
    "objectives collapsed",
-   "5fb8bed74389546084da169704a92ed6137b6f18256bf569be37b68ea3f2d398"
+   "0e4e6b3bc6ad088bc4a70926ae0fd3c8d4c39fc7d67e5bd50293f6cc8f15f005"
   ],
   [
    "route and forecast",
-   "7575f0e28125d7e26f12dc08f6937d3432bc347587d7f2ba2194f391281760b3"
+   "2e63acf1c374bc532a0e49d906c995f839803bc0808fe8228c607d49ee4ec7e0"
   ],
   [
    "debug graph",
@@ -40,47 +40,47 @@
   ],
   [
    "province build",
-   "27c1b39ef382bd10a88482712b72424a345db90ed6de6f6dbf2e23ea7946f905"
+   "49950f56c325d2e1ff93ab06e26e8143691694ca17cae2626a0e67efcefaace5"
   ],
   [
    "province infrastructure",
-   "2a13cec3d6eb15d840c8f1f2f0bbf19d59c88f42627e3a1cab1d9d9cd7487d0d"
+   "1f98e6c4a549199f65b70e0a6f48e54fcd10623d637274bb21cbdce583ec085a"
   ],
   [
    "province recruit",
-   "bb46aa534b90d7a7a0e640d4482a4019c25644ec4f2f3c9630e333b9fbc520a9"
+   "632e78d061cca2be6248eed833b983df91bee52cf6455edeccfb3ac57b426c31"
   ],
   [
    "recruit sea_air",
-   "bfa06375097eb0e63af849b9c8b4b6d37839d08423df5851b5b7c6c36673fe7b"
+   "6c9997d094c42b3b9b335986ef2a31926d51a439e9b88a877b2dbe7a7f61e02a"
   ],
   [
    "recruit regional",
-   "90eb55813f6c5787525628627bd59c588f61db0f7d5621ce94d9a975e9b559a7"
+   "bd451f4ff9464f8d84c9aab4c03b013fc678d2ae129471d77c47b03c4cfdade3"
   ],
   [
    "layer naval",
-   "6afcf1cceeffcac8a6024f2008e66addc187a6489eafe1915e98102367010621"
+   "7ee2307ad721dfb12bba37b44da64da6f88e4fd6a1d782405f6a6b43a4608bbb"
   ],
   [
    "layer air",
-   "6a3569d4658aa9373c070c7b2051f8c02d93cbf20a1040fe43e94a5b77b95745"
+   "4e77e7878f587debd2959e4f5068198b1d5a26f06b70bf371677eb94b51c4718"
   ],
   [
    "layer supply",
-   "69c72e4a1a6b38833f2396cc8b18646dfc657be78e6f0b7195f72e605912980a"
+   "342ddcd451cb2126a5dcae25edc30cb7cb1d212250a8bb81dbea58149ca9a848"
   ],
   [
    "menu",
-   "e83a8e23117b925a4a82a158ca6f59efd6c65270744aae8438dc98a903054ca9"
+   "5bfdb55fd1a534fe97674f05e403285221c646a3996a9e70b574084ed7337bde"
   ],
   [
    "market",
-   "1ece339d7ef9af5b34d99e1d140f615b47a8fbba7b2d44bcb820705e90be0be1"
+   "d8ea137f093adb77d3f67c1300ff624d57a6a8b205a7604b25f3a670d46a7502"
   ],
   [
    "dialog pedia",
-   "d601109b5ecef3df0c2a1f17b9257b726efd1dc38ef62701ceeeabd2696a714a"
+   "a1b498e80e91b459a6db5927014bd10ba79e299ed72289a2560c6dc081556f02"
   ],
   [
    "dialog strategy",
@@ -132,7 +132,7 @@
   ],
   [
    "zoomed",
-   "6a71d949366dafdf73cd52d0db65fda7d6b276a01114fde216f40afcd7b823e9"
+   "4790717ca98734c9a16133329b4d427f7990f512fad96490998dc0508a3b7e17"
   ],
   [
    "zoomed max",
@@ -140,7 +140,7 @@
   ],
   [
    "after rival turns",
-   "26284d85895e3aec7f38bab890141d8b5dd713fd56c6a5617476486f123db16a"
+   "96b0feb7fc7dee84a9dd26a512d02da62f5885b2808c0087d827865a5c6f0488"
   ],
   [
    "chronicle battles",
@@ -156,7 +156,7 @@
   ],
   [
    "tutorial",
-   "31763d86b15971cec04454452abfe3e5d00b9cf0e338e0247bd02a64c33ac2aa"
+   "eae19b709086742f1bb4b88b99b82fed85c4cf8d4462607e1cb8582be006f020"
   ],
   [
    "replay start",

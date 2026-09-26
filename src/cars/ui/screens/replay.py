@@ -35,6 +35,7 @@ class ReplayScreen:
         campaign = Campaign(playback.state)
         campaign.player = playback.player
         self.renderer = GameRenderer(self.context, playback.state, playback.shapes, playback.seas, campaign)
+        self.renderer.fog = False  # Replays are watched as an observer.
 
     def step(self) -> None:
         if self.playback.failed:

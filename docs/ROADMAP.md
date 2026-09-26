@@ -13,6 +13,8 @@
 - **Replays are tied to the Python version family.** Python 3.12 changed `sum()`
   over floats, so a replay recorded on 3.12+ may not verify on 3.10 or 3.11 (and
   vice versa). The Windows build always uses 3.13; source installs could require 3.12.
+- **The AI ignores the fog of war.** Rivals still see every unit. Enemy zones of
+  control also still raise route costs next to hidden armies, which hints at them.
 - **Save validation is incomplete.** Unknown terrain, building or resource keys
   pass validation and only fail later during play.
 

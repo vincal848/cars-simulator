@@ -12,6 +12,7 @@ from cars.sim.air import STRIKE_TARGET_KINDS, is_airbase
 from cars.sim.entities import AIR, FLEET
 from cars.sim.regional import CHARTERS
 from cars.sim.supply import supply_route, threatened_route
+from cars.sim.visibility import can_see
 from cars.ui.art.buildings import celebration, draw_building
 from cars.ui.art.cities import city_sprite, draw_pin
 from cars.ui.art.lighting import contact_shadow
@@ -50,6 +51,7 @@ SEA_HIT_RADIUS = 28
 CLOSE_SCALE = 8  # Larger sprites and buildings from this zoom level.
 UNIT_CLOSE_SCALE = 6
 CITY_NAMES_SCALE = 10
+FOG = (8, 14, 20, 105)
 COASTLINE = [(8, (26, 43, 46, 95)), (4, (184, 170, 118, 120)), (1, (58, 64, 51, 160))]
 
 # rings[0] is a polygon's outline and rings[1:] its holes, in screen coordinates.
@@ -79,6 +81,12 @@ class Scene:
     city_hover: str | None = None
     time: float = 0.0
     build_effects: dict[str, float] = field(default_factory=dict)
+    viewer: str | None = None
+    # Nodes the viewer can see; None disables fog of war.
+    visible: set[str] | None = None
+
+    def shows(self, unit: "Unit") -> bool:
+        return can_see(unit, self.viewer, self.visible)
 
 
 class MapView:
@@ -136,6 +144,7 @@ class MapView:
                     rect = pygame.Rect(point[0] - CITY_PIN_RADIUS, point[1] - CITY_PIN_RADIUS, 22, 22)
                     self.city_markers.append(CityMarker(city.id, point, rect))
         self._terrain.clear()
+        self._fog: tuple[frozenset, pygame.Surface] | None = None
         self.relief_surface = project_relief(camera)
         self.illustration_surface = illustration_layer(self.state, self.parts, camera.scale)
         self.coast_surface = self._draw_coast()
@@ -213,6 +222,8 @@ class MapView:
         self._draw_graticule(screen)
         screen.blit(self.coast_surface, (0, 0))
         self._draw_provinces(screen, scene)
+        if scene.visible is not None:
+            screen.blit(self._fog_surface(scene.visible), (0, 0))
         screen.blit(self.illustration_surface, (0, 0))
         self._draw_sea_zones(screen, scene)
         if scene.debug:
@@ -371,23 +382,38 @@ class MapView:
             icon = pygame.transform.smoothscale(city_sprite(style), size)
             screen.blit(icon, (x - size[0] / 2, y - size[1] * 0.58))
 
+    def visible_units(self, scene: Scene) -> list["Unit"]:
+        """Units drawn on this layer that the viewer can see through the fog."""
+        land_view = scene.layer in ("land", "supply")
+        layer_kind = FLEET if scene.layer == "naval" else AIR
+        return [
+            unit
+            for unit in self.state.units.values()
+            if (unit.is_land if land_view else unit.kind == layer_kind) and scene.shows(unit)
+        ]
+
+    def _fog_surface(self, visible: set[str]) -> pygame.Surface:
+        """Shade every province the viewer cannot see, cached until vision changes."""
+        key = frozenset(visible)
+        if self._fog is None or self._fog[0] != key:
+            surface = pygame.Surface(MAP_AREA.size, pygame.SRCALPHA)
+            for province, polygons in self.parts.items():
+                if province not in key:
+                    for rings in polygons:
+                        pygame.draw.polygon(surface, FOG, rings[0])
+            self._fog = (key, surface)
+        return self._fog[1]
+
     def _draw_units(self, screen, scene: Scene) -> None:
         """One sprite per stack, with the selected unit's stack drawn first."""
-        state = self.state
         selected = scene.unit.id if scene.unit else None
-        land_view = scene.layer in ("land", "supply")
+        units = self.visible_units(scene)
         shown = set()
-        for unit in sorted(state.units.values(), key=lambda u: u.id != selected):
-            visible = unit.is_land if land_view else unit.kind == (FLEET if scene.layer == "naval" else AIR)
-            if not visible or unit.location in shown:
+        for unit in sorted(units, key=lambda u: u.id != selected):
+            if unit.location in shown:
                 continue
             shown.add(unit.location)
-            stack = [
-                other
-                for other in state.units.values()
-                if other.location == unit.location
-                and (other.is_land if land_view else other.kind == unit.kind)
-            ]
+            stack = [other for other in units if other.location == unit.location]
             position = self.anchors[unit.location]
             if scene.animation and scene.animation.unit == unit.id:
                 position = (scene.animation.position[0], scene.animation.position[1] + scene.animation.bob())
@@ -428,7 +454,10 @@ class MapView:
         targets = {
             other.location
             for other in self.state.units.values()
-            if other.owner != unit.owner and other.kind in STRIKE_TARGET_KINDS and other.location in in_range
+            if other.owner != unit.owner
+            and other.kind in STRIKE_TARGET_KINDS
+            and other.location in in_range
+            and scene.shows(other)
         }
         for target in targets:
             for cx, cy in self.camera.copies(self.anchors[target]):

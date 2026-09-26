@@ -12,6 +12,7 @@ from cars.sim.entities import FLEET
 from cars.sim.movement import reachable
 from cars.sim.naval import reachable_seas
 from cars.sim.supply import supplied_provinces
+from cars.sim.visibility import visible_nodes
 from cars.ui.hud.bottom_bar import EMBLEM_RECT, SelectionCard, draw_compass, draw_emblem, draw_status_bar
 from cars.ui.hud.council import CouncilPanel
 from cars.ui.hud.faction_picker import FactionPicker
@@ -69,6 +70,8 @@ class GameRenderer:
         self.market = MarketPanel(self.theme)
         self.time = 0.0
         self.build_effects: dict[str, float] = {}
+        # Hide enemy forces the player cannot see. Replays show everything.
+        self.fog = True
         # Overlays owned by the screen (dialogs, tutorial) that also capture the pointer.
         self.blockers: list[Callable[[Point], bool]] = []
 
@@ -126,6 +129,12 @@ class GameRenderer:
             return None, coverage(self.state, unit)
         return paths, set(paths.costs)
 
+    def visible(self, view: ViewState) -> set[str] | None:
+        """Nodes the player can see, or None when nothing is hidden (no player, fog off, debug)."""
+        if not self.fog or self.campaign.player is None or view.debug:
+            return None
+        return visible_nodes(self.state, self.campaign.player)
+
     # Drawing --------------------------------------------------------------------------
 
     def draw(self, view: ViewState, hover: str | None, dialog_open: bool = False) -> None:
@@ -133,6 +142,7 @@ class GameRenderer:
         theme.tips.begin()
         unit = state.units.get(view.selected)
         paths, highlights = self.reach(unit, view.layer)
+        visible = self.visible(view)
         scene = Scene(
             layer=view.layer,
             unit=unit,
@@ -146,6 +156,8 @@ class GameRenderer:
             city_hover=self.city_at(self.context.mouse_pos(), view.layer),
             time=self.time,
             build_effects=self.build_effects,
+            viewer=self.campaign.player,
+            visible=visible,
         )
         covered = [self.council.rect]
         if self.province_window.is_open:
@@ -161,7 +173,9 @@ class GameRenderer:
         self.calendar.draw(state)
         self.objectives.draw(state)
         overlay_open = self.market.open or self.province_window.is_open or self.menu.open or dialog_open
-        if view.layer != "supply" and not overlay_open:
+        # A forecast would reveal hidden defenders, so only forecast what can be seen.
+        hover_seen = visible is None or hover in visible
+        if view.layer != "supply" and not overlay_open and hover_seen:
             self.forecast.draw(state, unit, hover, paths, view.air_mode)
         if self.campaign.player is None:
             self.picker.draw(state)

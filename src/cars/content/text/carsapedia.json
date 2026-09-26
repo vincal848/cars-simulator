@@ -12,6 +12,12 @@
     "body": "One date covers your orders, resource settlement and all seven rivals. End Turn collects production. The next date refreshes movement and sorties. T opens the calendar. Foothold requires a city; Expansion reaches the city target; Consolidation holds it for consecutive full rounds; Dominion is victory. Losing control below the target resets the streak. There is no real-time deadline."
   },
   {
+    "id": "fog",
+    "title": "Fog of war",
+    "category": "Basics",
+    "body": "You see your own provinces and their neighbours, the ground around each of your units and the sea zones beside your ports and fleets. Enemy forces elsewhere are hidden and shaded provinces mark what you cannot see; the map itself is always known. Order forecasts only cover targets you can see. Scouts are the cheapest way to watch a frontier."
+  },
+  {
     "id": "movement",
     "title": "Movement and roads",
     "category": "Land",

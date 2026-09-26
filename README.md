@@ -13,7 +13,7 @@ on those graphs. The map you see is only a way to click on them.
 ## Features
 
 - **Land warfare** on a road-, river- and terrain-weighted province graph, with
-  zones of control, supply cut-offs and deterministic attrition combat.
+  zones of control, supply cut-offs, fog of war and deterministic attrition combat.
 - **Four unit roles plus navy and air**: infantry, scouts, cavalry and field
   artillery; fleets that fight for sea zones; air groups that strike, support or rebase.
 - **Economy**: regional wood, food and iron; farms, mills, mines, roads, shipyards

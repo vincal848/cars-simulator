@@ -8,6 +8,8 @@
 - **Upkeep:** units consume food, wood or iron each turn. Shortfalls cost the
   affected units strength and can disband them. The council shows net income,
   and rival AIs only recruit what they can feed.
+- **Fog of war:** enemy forces are only shown near your territory, units, ports
+  and fleets; unseen provinces are shaded. Replays and the F3 view show everything.
 - Golden-master tests, a crash log for the Windows build, and step-by-step
   upgrades for older save formats.
 - Restructured the code base: `src/` layout; separate `sim`, `persist` and `ui`
