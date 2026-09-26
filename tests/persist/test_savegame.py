@@ -133,6 +133,18 @@ class ValidationTests(SaveTestCase):
     def test_invalid_tutorial_progress(self):
         self.assertRejected(lambda data: data.update(tutorial={"active": True, "step": 0, "seen": [{}]}))
 
+    def test_unknown_terrain(self):
+        self.assertRejected(lambda data: data["provinces"][0].update(terrain="swamp"))
+
+    def test_unknown_or_overbuilt_buildings(self):
+        self.assertRejected(lambda data: data["provinces"][0]["buildings"].update(castle=1))
+        self.assertRejected(lambda data: data["provinces"][0]["buildings"].update(roads=4))
+
+    def test_unknown_resources(self):
+        self.assertRejected(lambda data: data["provinces"][0]["resource_sites"].update(gold=1))
+        self.assertRejected(lambda data: data["factions"][0]["resources"].update(coal=5))
+        self.assertRejected(lambda data: data["factions"][0]["resources"].update(food=-1))
+
     def test_legacy_capacity_metadata_is_accepted(self):
         def add_capacity(data):
             for edge in data["graphs"]["supply"]["edges"]:

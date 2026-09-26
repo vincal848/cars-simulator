@@ -20,6 +20,7 @@
 - **Mods:** folders in the user-data `mods` directory layer over the bundled
   content: objects merge key by key, lists replace, events are added. See
   `docs/MODDING.md`.
+- Saves naming an unknown terrain, building or resource are rejected when opened.
 - Golden-master tests, a crash log for the Windows build, and step-by-step
   upgrades for older save formats.
 - Restructured the code base: `src/` layout; separate `sim`, `persist` and `ui`

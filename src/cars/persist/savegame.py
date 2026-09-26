@@ -12,12 +12,14 @@ from dataclasses import asdict
 from pathlib import Path
 
 from cars.paths import read_json, saves_dir, write_text_atomic
+from cars.sim.buildings import BUILDINGS
 from cars.sim.calendar import date_label, validate_clock
 from cars.sim.defines import DEFINES
-from cars.sim.entities import AIR, FLEET, UNIT_KINDS, City, Faction, Province, Region, Unit
+from cars.sim.entities import AIR, FLEET, RESOURCES, UNIT_KINDS, City, Faction, Province, Region, Unit
 from cars.sim.events import EVENTS
 from cars.sim.graph import Edge, Graph
 from cars.sim.market import RULES as MARKET_RULES
+from cars.sim.movement import RULES as MOVEMENT_RULES
 from cars.sim.objectives import ACTIVE, DEFEAT, VICTORY, begin
 from cars.sim.regional import CHARTERS
 from cars.sim.scenario import LAYERS
@@ -222,6 +224,12 @@ def _check_economy(state: GameState) -> None:
     )
     if not valid_market or not all(_is_count(f.gold) for f in state.factions.values()):
         raise ValueError("Invalid market or treasury.")
+    for faction in state.factions.values():
+        stock = faction.resources
+        if not isinstance(stock, dict) or set(stock) != set(RESOURCES):
+            raise ValueError("Invalid faction stockpile.")
+        if not all(_is_count(amount) for amount in stock.values()):
+            raise ValueError("Invalid faction stockpile.")
 
 
 def _check_turn(state: GameState, player: str) -> None:
@@ -243,6 +251,19 @@ def _check_references(state: GameState, shapes: dict) -> None:
         )
         if not valid:
             raise ValueError("Invalid province reference.")
+        _check_province_keys(province)
+
+
+def _check_province_keys(province: Province) -> None:
+    """Terrain, buildings and resource sites must name things the rules know about."""
+    if province.terrain not in MOVEMENT_RULES.terrain_cost:
+        raise ValueError(f"Unknown terrain in {province.id}.")
+    for kind, level in province.buildings.items():
+        if kind not in BUILDINGS or type(level) is not int or not 0 <= level <= BUILDINGS[kind].max_level:
+            raise ValueError(f"Invalid building in {province.id}.")
+    for resource, amount in province.resource_sites.items():
+        if resource not in RESOURCES or not _is_count(amount):
+            raise ValueError(f"Invalid resource site in {province.id}.")
 
 
 def _check_units(state: GameState) -> None:

@@ -20,8 +20,6 @@
 - **One rival usually snowballs.** A single AI tends to take half the continent
   while small nations are wiped out early. Catch-up mechanics or AI coalitions
   against the leader would help.
-- **Save validation is incomplete.** Unknown terrain, building or resource keys
-  pass validation and only fail later during play.
 
 ## Next
 
