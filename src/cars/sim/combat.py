@@ -4,6 +4,7 @@ Both sides always take losses. An attack that fails still spends the attacker's
 movement; a successful one changes the province's controller, never its owner.
 """
 
+from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 from cars.sim.air import support_bonus_at
@@ -36,12 +37,38 @@ def resolve(
     return success, f"{outcome} {factors}"
 
 
-def _fight(
-    state: "GameState", attacker: "Unit", origin: str, destination: str, edge: "Edge"
-) -> tuple[bool, str, str]:
-    province = state.provinces[destination]
-    defenders = state.enemy_units_at(destination, attacker.owner, LAND_KINDS)
+@dataclass(frozen=True)
+class Assessment:
+    """Everything that decides a land battle, computed before anyone takes losses."""
 
+    strength: float
+    defense: float
+    guns: tuple["Unit", ...]
+    factors: str
+
+    def attacker_loss(self) -> float:
+        return max(RULES.attacker_minimum_loss, self.defense * RULES.attacker_loss_ratio)
+
+    def defender_loss(self, defenders: int) -> float:
+        return max(RULES.defender_minimum_loss, self.strength * RULES.defender_loss_ratio / defenders)
+
+    def captures(self, attacker: "Unit", defenders: list["Unit"]) -> bool:
+        """Whether the attack would take the province: the attacker survives and no defender does."""
+        if attacker.hp - self.attacker_loss() <= 0:
+            return False
+        return not defenders or all(unit.hp - self.defender_loss(len(defenders)) <= 0 for unit in defenders)
+
+
+def assess(
+    state: "GameState",
+    attacker: "Unit",
+    origin: str,
+    destination: str,
+    edge: "Edge",
+    defenders: list["Unit"],
+) -> Assessment:
+    """Strength of an attack on ``destination`` against ``defenders``, without changing the state."""
+    province = state.provinces[destination]
     terrain = RULES.terrain_defense[province.terrain]
     crossing = RULES.river_attack_factor if edge.river_crossing else 1
     high_ground = state.provinces[origin].terrain == "mountains"
@@ -49,7 +76,7 @@ def _fight(
     strength = attacker.attack_power() * crossing * origin_bonus
     strength *= supply_factor(attacker)
 
-    guns = [
+    guns = tuple(
         unit
         for unit in state.units.values()
         if unit.kind == ARTILLERY
@@ -58,12 +85,10 @@ def _fight(
         and unit.location == origin
         and unit.remaining > 0
         and unit.supplied
-    ]
+    )
     artillery_bonus = min(RULES.artillery_bonus_cap, len(guns) * RULES.artillery_bonus_per_gun)
     air_bonus = support_bonus_at(state, attacker.owner, destination)
     strength *= (1 + artillery_bonus) * (1 + air_bonus)
-    for gun in guns[: RULES.artillery_guns_committed]:
-        gun.remaining = 0
 
     defense = sum(unit.defense_power() * supply_factor(unit) for unit in defenders)
     defense = max(RULES.minimum_defense, defense) * terrain
@@ -71,21 +96,32 @@ def _fight(
         f"Terrain ×{terrain:g}; river ×{crossing:g}; origin ×{origin_bonus:g}; "
         f"supply ×{supply_factor(attacker):g}; artillery +{artillery_bonus:.0%}; air +{air_bonus:.0%}."
     )
+    return Assessment(strength, defense, guns, factors)
 
-    attacker.hp -= max(RULES.attacker_minimum_loss, defense * RULES.attacker_loss_ratio)
+
+def _fight(
+    state: "GameState", attacker: "Unit", origin: str, destination: str, edge: "Edge"
+) -> tuple[bool, str, str]:
+    province = state.provinces[destination]
+    defenders = state.enemy_units_at(destination, attacker.owner, LAND_KINDS)
+    odds = assess(state, attacker, origin, destination, edge, defenders)
+    for gun in odds.guns[: RULES.artillery_guns_committed]:
+        gun.remaining = 0
+
+    attacker.hp -= odds.attacker_loss()
     for defender in defenders:
-        defender.hp -= max(RULES.defender_minimum_loss, strength * RULES.defender_loss_ratio / len(defenders))
+        defender.hp -= odds.defender_loss(len(defenders))
         if defender.hp <= 0:
             del state.units[defender.id]
     if attacker.hp <= 0:
         del state.units[attacker.id]
-        return False, "Attacking regiment destroyed.", factors
+        return False, "Attacking regiment destroyed.", odds.factors
     if any(unit.id in state.units for unit in defenders):
-        return False, "Attack repulsed; defenders suffered attrition.", factors
+        return False, "Attack repulsed; defenders suffered attrition.", odds.factors
 
     province.controller = attacker.owner
     # Enemy air groups cannot fly from a captured base.
     for unit_id, unit in list(state.units.items()):
         if unit.kind == AIR and unit.location == destination and unit.owner != attacker.owner:
             del state.units[unit_id]
-    return True, "Province captured; ownership unchanged.", factors
+    return True, "Province captured; ownership unchanged.", odds.factors
