@@ -1,0 +1,122 @@
+{
+  "northern": {
+    "name": "Northern frontier",
+    "hat": "fur",
+    "coat": "long",
+    "cloth": [
+      91,
+      123,
+      145
+    ],
+    "trim": [
+      189,
+      178,
+      146
+    ]
+  },
+  "atlantic": {
+    "name": "Atlantic court",
+    "hat": "tricorn",
+    "coat": "tails",
+    "cloth": [
+      155,
+      63,
+      54
+    ],
+    "trim": [
+      236,
+      211,
+      157
+    ]
+  },
+  "sierra": {
+    "name": "Sierra frontier",
+    "hat": "brim",
+    "coat": "short",
+    "cloth": [
+      153,
+      119,
+      73
+    ],
+    "trim": [
+      220,
+      195,
+      134
+    ]
+  },
+  "caribbean": {
+    "name": "Caribbean maritime",
+    "hat": "sailor",
+    "coat": "short",
+    "cloth": [
+      223,
+      216,
+      181
+    ],
+    "trim": [
+      64,
+      126,
+      140
+    ]
+  },
+  "andean": {
+    "name": "Andean highland",
+    "hat": "cap",
+    "coat": "poncho",
+    "cloth": [
+      126,
+      78,
+      100
+    ],
+    "trim": [
+      213,
+      167,
+      110
+    ]
+  },
+  "amazon": {
+    "name": "Amazon riverlands",
+    "hat": "brim",
+    "coat": "short",
+    "cloth": [
+      78,
+      120,
+      88
+    ],
+    "trim": [
+      198,
+      180,
+      117
+    ]
+  },
+  "southern": {
+    "name": "Southern plains",
+    "hat": "brim",
+    "coat": "poncho",
+    "cloth": [
+      147,
+      78,
+      72
+    ],
+    "trim": [
+      218,
+      204,
+      169
+    ]
+  },
+  "austral": {
+    "name": "Austral expedition",
+    "hat": "kepi",
+    "coat": "long",
+    "cloth": [
+      77,
+      90,
+      100
+    ],
+    "trim": [
+      179,
+      172,
+      134
+    ]
+  }
+}
