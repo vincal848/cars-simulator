@@ -76,7 +76,7 @@ class StrategyDialog(Dialog):
     def _layout_points(self, nodes) -> None:
         """Fit node anchors into the plot, north up."""
         world = self.game.renderer.map.world_anchors
-        anchors = {n: world[n] for n in nodes if n in world}
+        anchors = {n: world[n] for n in sorted(nodes) if n in world}
         if not anchors:
             self.points = {}
             return
