@@ -1,0 +1,24 @@
+C.A.R.S. 0.24 - Combat Arms Region Simulator
+
+Extract the ENTIRE CARS folder, then double-click CARS.exe.
+Keep _internal beside the executable. No Python installation is needed.
+Windows x64. Offline play. This independent prototype is unsigned.
+
+Start with Guided Tutorial, or Start Campaign to pick your own nation.
+F1: CARSapedia / G: strategy graph / R: replay studio / H: hide tutorial
+F11 or Alt+Enter: fullscreen windowed / Esc: close panel / Space: end turn
+Right-click a province to inspect, develop or recruit. Left-drag pans the map.
+F10: sound, preferences and the music collection.
+
+Replays: drag examples/opening.json onto CARS.exe to watch a sample.
+The replay studio records this session from faction selection or the last load.
+Export before quitting; each export replaces replays/latest.json, so copy it
+to keep it. Replays play back only on the ruleset they were recorded with (0.23).
+
+Saves:    %LOCALAPPDATA%\CARS\saves
+Replays:  %LOCALAPPDATA%\CARS\replays
+Settings: %LOCALAPPDATA%\CARS\settings.json
+Replacing or moving the game folder never touches your saves.
+
+Original code and art: MIT (LICENSE). Maps: Natural Earth (MAP_SOURCES.md).
+Music: see MUSIC_CREDITS.md. Bundled software: THIRD_PARTY.md and licenses/.
