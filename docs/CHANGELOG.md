@@ -20,6 +20,9 @@
 - **Mods:** folders in the user-data `mods` directory layer over the bundled
   content: objects merge key by key, lists replace, events are added. See
   `docs/MODDING.md`.
+- **Smaller saves:** saves and replays on a bundled map refer to it by name and
+  digest instead of copying it, shrinking them from about 1.3 MB to 100 KB. Saves
+  move to format version 4; older saves upgrade automatically.
 - Saves naming an unknown terrain, building or resource are rejected when opened.
 - Golden-master tests, a crash log for the Windows build, and step-by-step
   upgrades for older save formats.

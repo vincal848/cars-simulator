@@ -91,10 +91,14 @@ alter the outcome of a recorded command.
 
 ## Saves
 
-A save is a complete JSON snapshot, including map geometry, so it can be opened
-without the scenario that produced it. Loading validates every cross-reference
-(units, provinces, graph endpoints, journal, objectives) and raises `ValueError`
-on anything inconsistent. Files are written through a temporary file, so a crash
+A save is a complete JSON snapshot of the campaign. The map never changes during
+play, so a save made on a bundled scenario records the scenario's name and a
+digest of its shapes, sea zones and graphs rather than a copy; a save on any
+other map embeds it. A save whose digest no longer matches the bundled map is
+refused rather than loaded onto the wrong geography. Loading validates every
+cross-reference (units, provinces, terrain, buildings, graph endpoints, journal,
+objectives) and raises `ValueError` on anything inconsistent. Older formats are
+upgraded one version at a time. Files are written through a temporary file, so a crash
 never leaves a half-written save.
 
 ## User interface

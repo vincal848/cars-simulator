@@ -1,17 +1,22 @@
 """Versioned JSON save files.
 
-A save is a complete snapshot, including map geometry, so it can be opened
-without the scenario it came from. Loading validates every reference before
-the state is used; a malformed file raises ``ValueError``.
+A save is a complete snapshot of the campaign. The map (province shapes, sea
+zones and movement graphs) never changes during play, so a save made on a
+bundled scenario names that scenario and records a digest of its map instead
+of copying it; any other map is embedded in full. Loading validates every
+reference before the state is used; a malformed file raises ``ValueError``.
 """
 
+import hashlib
 import json
 import math
 from collections.abc import Callable
+from copy import deepcopy
 from dataclasses import asdict
+from functools import cache
 from pathlib import Path
 
-from cars.paths import read_json, saves_dir, write_text_atomic
+from cars.paths import content_path, read_json, saves_dir, write_text_atomic
 from cars.sim.buildings import BUILDINGS
 from cars.sim.calendar import date_label, validate_clock
 from cars.sim.defines import DEFINES
@@ -22,11 +27,14 @@ from cars.sim.market import RULES as MARKET_RULES
 from cars.sim.movement import RULES as MOVEMENT_RULES
 from cars.sim.objectives import ACTIVE, DEFEAT, VICTORY, begin
 from cars.sim.regional import CHARTERS
-from cars.sim.scenario import LAYERS
+from cars.sim.scenario import LAYERS, load_scenario
 from cars.sim.state import FACTION_COUNT, PEACE, GameState, relation_key
 from cars.sim.supply import refresh_supply
 
-SAVE_VERSION = 3
+SAVE_VERSION = 4
+# Bundled scenarios a save may refer to instead of embedding the map.
+SCENARIOS = ("americas_detailed", "americas")
+MAP_KEYS = ("shapes", "seas", "graphs")
 
 
 def _add_relations(data: dict) -> dict:
@@ -41,9 +49,17 @@ def _add_event_log(data: dict) -> dict:
     return data
 
 
+def _reference_map(data: dict) -> dict:
+    """Version 4 stopped copying bundled maps into every save."""
+    for edges in (graph["edges"] for graph in data["graphs"].values()):
+        for edge in edges:
+            edge["metadata"].pop("capacity", None)  # Unused field written by 0.24 and earlier.
+    return _compact_map(data)
+
+
 # UPGRADES[n] converts a version-n save into version n + 1. When the format changes,
 # bump SAVE_VERSION and register a step here instead of breaking players' saves.
-UPGRADES: dict[int, Callable[[dict], dict]] = {1: _add_relations, 2: _add_event_log}
+UPGRADES: dict[int, Callable[[dict], dict]] = {1: _add_relations, 2: _add_event_log, 3: _reference_map}
 ENTITY_TYPES = {
     "provinces": Province,
     "regions": Region,
@@ -103,6 +119,7 @@ def encode_game(state: GameState, shapes: dict, seas: list, player: str) -> dict
         active_index=state.active_index,
         shapes=shapes,
         seas=seas,
+        graphs=_encode_graphs(state),
         ports=state.ports,
         objectives=state.objectives,
         recruited=state.recruited,
@@ -116,14 +133,63 @@ def encode_game(state: GameState, shapes: dict, seas: list, player: str) -> dict
     )
     for name in ENTITY_TYPES:
         data[name] = [asdict(item) for item in getattr(state, name).values()]
-    data["graphs"] = {
+    return _compact_map(data)
+
+
+def _encode_graphs(state: GameState) -> dict:
+    return {
         layer: dict(
             nodes=state.graph(layer).nodes(),
             edges=[dict(a=a, b=b, metadata=asdict(edge)) for a, b, edge in state.graph(layer).edges()],
         )
         for layer in LAYERS
     }
+
+
+def map_digest(game_map: dict) -> str:
+    """Hash of a map's shapes, sea zones and graphs, independent of edge order."""
+    graphs = {
+        layer: dict(
+            nodes=sorted(graph["nodes"]),
+            edges=sorted(json.dumps(edge, sort_keys=True) for edge in graph["edges"]),
+        )
+        for layer, graph in game_map["graphs"].items()
+    }
+    canonical = dict(shapes=game_map["shapes"], seas=game_map["seas"], graphs=graphs)
+    return hashlib.sha256(json.dumps(canonical, sort_keys=True, allow_nan=False).encode()).hexdigest()
+
+
+@cache
+def _bundled_map(name: str) -> tuple[dict, str]:
+    """The map of a bundled scenario, as it appears in a save, and its digest."""
+    state, shapes, seas = load_scenario(content_path("scenarios", name + ".json"))
+    game_map = dict(shapes=shapes, seas=seas, graphs=_encode_graphs(state))
+    return game_map, map_digest(game_map)
+
+
+def _compact_map(data: dict) -> dict:
+    """Replace an embedded map with a reference when it is one of the bundled scenarios."""
+    digest = map_digest(data)
+    for name in SCENARIOS:
+        if _bundled_map(name)[1] == digest:
+            for key in MAP_KEYS:
+                del data[key]
+            data["map"] = dict(scenario=name, digest=digest)
+            break
     return data
+
+
+def _expand_map(data: dict) -> dict:
+    """The embedded map, or a fresh copy of the bundled one the save refers to."""
+    if "map" not in data:
+        return {key: data[key] for key in MAP_KEYS}
+    reference = data["map"]
+    if not isinstance(reference, dict) or reference.get("scenario") not in SCENARIOS:
+        raise ValueError("This save refers to an unknown map.")
+    game_map, digest = _bundled_map(reference["scenario"])
+    if reference.get("digest") != digest:
+        raise ValueError("This save was made on a different version of the map.")
+    return deepcopy(game_map)
 
 
 def save_game(state: GameState, shapes: dict, seas: list, player: str, path: Path) -> None:
@@ -151,16 +217,17 @@ def upgrade(data: dict) -> dict:
 
 def decode_game(data: dict) -> Loaded:
     """Rebuild a campaign from save data, rejecting anything inconsistent."""
-    data = upgrade(data)
     try:
-        return _decode(data)
+        return _decode(upgrade(data))
     except (KeyError, TypeError, AttributeError, IndexError) as exc:
         raise ValueError(f"Malformed save data ({exc!r}).") from exc
 
 
 def _decode(data: dict) -> Loaded:
+    game_map = _expand_map(data)
+    shapes = game_map["shapes"]
     entities = {name: {item["id"]: cls(**item) for item in data[name]} for name, cls in ENTITY_TYPES.items()}
-    graphs = {layer: _decode_graph(data["graphs"][layer]) for layer in LAYERS}
+    graphs = {layer: _decode_graph(game_map["graphs"][layer]) for layer in LAYERS}
     state = GameState(
         **entities, **graphs, ports=data["ports"], active_index=data["active_index"], round=data["round"]
     )
@@ -170,7 +237,7 @@ def _decode(data: dict) -> Loaded:
     state.market = data["market"]
     _check_economy(state)
     _check_turn(state, player)
-    _check_references(state, data["shapes"])
+    _check_references(state, shapes)
     _check_units(state)
     _check_cities(state)
     state.tutorial = data["tutorial"]
@@ -195,7 +262,7 @@ def _decode(data: dict) -> Loaded:
     _check_objectives(state.objectives, player)
     state.reindex_units()
     refresh_supply(state)
-    return state, data["shapes"], data["seas"], player
+    return state, shapes, game_map["seas"], player
 
 
 def _decode_graph(data: dict) -> Graph:
@@ -205,9 +272,7 @@ def _decode_graph(data: dict) -> Graph:
     for item in data["edges"]:
         if item["a"] not in graph or item["b"] not in graph:
             raise ValueError("Invalid graph endpoint.")
-        metadata = dict(item["metadata"])
-        metadata.pop("capacity", None)  # Unused field written by 0.24 and earlier.
-        graph.connect(item["a"], item["b"], Edge(**metadata))
+        graph.connect(item["a"], item["b"], Edge(**item["metadata"]))
     return graph
 
 

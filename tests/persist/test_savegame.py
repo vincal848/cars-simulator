@@ -17,6 +17,12 @@ from cars.sim.turn import end_turn
 from tests.support import compact, detailed
 
 
+def embed_map(data: dict) -> None:
+    """Rewrite a save the way versions before 4 stored it, with the map copied in."""
+    data.update(savegame._expand_map(data))
+    del data["map"]
+
+
 class SaveTestCase(unittest.TestCase):
     def setUp(self):
         self.folder = tempfile.TemporaryDirectory()
@@ -147,6 +153,8 @@ class ValidationTests(SaveTestCase):
 
     def test_legacy_capacity_metadata_is_accepted(self):
         def add_capacity(data):
+            embed_map(data)
+            data["version"] = 3
             for edge in data["graphs"]["supply"]["edges"]:
                 edge["metadata"]["capacity"] = 10
 
@@ -181,6 +189,7 @@ class UpgradeTests(SaveTestCase):
 
     def test_version_one_saves_start_at_war_with_everyone(self):
         def as_version_one(data):
+            embed_map(data)
             data["version"] = 1
             del data["relations"]
 
@@ -191,6 +200,7 @@ class UpgradeTests(SaveTestCase):
 
     def test_version_two_saves_gain_an_empty_event_log(self):
         def as_version_two(data):
+            embed_map(data)
             data["version"] = 2
             del data["events"]
 
@@ -206,6 +216,41 @@ class UpgradeTests(SaveTestCase):
     def test_saves_from_a_newer_game_are_refused_clearly(self):
         self.corrupt(lambda data: data.update(version=savegame.SAVE_VERSION + 1))
         with self.assertRaisesRegex(ValueError, "newer version"):
+            load_game(self.path)
+
+
+class MapReferenceTests(SaveTestCase):
+    def test_bundled_maps_are_referenced_not_copied(self):
+        state, shapes, seas = detailed()
+        begin(state, state.active)
+        save_game(state, shapes, seas, state.active, self.path)
+        data = json.loads(self.path.read_text())
+        self.assertEqual(data["map"]["scenario"], "americas_detailed")
+        self.assertNotIn("shapes", data)
+        self.assertLess(self.path.stat().st_size, 200_000)
+        restored, geometry, zones, _ = load_game(self.path)
+        self.assertEqual(geometry, shapes)
+        self.assertEqual(zones, seas)
+        self.assertEqual(restored.naval.adj, state.naval.adj)
+
+    def test_version_three_saves_drop_their_copy_of_the_map(self):
+        state, shapes, seas = compact()
+        save_game(state, shapes, seas, "f0", self.path)
+        self.corrupt(lambda data: (embed_map(data), data.update(version=3)))
+        self.assertEqual(savegame.upgrade(json.loads(self.path.read_text()))["map"]["scenario"], "americas")
+
+    def test_unbundled_maps_are_embedded(self):
+        state, shapes, seas = compact()
+        shapes = dict(shapes, extra={"type": "Point", "coordinates": [0, 0], "anchor": None})
+        _, geometry, *_ = self.round_trip(state, shapes, seas)
+        self.assertIn("extra", geometry)
+        self.assertIn("shapes", json.loads(self.path.read_text()))
+
+    def test_a_changed_bundled_map_is_refused(self):
+        state, shapes, seas = compact()
+        save_game(state, shapes, seas, "f0", self.path)
+        self.corrupt(lambda data: data["map"].update(digest="0" * 64))
+        with self.assertRaisesRegex(ValueError, "different version of the map"):
             load_game(self.path)
 
 
