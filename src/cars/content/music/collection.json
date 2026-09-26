@@ -1,0 +1,38 @@
+[
+  {
+    "id": "bach_aria",
+    "title": "Bach - Goldberg Variations: Aria",
+    "composer": "J. S. Bach",
+    "performer": "Kimiko Ishizaka",
+    "license": "CC0 1.0",
+    "file": "bach_aria.ogg",
+    "source": "https://commons.wikimedia.org/wiki/File:Kimiko_Ishizaka_-_01_-_Aria.ogg",
+    "download": "https://upload.wikimedia.org/wikipedia/commons/e/e6/Kimiko_Ishizaka_-_01_-_Aria.ogg",
+    "sha256": "c6b232e71e0c2a615c74ad119692db7f618173bc1c5452e0c6d4875990634d14",
+    "duration": 299.52
+  },
+  {
+    "id": "grieg_morning",
+    "title": "Grieg - Morning Mood",
+    "composer": "Edvard Grieg",
+    "performer": "Musopen Symphony / Czech National Symphony Orchestra",
+    "license": "Public domain dedication",
+    "file": "grieg_morning.ogg",
+    "source": "https://commons.wikimedia.org/wiki/File:Musopen_-_Morning.ogg",
+    "download": "https://upload.wikimedia.org/wikipedia/commons/1/1a/Musopen_-_Morning.ogg",
+    "sha256": "3207072ffef9f65f9a4a78c2ddc5afdd1c5b4c61b83ab092da3d6a87852e4996",
+    "duration": 229.18
+  },
+  {
+    "id": "bach_overture",
+    "title": "Bach - Variation 16: Ouverture",
+    "composer": "J. S. Bach",
+    "performer": "Kimiko Ishizaka",
+    "license": "CC0 1.0",
+    "file": "bach_overture.ogg",
+    "source": "https://commons.wikimedia.org/wiki/File:Kimiko_Ishizaka_-_17_-_Variatio_16_a_1_Clav_Ouverture.ogg",
+    "download": "https://upload.wikimedia.org/wikipedia/commons/a/af/Kimiko_Ishizaka_-_17_-_Variatio_16_a_1_Clav_Ouverture.ogg",
+    "sha256": "4f6b25965ae0a2901627836856e65409f618eb6927fae7c7edc5c2b416b8f294",
+    "duration": 188.67
+  }
+]
