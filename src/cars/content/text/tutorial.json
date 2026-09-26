@@ -1,0 +1,12 @@
+[
+  {"title": "Survey your command", "body": "Select one of your land regiments. N finds a unit with orders; F centers it.", "goal": "select"},
+  {"title": "March the regiment", "body": "Click a gold-bordered neighboring province. Hover first to see its route and cost.", "goal": "move"},
+  {"title": "Inspect a province", "body": "Right-click a province or click its city pin. The window separates control from ownership.", "goal": "inspect"},
+  {"title": "Develop the realm", "body": "In a controlled province, use Estates to build a farm, mill or mine. Tutorial resources cover the cost.", "goal": "build"},
+  {"title": "Trace your supply", "body": "Choose Supply (4). Select an army to see its connection to a controlled hub.", "goal": "supply"},
+  {"title": "Raise reinforcements", "body": "Open a controlled city, choose Muster and recruit a land unit. Each city recruits once per turn.", "goal": "recruit"},
+  {"title": "Pass a season", "body": "Close open windows and End Turn. Wait for all seven rivals; the next date refreshes orders.", "goal": "turn"},
+  {"title": "Consult CARSapedia", "body": "Press F1. Search for supply, combat or air. Close the library when finished.", "goal": "pedia"},
+  {"title": "Inspect strategic connections", "body": "Press G to open the strategy graph. Try Supply and click a node. Normal play stays geographic.", "goal": "strategy"},
+  {"title": "Review your campaign", "body": "Press R for recorded commands. Watch or export your replay, then close the panel.", "goal": "replay"}
+]

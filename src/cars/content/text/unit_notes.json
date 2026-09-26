@@ -1,0 +1,8 @@
+{
+  "infantry": "Historical role: infantry fought on foot and held ground. This game uses a stylized musket-era silhouette.",
+  "scout": "Historical role: scouts gathered information and reconnoitered routes ahead of the main army.",
+  "cavalry": "Historical role: mounted troops provided speed, pursuit and reconnaissance.",
+  "artillery": "Historical role: field guns supported armies with concentrated fire.",
+  "fleet": "Historical role: naval forces protected routes and contested sea control. Amphibious transport is a future feature.",
+  "air": "Historical role: military aviation came much later than the starting calendar. C.A.R.S. deliberately mixes periods; its air service is a game abstraction."
+}

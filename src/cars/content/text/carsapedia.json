@@ -1,0 +1,98 @@
+[
+  {
+    "id": "first-orders",
+    "title": "First orders",
+    "category": "Basics",
+    "body": "Choose a faction. Click a regiment, then hover a gold-bordered province. The route arrow and order forecast explain its cost and likely outcome. Click the destination to issue the order. Esc clears selection; Tab cycles stacks. N finds the next unit with orders; F centers it. Right-click a province to inspect it."
+  },
+  {
+    "id": "turns",
+    "title": "Seasons and campaign stages",
+    "category": "Basics",
+    "body": "One date covers your orders, resource settlement and all seven rivals. End Turn collects production. The next date refreshes movement and sorties. T opens the calendar. Foothold requires a city; Expansion reaches the city target; Consolidation holds it for consecutive full rounds; Dominion is victory. Losing control below the target resets the streak. There is no real-time deadline."
+  },
+  {
+    "id": "movement",
+    "title": "Movement and roads",
+    "category": "Land",
+    "body": "Bounded Dijkstra finds all provinces within remaining movement. Costs combine destination terrain, unit role, roads, passes, river crossings, supply and hostile zones of control. Roads discount the terrain portion by 5% per level, up to 15%; river and ZOC penalties remain. Hostile provinces are endpoints, never transit points. Topology and drawn polygon geometry are separate."
+  },
+  {
+    "id": "combat",
+    "title": "Land combat and forecasts",
+    "category": "Land",
+    "body": "Combat is deterministic attrition. Terrain strengthens defenders; river crossings reduce attacking strength. Supply, high-ground origins, artillery and close air support compose into the result. Hover a reachable enemy province for an exact forecast under current conditions. An attack spends remaining movement. Surviving defenders prevent capture. Control can change without changing legal ownership. J opens detailed battle reports."
+  },
+  {
+    "id": "supply",
+    "title": "Supply and encirclement",
+    "category": "Land",
+    "body": "Supply is connectivity from a controlled city hub through controlled provinces on its own network. A disconnected army pays 50% more movement cost and fights at reduced strength. The Supply view traces a selected army to its hub. Strategic inspection colors supplied nodes green and unreachable nodes red. A graph cut point is only a potential choke point: multiple hubs may still keep both sides supplied."
+  },
+  {
+    "id": "units",
+    "title": "Land unit roles",
+    "category": "Land",
+    "body": "Infantry is the general-purpose force. Scouts traverse rough terrain more cheaply. Cavalry favors plains but struggles in forests and mountains. Artillery is slow; up to two supplied guns at the attack origin can support another attacker, consuming their movement. U opens the military overview, including ready and cut-off filters. Click a row to focus its unit."
+  },
+  {
+    "id": "economy",
+    "title": "Resources and development",
+    "category": "Economy",
+    "body": "Wood, food and iron fund construction and recruitment. Regional base output is shared by controlled province count. Local resource sites and buildings add income. Estates contains farms, lumber mills and iron mines; each level adds two of its resource per turn. Improvements complete immediately in this prototype and persist after capture. Population and industry counters describe the whole administrative region."
+  },
+  {
+    "id": "market",
+    "title": "Merchant contracts",
+    "category": "Economy",
+    "body": "M opens the Merchant Exchange. Buy or sell fixed lots of ten resources using gold. Quotes show the full contract price. Stocks are finite, trades shift prices, and stock replenishes each global round. Transactions are manual; enemy AI does not trade. Controlled cities provide treasury income."
+  },
+  {
+    "id": "recruit",
+    "title": "Recruitment and facilities",
+    "category": "Economy",
+    "body": "Open a controlled city province and choose Muster. Each city recruits at most one unit per turn. Newly formed units act next turn. Shipyards require an existing port connection and unlock fleets. Airfields unlock air groups. Fleets deploy into the connected sea zone; aircraft form at the city. Works contains these facilities and roads."
+  },
+  {
+    "id": "naval",
+    "title": "Naval operations",
+    "category": "Services",
+    "body": "Select Naval or press 2. Fleets use their own sea-zone graph. Entering an enemy fleet zone triggers simultaneous attrition; the route stops there. If defenders survive, the attacker remains in the previous zone. If they are destroyed, a surviving attacker enters. Click the current sea zone to fight enemies sharing it. Seas do not change provincial ownership. Amphibious transport is not implemented."
+  },
+  {
+    "id": "air",
+    "title": "Air missions",
+    "category": "Services",
+    "body": "Select Air or press 3. Each group has one action per faction turn. Strike attacks armies or fleets in range, with return fire and automatic interception. Support grants +25% land attack against one province until your next turn; it does not stack. Rebase transfers to a controlled airbase within range. Aircraft do not walk province paths. The range graph includes abstract sea links. Losing the base destroys parked aircraft."
+  },
+  {
+    "id": "strategy",
+    "title": "Reading the strategy graph",
+    "category": "Algorithms",
+    "body": "G opens a separate inspector. Land shows province adjacency; Supply shows only your controlled network; Naval shows sea links; Air shows coverage links. Amber nodes are articulation points: removing one splits its component. Gold links are bridges. These are topological properties, not guaranteed military advantages. Click a node for degree, component and selected-unit reachability. Normal gameplay remains a geographic map."
+  },
+  {
+    "id": "replay",
+    "title": "Recording and replay",
+    "category": "Reference",
+    "body": "Commands are recorded from faction selection or the most recent load. R opens replay controls. Watch a separate read-only copy, step commands, or export JSON. End Turn replays the complete deterministic rival cycle as one step. Every step verifies a state digest and stops on divergence. Files require the matching ruleset. Saving a campaign does not save recording history; export before closing. Exported files can be dragged onto CARS.exe."
+  },
+  {
+    "id": "saves",
+    "title": "Saves and shortcuts",
+    "category": "Reference",
+    "body": "F5 opens three manual save slots. F9 opens the load library. A separate optional autosave runs when rivals finish. F10 controls audio and autosave; F11 toggles borderless fullscreen. J opens the chronicle. T opens the calendar. U opens the roster. F1 opens this library. H shows or hides the tutorial guide. Saves and exports live in your user-data folder, outside the installation."
+  },
+  {
+    "id": "project",
+    "title": "The graph-driven design",
+    "category": "Algorithms",
+    "body": "The user plays on a map; the simulation plays on graphs. Stable province IDs connect visuals to simulation. Dijkstra governs weighted movement, neighborhoods create ZOC, connectivity governs supply, and independent graphs model sea and air systems. Rivers are edge metadata. Geography is a fictional province subdivision of Natural Earth data. Max-flow supply, diplomacy and amphibious transport remain future work."
+  },
+  {
+    "id": "history",
+    "title": "An atlas of ambition",
+    "category": "History",
+    "body": "Scenario history: eight fictional realms compete across the Americas. The calendar starts in 1800, but the units and cultures are deliberately stylized across eras. Regional charters are original fictional formations. Province boundaries are generated subdivisions, not historical borders. Open Campaign Chronicle below for the actual battles, construction, seasonal milestones and orders in your current campaign."
+  }
+]
