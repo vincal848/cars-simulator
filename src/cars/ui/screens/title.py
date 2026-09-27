@@ -95,7 +95,7 @@ class TitleScreen:
         title = ui.surface.blit(font.render("C.A.R.S.", True, style.ON_SLATE), (x, y))
         y = title.bottom
         ui.text(
-            "COMBAT ARMS REGION SIMULATOR", (x + ui.px(4), y), style.HEADING, style.BRASS_LIGHT, bold=True
+            "COMBAT ARMS REGION SIMULATOR", (x + ui.px(4), y), style.HEADING, style.ACCENT_LIGHT, bold=True
         )
         ui.text(
             "Eight nations. One continent. The Americas, 1836.",

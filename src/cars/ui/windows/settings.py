@@ -154,11 +154,7 @@ class MusicWindow(Window):
             active = index == audio.index
             ui.inset(
                 row,
-                style.SELECTED_ROW
-                if active
-                else style.PARCHMENT_DARK
-                if ui.hovered(row)
-                else style.PARCHMENT_LIGHT,
+                style.SELECTED_ROW if active else style.PANEL_DARK if ui.hovered(row) else style.PANEL_LIGHT,
             )
             ui.text(
                 track["title"],

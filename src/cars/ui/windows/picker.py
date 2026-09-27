@@ -34,9 +34,9 @@ class PickerWindow(Window):
                 row,
                 style.SELECTED_ROW
                 if faction_id == self.choice
-                else style.PARCHMENT_DARK
+                else style.PANEL_DARK
                 if ui.hovered(row)
-                else style.PARCHMENT_LIGHT,
+                else style.PANEL_LIGHT,
             )
             ui.swatch((row.x + ui.px(20), row.centery), faction.color, 11)
             ui.text(

@@ -61,7 +61,7 @@ class UnitCard:
         faction = state.factions[unit.owner]
         rect = self.rect
         ui.shadow(rect, 4)
-        pygame.draw.rect(ui.surface, style.PARCHMENT, rect)
+        pygame.draw.rect(ui.surface, style.PANEL, rect)
         ui.frame(rect)
         self.areas.append((rect, "card"))
         pad = ui.px(style.PAD)

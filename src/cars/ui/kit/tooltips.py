@@ -58,7 +58,7 @@ class Tooltips:
         rect.clamp_ip(screen.inflate(-pad, -pad))
         self.last_rect = rect
         ui.shadow(rect, 4)
-        pygame.draw.rect(ui.surface, style.PARCHMENT_LIGHT, rect)
+        pygame.draw.rect(ui.surface, style.PANEL_LIGHT, rect)
         ui.frame(rect)
         ui.text(
             title, (rect.x + pad, rect.y + pad), style.HEADING, style.SLATE, width=width - pad * 2, bold=True

@@ -119,8 +119,8 @@ class Frame:
         thumb = track.copy()
         thumb.height = max(ui.px(24), round(body.height * body.height / content))
         thumb.y = body.y + round((body.height - thumb.height) * self.scroll / max(1, content - body.height))
-        pygame.draw.rect(ui.surface, style.PARCHMENT_DARK, track, border_radius=track.width // 2)
-        pygame.draw.rect(ui.surface, style.BRASS, thumb, border_radius=track.width // 2)
+        pygame.draw.rect(ui.surface, style.PANEL_DARK, track, border_radius=track.width // 2)
+        pygame.draw.rect(ui.surface, style.ACCENT, thumb, border_radius=track.width // 2)
 
     # Input ----------------------------------------------------------------------------
 

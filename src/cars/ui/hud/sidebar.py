@@ -47,7 +47,7 @@ class Sidebar:
         pygame.draw.rect(ui.surface, style.SLATE_DARK, self.rect)
         pygame.draw.line(
             ui.surface,
-            style.BRASS,
+            style.ACCENT,
             (self.rect.right - 1, self.rect.top),
             (self.rect.right - 1, self.rect.bottom),
             max(1, ui.px(1)),

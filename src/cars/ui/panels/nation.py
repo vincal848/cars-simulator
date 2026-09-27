@@ -143,7 +143,7 @@ class NationPanel(DockedPanel):
             reached = i <= stage.index
             bar = pygame.Rect(x + i * step, y, step - ui.px(6), ui.px(6))
             pygame.draw.rect(
-                ui.surface, style.HIGHLIGHT if reached else style.PARCHMENT_DARK, bar, border_radius=ui.px(3)
+                ui.surface, style.HIGHLIGHT if reached else style.PANEL_DARK, bar, border_radius=ui.px(3)
             )
             ui.text(
                 name, (bar.x, bar.bottom + ui.px(4)), style.SMALL, style.INK if reached else style.INK_FAINT

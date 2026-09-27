@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- **A cooler, cleaner palette.** Panels are light neutral grey with dark ink under
+  deep slate title bars, with a muted gold for emphasis and a single thin frame,
+  in place of parchment and brass.
 - **A modern map.** Nations are clean colours over the hill shading, deepening
   towards their frontiers, and give way to the terrain as you zoom in. The sea
   is a deep blue that lightens towards the coasts. The forest and mountain
@@ -36,8 +39,7 @@
   - The game draws at your screen's own resolution, sharp at any size, and the
     interface scales with it: 125% at 1080p, 150% at 1440p, 200% at 4K, or any
     size you choose in Settings.
-  - A lighter palette: parchment panels with dark ink, slate-blue headers and
-    brass accents.
+  - A lighter palette with dark ink and slate-blue headers.
   - An icon bar on the left opens docked panels for your nation, military,
     diplomacy, the market and the chronicle. An outliner on the right tracks
     the objective and lists every army, fleet, balloon corps and city.

@@ -73,7 +73,7 @@ class Outliner:
         height = min(self.limit.height, sum(heights) + ui.px(8))
         self.rect = pygame.Rect(self.limit.x, self.limit.y, self.limit.width, height)
         ui.shadow(self.rect, 4)
-        pygame.draw.rect(ui.surface, style.PARCHMENT, self.rect)
+        pygame.draw.rect(ui.surface, style.PANEL, self.rect)
         ui.frame(self.rect)
         inner = self.rect.inflate(-ui.px(8), -ui.px(8))
         self.scroll = max(0, min(self.scroll, sum(heights) - inner.height))

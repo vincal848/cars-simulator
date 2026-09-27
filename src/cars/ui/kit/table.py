@@ -48,8 +48,8 @@ class Table:
         self.rows = self.sorted(rows)
         widths = self._widths(ui, rect.width)
         header = pygame.Rect(rect.x, rect.y, rect.width, ui.px(self.row_height))
-        pygame.draw.rect(ui.surface, style.PARCHMENT_DARK, header)
-        ui.rule(header.x, header.right, header.bottom - 1, style.BRASS)
+        pygame.draw.rect(ui.surface, style.PANEL_DARK, header)
+        ui.rule(header.x, header.right, header.bottom - 1, style.ACCENT)
         self._header = {}
         x = rect.x
         for index, (column, width) in enumerate(zip(self.columns, widths, strict=True)):
@@ -72,7 +72,7 @@ class Table:
                     continue
                 line = pygame.Rect(rect.x, top, rect.width, row_height)
                 self._row_rects.append((line, row))
-                fill = style.PARCHMENT_LIGHT if number % 2 == 0 else style.PARCHMENT
+                fill = style.PANEL_LIGHT if number % 2 == 0 else style.PANEL
                 if row is selected:
                     fill = style.SELECTED_ROW
                 elif ui.hovered(line) and body.collidepoint(ui.mouse()):
@@ -161,8 +161,8 @@ class Table:
         thumb = track.copy()
         thumb.height = max(ui.px(20), round(body.height * body.height / content))
         thumb.y = body.y + round((body.height - thumb.height) * self.scroll / max(1, content - body.height))
-        pygame.draw.rect(ui.surface, style.PARCHMENT_DARK, track, border_radius=track.width // 2)
-        pygame.draw.rect(ui.surface, style.BRASS, thumb, border_radius=track.width // 2)
+        pygame.draw.rect(ui.surface, style.PANEL_DARK, track, border_radius=track.width // 2)
+        pygame.draw.rect(ui.surface, style.ACCENT, thumb, border_radius=track.width // 2)
 
 
 def _format(value: object) -> str:

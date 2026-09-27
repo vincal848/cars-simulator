@@ -56,7 +56,7 @@ class TimelineWindow(Window):
             reached = i <= stage.index
             bar = pygame.Rect(x + i * step, y, step - ui.px(8), ui.px(8))
             pygame.draw.rect(
-                ui.surface, style.HIGHLIGHT if reached else style.PARCHMENT_DARK, bar, border_radius=ui.px(4)
+                ui.surface, style.HIGHLIGHT if reached else style.PANEL_DARK, bar, border_radius=ui.px(4)
             )
             ui.text(
                 name,

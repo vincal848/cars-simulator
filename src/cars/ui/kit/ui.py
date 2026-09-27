@@ -153,12 +153,12 @@ class Ui:
     # Surfaces -------------------------------------------------------------------------
 
     def panel(self, rect: pygame.Rect, title: str | None = None, icon: str | None = None) -> pygame.Rect:
-        """A parchment panel with a brass frame and an optional slate title bar.
+        """A light panel with a thin frame and an optional slate title bar.
 
         Returns the area inside, below the title bar and inside the padding.
         """
         self.shadow(rect)
-        pygame.draw.rect(self.surface, style.PARCHMENT, rect)
+        pygame.draw.rect(self.surface, style.PANEL, rect)
         inner = rect.inflate(-self.px(style.PAD) * 2, -self.px(style.PAD) * 2)
         if title is not None:
             header = pygame.Rect(rect.x, rect.y, rect.width, self.px(40))
@@ -171,12 +171,12 @@ class Ui:
     def header(self, rect: pygame.Rect, title: str, icon: str | None = None) -> None:
         pygame.draw.rect(self.surface, style.SLATE, rect)
         pygame.draw.line(
-            self.surface, style.BRASS, rect.bottomleft, (rect.right - 1, rect.bottom - 1), self.px(2)
+            self.surface, style.ACCENT, rect.bottomleft, (rect.right - 1, rect.bottom - 1), self.px(2)
         )
         x = rect.x + self.px(style.PAD)
         if icon:
             size = self.px(22)
-            self.icon(icon, (x + size // 2, rect.centery), 22, style.BRASS_LIGHT)
+            self.icon(icon, (x + size // 2, rect.centery), 22, style.ACCENT_LIGHT)
             x += size + self.px(8)
         font = self.font(style.HEADING, bold=True)
         label = font.render(self.fit(title, font, rect.right - x - self.px(44)), True, style.ON_SLATE)
@@ -184,24 +184,23 @@ class Ui:
 
     def frame(self, rect: pygame.Rect) -> None:
         pygame.draw.rect(self.surface, style.FRAME, rect, max(1, self.px(1)))
-        pygame.draw.rect(self.surface, style.BRASS, rect.inflate(-self.px(2) * 2, -self.px(2) * 2), 1)
 
     def bar(self, rect: pygame.Rect) -> None:
-        """A slate strip, such as the top bar, with a brass edge on the map side."""
+        """A slate strip, such as the top bar, with a gold edge on the map side."""
         pygame.draw.rect(self.surface, style.SLATE, rect)
         width = max(1, self.px(2))
         if rect.top == 0:
             pygame.draw.line(
                 self.surface,
-                style.BRASS,
+                style.ACCENT,
                 (rect.x, rect.bottom - width),
                 (rect.right, rect.bottom - width),
                 width,
             )
         else:
-            pygame.draw.line(self.surface, style.BRASS, rect.topleft, rect.topright, width)
+            pygame.draw.line(self.surface, style.ACCENT, rect.topleft, rect.topright, width)
 
-    def inset(self, rect: pygame.Rect, color: Color = style.PARCHMENT_LIGHT) -> None:
+    def inset(self, rect: pygame.Rect, color: Color = style.PANEL_LIGHT) -> None:
         pygame.draw.rect(self.surface, color, rect, border_radius=self.px(3))
         pygame.draw.rect(self.surface, style.RULE, rect, 1, border_radius=self.px(3))
 
@@ -265,12 +264,10 @@ class Ui:
             fill = style.HOVER_ROW if hovered or selected else None
             ink = style.INK if enabled else style.INK_FAINT
         else:
-            fill = (
-                style.SELECTED_ROW if selected else style.PARCHMENT_DARK if hovered else style.PARCHMENT_LIGHT
-            )
+            fill = style.SELECTED_ROW if selected else style.PANEL_DARK if hovered else style.PANEL_LIGHT
             ink = style.INK if enabled else style.INK_FAINT
         if not enabled and kind != "primary":
-            fill = style.PARCHMENT
+            fill = style.PANEL
         if fill:
             pygame.draw.rect(self.surface, fill, rect, border_radius=radius)
         if kind != "ghost":
@@ -361,7 +358,7 @@ class Ui:
         pygame.draw.polygon(self.surface, color, points)
 
     def progress(self, rect: pygame.Rect, fraction: float, color: Color = style.HIGHLIGHT) -> None:
-        pygame.draw.rect(self.surface, style.PARCHMENT_DARK, rect, border_radius=rect.height // 2)
+        pygame.draw.rect(self.surface, style.PANEL_DARK, rect, border_radius=rect.height // 2)
         filled = rect.copy()
         filled.width = round(rect.width * max(0.0, min(1.0, fraction)))
         if filled.width:

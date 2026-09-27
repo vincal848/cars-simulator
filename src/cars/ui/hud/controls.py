@@ -76,7 +76,7 @@ class Controls:
     def draw(self, state: "GameState", player: str, mode: str, human_turn: bool) -> None:
         ui = self.ui
         pygame.draw.rect(ui.surface, style.SLATE, self.bar, border_radius=ui.px(6))
-        pygame.draw.rect(ui.surface, style.BRASS, self.bar, max(1, ui.px(1)), border_radius=ui.px(6))
+        pygame.draw.rect(ui.surface, style.ACCENT, self.bar, max(1, ui.px(1)), border_radius=ui.px(6))
         ready = sum(u.owner == player and u.remaining > 0 for u in state.units.values())
         for action, icon, title, help_text in (*MODES, *EXTRAS):
             rect = self.buttons[action]
@@ -93,12 +93,12 @@ class Controls:
         hovered = enabled and math.dist(ui.mouse(), self.end_center) <= radius
         pygame.draw.circle(screen, style.SHADOW, (x + ui.px(2), y + ui.px(3)), radius + ui.px(3))
         pygame.draw.circle(screen, style.FRAME, self.end_center, radius + ui.px(3))
-        pygame.draw.circle(screen, style.BRASS, self.end_center, radius)
+        pygame.draw.circle(screen, style.ACCENT, self.end_center, radius)
         face = style.SLATE_LIGHT if hovered else style.SLATE if enabled else style.SLATE_DARK
         pygame.draw.circle(screen, face, self.end_center, radius - ui.px(5))
-        pygame.draw.circle(screen, style.BRASS_LIGHT, self.end_center, radius - ui.px(9), max(1, ui.px(1)))
+        pygame.draw.circle(screen, style.ACCENT_LIGHT, self.end_center, radius - ui.px(9), max(1, ui.px(1)))
         ink = style.ON_SLATE if enabled else style.ON_SLATE_MUTED
-        ui.icon("end", (x, y - ui.px(15)), 22, style.BRASS_LIGHT)
+        ui.icon("end", (x, y - ui.px(15)), 22, style.ACCENT_LIGHT)
         font = ui.font(style.BODY, bold=True)
         for text, dy in (("END", 4), ("TURN", 20)):
             label = font.render(text, True, ink)

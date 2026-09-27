@@ -33,8 +33,8 @@ def draw_grid(
     widths[-1] += width - sum(widths)
     height = ui.px(row_height)
     header = pygame.Rect(x, y, width, ui.px(row_height - 4))
-    pygame.draw.rect(ui.surface, style.PARCHMENT_DARK, header)
-    ui.rule(header.x, header.right, header.bottom - 1, style.BRASS)
+    pygame.draw.rect(ui.surface, style.PANEL_DARK, header)
+    ui.rule(header.x, header.right, header.bottom - 1, style.ACCENT)
     left = x
     for (title, _, align), column_width in zip(columns, widths, strict=True):
         _cell(
@@ -44,7 +44,7 @@ def draw_grid(
     top = header.bottom
     for number, row in enumerate(rows):
         line = pygame.Rect(x, top, width, height)
-        pygame.draw.rect(ui.surface, style.PARCHMENT_LIGHT if number % 2 == 0 else style.PARCHMENT, line)
+        pygame.draw.rect(ui.surface, style.PANEL_LIGHT if number % 2 == 0 else style.PANEL, line)
         left = x
         for cell, (_, _, align), column_width in zip(row, columns, widths, strict=True):
             area = pygame.Rect(left, top, column_width, height)

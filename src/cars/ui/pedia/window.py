@@ -117,9 +117,7 @@ class PediaWindow(Window):
     def _list_row(self, ui, line: pygame.Rect, kind: str, value: str, label: str) -> None:
         pad = ui.px(8)
         if kind == "category":
-            pygame.draw.rect(
-                ui.surface, style.PARCHMENT_DARK, line.inflate(0, -ui.px(2)), border_radius=ui.px(3)
-            )
+            pygame.draw.rect(ui.surface, style.PANEL_DARK, line.inflate(0, -ui.px(2)), border_radius=ui.px(3))
             ui.disclosure((line.x + pad + ui.px(4), line.centery), value in self.open_categories, style.SLATE)
             ui.text(
                 label,
@@ -182,8 +180,8 @@ class PediaWindow(Window):
             thumb.y = page.y + (page.height - thumb.height) * self.article_scroll // max(
                 1, height - page.height
             )
-            pygame.draw.rect(ui.surface, style.PARCHMENT_DARK, track, border_radius=track.width // 2)
-            pygame.draw.rect(ui.surface, style.BRASS, thumb, border_radius=track.width // 2)
+            pygame.draw.rect(ui.surface, style.PANEL_DARK, track, border_radius=track.width // 2)
+            pygame.draw.rect(ui.surface, style.ACCENT, thumb, border_radius=track.width // 2)
 
     def _draw_page(self, ui, article: Article, rect: pygame.Rect) -> int:
         x, y = rect.x, rect.y

@@ -1,39 +1,39 @@
 """The interface palette and type scale.
 
-Light parchment panels with dark ink, slate-blue headers and bars, and brass for
-emphasis. Sizes are logical: the Ui multiplies them by the player's UI scale.
+Light neutral panels with dark ink, deep slate headers and bars, and a muted gold
+for emphasis. Sizes are logical: the Ui multiplies them by the player's UI scale.
 """
 
 # Surfaces.
-PARCHMENT = (233, 223, 202)
-PARCHMENT_DARK = (221, 209, 184)  # alternate table rows, pressed buttons
-PARCHMENT_LIGHT = (244, 238, 224)  # wells, inputs, cards
-RULE = (190, 172, 138)
-SLATE = (47, 64, 79)  # headers, bars
-SLATE_DARK = (35, 48, 60)
-SLATE_LIGHT = (70, 92, 110)
-BRASS = (176, 138, 72)
-BRASS_LIGHT = (214, 179, 110)
-FRAME = (74, 62, 49)
+PANEL = (236, 236, 232)
+PANEL_DARK = (222, 223, 219)  # alternate table rows, pressed buttons
+PANEL_LIGHT = (248, 248, 246)  # wells, inputs, cards
+RULE = (200, 202, 200)
+SLATE = (29, 42, 58)  # headers, bars
+SLATE_DARK = (19, 29, 42)
+SLATE_LIGHT = (48, 66, 88)
+ACCENT = (201, 162, 79)
+ACCENT_LIGHT = (226, 192, 120)
+FRAME = (44, 54, 66)
 
 # Ink.
-INK = (40, 35, 30)
-INK_MUTED = (104, 94, 81)
-INK_FAINT = (146, 134, 118)
-ON_SLATE = (240, 233, 216)
-ON_SLATE_MUTED = (182, 190, 196)
+INK = (28, 32, 38)
+INK_MUTED = (88, 96, 108)
+INK_FAINT = (140, 146, 156)
+ON_SLATE = (236, 239, 243)
+ON_SLATE_MUTED = (160, 174, 190)
 
 # Meaning.
-GOOD = (58, 118, 72)
-BAD = (164, 62, 46)
-WARN = (170, 116, 30)
-HIGHLIGHT = (199, 154, 62)
-SELECTED_ROW = (232, 208, 150)
-HOVER_ROW = (238, 227, 200)
+GOOD = (38, 128, 82)
+BAD = (192, 60, 50)
+WARN = (200, 130, 24)
+HIGHLIGHT = (214, 172, 84)
+SELECTED_ROW = (214, 226, 242)
+HOVER_ROW = (230, 234, 239)
 
 # Shadows and veils.
-SHADOW = (12, 16, 20)
-VEIL = (18, 24, 30, 150)
+SHADOW = (8, 12, 18)
+VEIL = (12, 18, 26, 150)
 
 # Type scale in logical pixels.
 TITLE = 24

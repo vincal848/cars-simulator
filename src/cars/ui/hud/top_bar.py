@@ -71,7 +71,7 @@ class TopBar:
             f"{faction.gold:,.0f}",
             f"+{income} / turn",
             GOOD_ON_SLATE,
-            lambda left: ui.icon("gold", (left + ui.px(11), self.rect.centery), 22, style.BRASS_LIGHT),
+            lambda left: ui.icon("gold", (left + ui.px(11), self.rect.centery), 22, style.ACCENT_LIGHT),
         )
         ui.hint(
             pygame.Rect(start, 0, x - start, self.rect.height),
@@ -120,7 +120,7 @@ class TopBar:
         pygame.draw.line(
             ui.surface, style.SLATE_LIGHT, rect.topleft, (rect.x, rect.bottom - ui.px(3)), max(1, ui.px(1))
         )
-        ui.icon("end", (rect.x + ui.px(22), rect.centery), 22, style.BRASS_LIGHT)
+        ui.icon("end", (rect.x + ui.px(22), rect.centery), 22, style.ACCENT_LIGHT)
         top = rect.centery - ui.px(16)
         ui.text(date_label(state.clock), (rect.x + ui.px(42), top), style.HEADING, style.ON_SLATE, bold=True)
         _actor, completed = turn_phase(state)

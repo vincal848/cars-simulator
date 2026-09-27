@@ -41,9 +41,9 @@ class _LibraryWindow(Window):
                 row,
                 style.SELECTED_ROW
                 if self.confirm == action
-                else style.PARCHMENT_DARK
+                else style.PANEL_DARK
                 if ui.hovered(row)
-                else style.PARCHMENT_LIGHT,
+                else style.PANEL_LIGHT,
             )
             name = "Autosave" if i == SaveLibrary.AUTOSAVE else f"Slot {i + 1}"
             ui.text(name, (row.x + ui.px(14), row.y + ui.px(10)), style.HEADING, style.SLATE, bold=True)

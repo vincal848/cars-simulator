@@ -47,7 +47,7 @@ class Toasts:
             card = pygame.Surface(box.size, pygame.SRCALPHA)
             pygame.draw.rect(card, (*style.SLATE_DARK, 225), card.get_rect(), border_radius=ui.px(4))
             pygame.draw.rect(
-                card, (*style.BRASS, 255), card.get_rect(), max(1, ui.px(1)), border_radius=ui.px(4)
+                card, (*style.ACCENT, 255), card.get_rect(), max(1, ui.px(1)), border_radius=ui.px(4)
             )
             card.blit(label, label.get_rect(center=card.get_rect().center))
             card.set_alpha(alpha)
