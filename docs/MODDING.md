@@ -57,9 +57,14 @@ instead of failing halfway through a campaign.
 
 ## Nations and traits
 
-`common/nations.json` holds each nation's history and its two national traits.
-A mod can rewrite the history or rebalance a trait by overriding just the parts
-it changes. Each trait lists modifiers:
+`common/nations.json` holds each nation's history, its flag and its two
+national traits. A mod can rewrite the history or rebalance a trait by
+overriding just the parts it changes.
+
+A flag is a short specification: a `field` colour, equal `stripes` (horizontal
+or vertical), the `union` flag, a `rhombus` with a disc, a starred `canton`, and
+an `emblem` (`star`, `stars3`, `sun` or `eagle`) at the centre; see
+`ui/art/flags.py`. Each trait lists modifiers:
 
 | Modifier | Value | Effect |
 | --- | --- | --- |

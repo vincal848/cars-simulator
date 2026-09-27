@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- **Models in the CARSapedia.** Every article about a thing shows a small model
+  of it beside the title: a unit's figure, a nation's flag of 1836, a building,
+  a piece of relief for each terrain, and an emblem for each event until it has
+  a painting. Flags are drawn from short specifications in `nations.json`.
 - **Less filler text.** Explanatory lines under titles and at the foot of
   windows are gone: the save slots' introduction and "Click a slot.", the
   market's paragraphs, the calendar's steps of a turn, the strategic atlas's

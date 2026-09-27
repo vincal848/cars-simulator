@@ -78,6 +78,15 @@ class PediaWindowTests(ScreenTestCase):
             self.window.go(article)
             self.draw()
 
+    def test_every_item_article_shows_a_model(self):
+        items = ("Units", "Regional charters", "Buildings", "Terrain", "Nations", "Events")
+        for article in self.window.library.values():
+            if article.category in items and "-" in article.id:  # Not the category indexes.
+                self.assertIsNotNone(article.plate, article.id)
+                self.window.go(article.id)
+                self.draw()
+        self.assertTrue(all(nation.flag for nation in NATIONS.values()))
+
 
 if __name__ == "__main__":
     unittest.main()

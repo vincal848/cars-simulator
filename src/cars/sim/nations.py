@@ -51,6 +51,7 @@ class Nation:
     summary: str
     history: tuple[str, ...]
     traits: tuple[Trait, ...]
+    flag: dict  # drawn by the interface; see ui/art/flags.py
 
 
 def _load() -> dict[str, Nation]:
@@ -66,6 +67,7 @@ def _load() -> dict[str, Nation]:
             **{key: data[key] for key in ("capital", "ruler", "government", "founded", "motto", "summary")},
             history=tuple(data["history"]),
             traits=traits,
+            flag=data.get("flag", {}),
         )
     return nations
 

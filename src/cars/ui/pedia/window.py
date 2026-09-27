@@ -9,11 +9,15 @@ import re
 
 import pygame
 
+from cars.sim.nations import NATIONS
 from cars.sim.regional import CHARTERS
-from cars.ui.art.paintings import LEADERS, frame, painting
+from cars.ui.art.buildings import draw_building
+from cars.ui.art.flags import flag
+from cars.ui.art.paintings import EVENTS, frame, painting
 from cars.ui.frames import Window
 from cars.ui.kit import style
 from cars.ui.kit.grid import draw_grid, facts, section
+from cars.ui.map.relief import RASTER_NORTH, RASTER_WEST, RASTER_WIDTH_DEGREES, relief_image
 from cars.ui.pedia.library import CATEGORIES, LINK, Article, build, search
 
 LIST_WIDTH = 290
@@ -228,25 +232,37 @@ class PediaWindow(Window):
         return y - rect.y
 
     def _plate(self, ui, plate: tuple, rect: pygame.Rect) -> int:
+        """A small model of the article's subject: a unit's figure, a nation's flag, a
+        building, a stretch of terrain or an event's painting."""
         state = self.state
         ui.inset(rect)
-        if plate[0] == "unit":
+        kind, key = plate[0], plate[1]
+        inner = rect.inflate(-ui.px(20), -ui.px(20))
+        if kind == "unit":
             faction = state.factions[self.game.campaign.player or state.active]
             uniform = CHARTERS[plate[2]].style if plate[2] else faction.style
-            sprite = self.game.renderer.map.sprites.sprite(plate[1], faction.color, uniform)
-            size = min(rect.width, rect.height) - ui.px(20)
-            ui.surface.blit(
-                pygame.transform.smoothscale(sprite, (size, size)),
-                (rect.centerx - size // 2, rect.centery - size // 2),
+            sprite = self.game.renderer.map.sprites.sprite(key, faction.color, uniform)
+            size = min(inner.width, inner.height)
+            ui.surface.blit(pygame.transform.smoothscale(sprite, (size, size)), sprite_rect(inner, size))
+        elif kind == "flag":
+            image = flag(NATIONS[key].flag, inner.width)
+            ui.shadow(image.get_rect(center=inner.center), 3)
+            ui.surface.blit(image, image.get_rect(center=inner.center))
+        elif kind == "building":
+            draw_building(
+                ui.surface, key, inner.center, min(inner.width, inner.height), self.game.renderer.time
             )
-        else:
-            faction = state.factions[plate[1]]
-            portrait = painting(LEADERS, plate[1], (rect.width - ui.px(16), rect.height - ui.px(16)))
-            if portrait:
-                frame(ui.surface, portrait, rect.inflate(-ui.px(16), -ui.px(16)))
+        elif kind == "terrain":
+            model = terrain_model(key, inner.size)
+            ui.surface.blit(model, inner)
+            pygame.draw.rect(ui.surface, style.FRAME, inner, max(1, ui.px(1)), border_radius=ui.px(6))
+        elif kind == "event":
+            picture = painting(EVENTS, key, inner.size)
+            if picture:
+                frame(ui.surface, picture, inner)
             else:
-                ui.swatch(rect.center, faction.color, 48)
-                ui.icon("nation", rect.center, 50, style.ON_SLATE)
+                pygame.draw.circle(ui.surface, style.SLATE, inner.center, min(inner.size) // 2)
+                ui.icon(plate[2], inner.center, round(min(inner.size) / ui.scale * 0.55), style.ACCENT_LIGHT)
         return rect.width
 
     # Rich text --------------------------------------------------------------------------
@@ -376,3 +392,31 @@ def _ordered(library: dict[str, Article], category: str) -> list[Article]:
     if category in INDEXED:
         return sorted(articles, key=lambda a: (a.id not in INDEXES, a.title))
     return articles
+
+
+# Models -----------------------------------------------------------------------------
+
+
+# Where each terrain's model is cut from the relief: (longitude, latitude) of its centre.
+TERRAIN_SAMPLES = {"plains": (-62.0, -35.0), "forest": (-63.0, -5.0), "mountains": (-68.0, -18.0)}
+TERRAIN_SPAN = 9  # degrees across
+
+
+def sprite_rect(area: pygame.Rect, size: int) -> pygame.Rect:
+    return pygame.Rect(area.centerx - size // 2, area.centery - size // 2, size, size)
+
+
+def terrain_model(terrain: str, size: tuple[int, int]) -> pygame.Surface:
+    """A rounded piece of the relief showing ``terrain``, like a tile from a relief model."""
+    relief = relief_image()
+    per_degree = relief.get_width() / RASTER_WIDTH_DEGREES
+    longitude, latitude = TERRAIN_SAMPLES.get(terrain, TERRAIN_SAMPLES["plains"])
+    span = round(TERRAIN_SPAN * per_degree)
+    left = round((longitude - RASTER_WEST) * per_degree) - span // 2
+    top = round((RASTER_NORTH - latitude) * per_degree) - span * size[1] // size[0] // 2
+    source = pygame.Rect(left, top, span, span * size[1] // size[0]).clip(relief.get_rect())
+    model = pygame.transform.smoothscale(relief.subsurface(source), size).convert_alpha()
+    mask = pygame.Surface(size, pygame.SRCALPHA)
+    pygame.draw.rect(mask, (255, 255, 255, 255), mask.get_rect(), border_radius=max(4, size[0] // 20))
+    model.blit(mask, (0, 0), special_flags=pygame.BLEND_RGBA_MIN)
+    return model

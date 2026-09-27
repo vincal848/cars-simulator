@@ -1,5 +1,6 @@
 {
   "f0": {
+    "flag": {"stripes": {"direction": "horizontal", "colors": [[178, 34, 52], [255, 255, 255], [178, 34, 52], [255, 255, 255], [178, 34, 52], [255, 255, 255], [178, 34, 52], [255, 255, 255], [178, 34, 52], [255, 255, 255], [178, 34, 52], [255, 255, 255], [178, 34, 52]]}, "canton": {"color": [60, 59, 110], "stars": 25}},
     "capital": "Washington",
     "ruler": "President Andrew Jackson",
     "government": "Federal republic of twenty-four states",
@@ -25,6 +26,7 @@
     ]
   },
   "f1": {
+    "flag": {"stripes": {"direction": "vertical", "colors": [[0, 104, 71], [255, 255, 255], [206, 17, 38]]}, "emblem": {"kind": "eagle", "color": [122, 86, 50]}},
     "capital": "Mexico City",
     "ruler": "Acting President José Justo Corro",
     "government": "Centralist republic",
@@ -50,6 +52,7 @@
     ]
   },
   "f2": {
+    "flag": {"field": [0, 56, 168], "emblem": {"kind": "star", "color": [236, 194, 64]}},
     "capital": "Washington-on-the-Brazos",
     "ruler": "Interim President David G. Burnet",
     "government": "Provisional republic",
@@ -75,6 +78,7 @@
     ]
   },
   "f3": {
+    "flag": {"union": true},
     "capital": "Quebec",
     "ruler": "Governor-in-Chief the Earl of Gosford",
     "government": "Crown colonies and the Hudson's Bay Company",
@@ -100,6 +104,7 @@
     ]
   },
   "f4": {
+    "flag": {"stripes": {"direction": "vertical", "colors": [[206, 17, 38], [0, 56, 147], [252, 209, 22]]}},
     "capital": "Bogotá",
     "ruler": "President Francisco de Paula Santander",
     "government": "Centralist republic",
@@ -125,6 +130,7 @@
     ]
   },
   "f5": {
+    "flag": {"field": [178, 34, 52], "emblem": {"kind": "stars3", "color": [242, 200, 70]}},
     "capital": "Lima",
     "ruler": "Supreme Protector Andrés de Santa Cruz",
     "government": "Confederation of three states under a protector",
@@ -150,6 +156,7 @@
     ]
   },
   "f6": {
+    "flag": {"field": [0, 120, 64], "rhombus": {"color": [250, 210, 40], "disc": [30, 60, 140]}},
     "capital": "Rio de Janeiro",
     "ruler": "Emperor Pedro II, under the Regent Diogo Antônio Feijó",
     "government": "Constitutional monarchy under a regency",
@@ -175,6 +182,7 @@
     ]
   },
   "f7": {
+    "flag": {"stripes": {"direction": "horizontal", "colors": [[108, 172, 228], [255, 255, 255], [108, 172, 228]]}, "emblem": {"kind": "sun", "color": [196, 58, 40]}},
     "capital": "Buenos Aires",
     "ruler": "Governor Juan Manuel de Rosas",
     "government": "Confederation of provinces, led by Buenos Aires",

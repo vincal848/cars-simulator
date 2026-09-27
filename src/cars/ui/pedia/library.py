@@ -201,6 +201,7 @@ def _building_articles() -> list[Article]:
                 tables=[("Cost of each level", ["Level", "Cost"], rows)],
                 facts=[("Effect", spec.summary()), ("Levels", str(spec.max_level))],
                 see_also=["construction", "buildings"],
+                plate=("building", kind),
             )
         )
     return articles
@@ -249,6 +250,7 @@ def _terrain_articles() -> list[Article]:
                     ("Defence", f"×{combat.terrain_defense[terrain]:g}"),
                 ],
                 see_also=["movement", "combat", "map-modes"],
+                plate=("terrain", terrain),
             )
         )
     return articles
@@ -273,10 +275,25 @@ def _nation_articles(names: Mapping[str, str]) -> list[Article]:
                     ("Founded", str(nation.founded)),
                 ],
                 see_also=["nations", "traits", "world"],
-                plate=("nation", nation.id),
+                plate=("flag", nation.id),
             )
         )
     return articles
+
+
+# The emblem an event's article shows until it has a painting.
+EVENT_EMBLEMS = {
+    "bountiful_harvest": "build",
+    "veteran_volunteers": "recruit",
+    "camp_fever": "population",
+    "iron_seam": "industry",
+    "merchant_convoy": "market",
+    "envoys_of_peace": "diplomacy",
+    "lean_winter": "supply",
+    "last_stand": "province",
+}
+# Authored articles about a unit show its model too.
+ARTICLE_PLATES = {"balloons": ("unit", "balloon", ""), "naval": ("unit", "fleet", "")}
 
 
 def _event_articles() -> list[Article]:
@@ -292,6 +309,7 @@ def _event_articles() -> list[Article]:
                 body=[event.text],
                 tables=[("Choices", ["Option"], rows)],
                 see_also=["events"],
+                plate=("event", event.id, EVENT_EMBLEMS.get(event.id, "chronicle")),
             )
         )
     return articles
@@ -317,6 +335,7 @@ def build(names: Mapping[str, str]) -> dict[str, Article]:
             summary=fill(raw.get("summary", "")),
             body=[fill(paragraph) for paragraph in raw["body"]],
             see_also=raw.get("see_also", []),
+            plate=ARTICLE_PLATES.get(raw["id"]),
         )
         for raw in load_content("text", "carsapedia.json")
     ]
