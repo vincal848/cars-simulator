@@ -423,7 +423,7 @@ class MapView:
         """A sea's name in spaced italic capitals, as engraved on period charts."""
         key = (name, color, self.ui.scale, self.ui.font_index)
         if key not in self._sea_labels:
-            font = self.ui.font(13, italic=True)
+            font = self.ui.font(13, italic=True, serif=True)
             letters = [font.render(letter, True, color) for letter in name.upper()]
             spacing = self.ui.px(3)
             width = sum(letter.get_width() for letter in letters) + spacing * (len(letters) - 1)

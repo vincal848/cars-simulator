@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- **New type.** The interface now uses bundled open-licensed fonts, Adobe's
+  Source Sans 3 for text and figures and Source Serif 4 for titles, so it looks
+  the same on every machine. Settings offers Modern (sans with serif titles, the
+  default), Classic (serif) and Plain (sans).
 - **The Americas of 1836.** The eight invented nations give way to the powers of
   1836: the United States, Mexico, the new Republic of Texas, British North
   America, New Granada, the Peru-Bolivian Confederation, the Empire of Brazil

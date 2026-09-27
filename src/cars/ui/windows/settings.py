@@ -41,7 +41,7 @@ class SettingsWindow(Window):
         y += ui.px(40)
         ui.text("Typeface", (x, y + ui.px(6)), style.BODY)
         font_width = (width - label_width) // len(FONT_CHOICES) - ui.px(4)
-        for i, (name, _faces) in enumerate(FONT_CHOICES):
+        for i, (name, *_faces) in enumerate(FONT_CHOICES):
             button = pygame.Rect(x + label_width + i * (font_width + ui.px(4)), y, font_width, ui.px(30))
             self.button(button, name, f"font:{i}", selected=ui.font_index == i)
         y += ui.px(52)
@@ -85,7 +85,7 @@ class SettingsWindow(Window):
         elif verb == "font":
             context.ui.set_font(int(value))
             if audio:
-                audio.set("font", int(value))
+                audio.set("typeface", int(value))
             self.game.renderer.map.invalidate_labels()
         elif verb == "display":
             context.request_display_toggle()

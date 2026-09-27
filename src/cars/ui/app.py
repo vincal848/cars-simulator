@@ -25,7 +25,7 @@ class App:
         pygame.display.set_caption(CAPTION)
         audio = Audio()
         self.context = UiContext(self.display.surface, audio)
-        self.context.ui.set_font(audio.settings["font"])
+        self.context.ui.set_font(audio.settings["typeface"])
         state, shapes, seas = load_scenario(args.scenario or DETAILED_SCENARIO)
         self.game = GameScreen(self.context, state, shapes, seas)
         if args.tutorial:

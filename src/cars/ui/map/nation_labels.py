@@ -17,7 +17,7 @@ import pygame
 
 from cars.ui.map.geometry import Rings
 from cars.ui.map.relief import RASTER_NORTH, RASTER_WEST
-from cars.ui.typography import DEFAULT_FONT, system_font
+from cars.ui.typography import DEFAULT_FONT, TITLE, load_font
 
 if TYPE_CHECKING:
     from cars.sim.state import GameState
@@ -45,7 +45,7 @@ class NationNames:
 
     def font(self, size: int) -> pygame.font.Font:
         if size not in self._fonts:
-            self._fonts[size] = system_font(DEFAULT_FONT, size)
+            self._fonts[size] = load_font(DEFAULT_FONT, size, TITLE)
         return self._fonts[size]
 
     def curves(self) -> list[tuple[str, "NameCurve"]]:

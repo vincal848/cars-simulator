@@ -4,7 +4,7 @@ import pygame
 
 from cars.ui.map.geometry import province_polygons
 from cars.ui.map.nation_labels import NationNames, render, territories
-from cars.ui.typography import DEFAULT_FONT, system_font
+from cars.ui.typography import DEFAULT_FONT, TITLE, load_font
 from tests.support import compact
 
 
@@ -21,7 +21,7 @@ class NationLabelTests(unittest.TestCase):
         pygame.quit()
 
     def font(self, size):
-        return self.fonts.setdefault(size, system_font(DEFAULT_FONT, size))
+        return self.fonts.setdefault(size, load_font(DEFAULT_FONT, size, TITLE))
 
     def test_a_wide_territory_is_named_along_its_length(self):
         (curve,) = territories([box(-120, 30, -80, 45)])

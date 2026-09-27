@@ -40,7 +40,7 @@ class Audio:
         paused=False,
         shuffle=False,
         ui_scale=0,  # 0 follows the window size
-        font=DEFAULT_FONT,
+        typeface=DEFAULT_FONT,  # renamed from "font" when the faces became bundled
     )
 
     def __init__(self, path: Path | None = None) -> None:
@@ -86,8 +86,8 @@ class Audio:
                 self.settings["track"] = values["track"]
             if values.get("ui_scale") in (0, *SCALES):
                 self.settings["ui_scale"] = values["ui_scale"]
-            if values.get("font") in range(len(FONT_CHOICES)):
-                self.settings["font"] = values["font"]
+            if values.get("typeface") in range(len(FONT_CHOICES)):
+                self.settings["typeface"] = values["typeface"]
         except (OSError, ValueError, AttributeError):
             pass
 

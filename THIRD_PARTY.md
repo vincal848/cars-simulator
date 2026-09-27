@@ -3,7 +3,12 @@
 C.A.R.S. original code and procedural artwork are MIT licensed. Third-party
 components retain their own licenses; see `packaging/windows/licenses/` in the source
 repository or `licenses/` beside the Windows executable. Natural Earth raster
-and vector credits are in MAP_SOURCES.md. System fonts are not redistributed.
+and vector credits are in MAP_SOURCES.md.
+
+The interface uses Adobe's Source Sans 3 and Source Serif 4, bundled in
+`src/cars/content/fonts/` under the SIL Open Font License 1.1 (`OFL.txt` there,
+and `licenses/LICENSE.source-fonts.txt` beside the Windows executable):
+https://github.com/adobe-fonts/source-sans and https://github.com/adobe-fonts/source-serif.
 
 The Windows 0.24 build bundles Python 3.13, pygame-ce 2.5.8, and a PyInstaller
 6.22.3 bootloader. PyInstaller's bootloader exception permits distribution of

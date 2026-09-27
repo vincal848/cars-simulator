@@ -250,7 +250,7 @@ class GameScreen:
         ui = self.context.ui
         ui.set_font((ui.font_index + 1) % len(FONT_CHOICES))
         if self.context.audio:
-            self.context.audio.set("font", ui.font_index)
+            self.context.audio.set("typeface", ui.font_index)
         self.renderer.map.invalidate_labels()
 
     # Turn flow ------------------------------------------------------------------------

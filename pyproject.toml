@@ -25,7 +25,14 @@ version = { attr = "cars.__version__" }
 where = ["src"]
 
 [tool.setuptools.package-data]
-cars = ["content/**/*.json", "content/**/*.geojson", "content/**/*.jpg", "content/**/*.ogg"]
+cars = [
+    "content/**/*.json",
+    "content/**/*.geojson",
+    "content/**/*.jpg",
+    "content/**/*.ogg",
+    "content/**/*.ttf",
+    "content/fonts/OFL.txt",
+]
 
 [tool.ruff]
 line-length = 110

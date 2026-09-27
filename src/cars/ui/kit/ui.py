@@ -15,7 +15,7 @@ from cars.ui.art.badges import glyph
 from cars.ui.kit import style
 from cars.ui.kit.tooltips import Tooltips
 from cars.ui.text import wrap
-from cars.ui.typography import DEFAULT_FONT, system_font
+from cars.ui.typography import DEFAULT_FONT, TEXT, TITLE, load_font
 
 Color = tuple[int, int, int]
 SCALES = (1.0, 1.25, 1.5, 1.75, 2.0)
@@ -66,10 +66,16 @@ class Ui:
     def screen(self) -> pygame.Rect:
         return self.surface.get_rect()
 
-    def font(self, size: int = style.BODY, bold: bool = False, italic: bool = False) -> pygame.font.Font:
-        key = (self.font_index, self.px(size), bold, italic)
+    def font(
+        self, size: int = style.BODY, bold: bool = False, italic: bool = False, serif: bool | None = None
+    ) -> pygame.font.Font:
+        """A font at ``size`` logical pixels. Bold text at heading size or larger is a title
+        and takes the title face; ``serif`` forces the choice either way."""
+        title = serif if serif is not None else bold and size >= style.HEADING
+        key = (self.font_index, self.px(size), bold, italic, title)
         if key not in self._fonts:
-            self._fonts[key] = system_font(self.font_index, self.px(size), italic=italic, bold=bold)
+            role = TITLE if title else TEXT
+            self._fonts[key] = load_font(self.font_index, self.px(size), role, bold=bold, italic=italic)
         return self._fonts[key]
 
     def hovered(self, rect: pygame.Rect) -> bool:
