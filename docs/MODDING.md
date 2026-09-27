@@ -55,6 +55,27 @@ fires at most once per campaign. The available names are the `TRIGGERS` and
 A misspelled name stops the game at start-up with a message naming the event,
 instead of failing halfway through a campaign.
 
+## Nations and traits
+
+`common/nations.json` holds each nation's history and its two national traits.
+A mod can rewrite the history or rebalance a trait by overriding just the parts
+it changes. Each trait lists modifiers:
+
+| Modifier | Value | Effect |
+| --- | --- | --- |
+| `recruit_cost` | `{unit kind: factor}` | Recruitment price |
+| `attack` | `{unit kind: factor}` | Attacking strength |
+| `defense_terrain` | `{terrain: factor}` | Defending strength in that terrain |
+| `defense_home` | factor | Defending strength in the nation's own provinces |
+| `movement_terrain` | `{terrain: factor}` | Land movement cost into that terrain |
+| `production` | `{resource: factor}` | Income |
+| `upkeep` | `{resource: factor}` | Unit upkeep |
+| `gold_income` | amount | Extra gold each turn |
+| `storage` | amount | Extra stockpile capacity |
+
+Factors multiply and amounts add. Because lists replace rather than merge, a mod
+that changes one trait must list both of the nation's traits.
+
 ## Paintings
 
 A mod can supply the optional paintings: event illustrations, leader portraits

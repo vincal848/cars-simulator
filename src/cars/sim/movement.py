@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING
 
 from cars.sim.defines import DEFINES
 from cars.sim.graph import Edge, Paths
+from cars.sim.nations import modifier
 from cars.sim.regional import CHARTERS
 from cars.sim.visibility import visible_nodes
 
@@ -53,6 +54,7 @@ def movement_cost(
     charter = CHARTERS.get(unit.regional)
     if charter and charter.terrain == terrain:
         factor *= 1 - charter.discount
+    factor *= modifier(unit.owner, "movement_terrain", terrain)
     role_factors = RULES.role_terrain_factor.get(unit.kind)
     if role_factors:
         factor *= role_factors[terrain]

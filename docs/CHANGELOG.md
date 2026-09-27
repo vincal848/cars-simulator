@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- **Nations with a history:** each nation has a ruler, capital, government,
+  history and two national traits with real effects on recruitment, combat,
+  movement, production, upkeep, gold and storage (`common/nations.json`).
 - **A new map:** the relief now shows through translucent nation colours, with a
   glow inside each nation's frontier, strong nation borders, faint province
   borders, and a dark sea with visible depths and lighter shallows along the

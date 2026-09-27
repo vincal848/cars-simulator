@@ -15,6 +15,7 @@ from cars.sim.diplomacy import coalition_partners, declare_war, join_coalition, 
 from cars.sim.entities import AIR, FLEET, LAND_KINDS
 from cars.sim.graph import step_cost
 from cars.sim.movement import reachable
+from cars.sim.nations import modifier
 from cars.sim.naval import enemy_fleets, reachable_seas
 from cars.sim.orders import issue_move
 from cars.sim.recruitment import REQUIRED_FACILITY, quote_recruit, recruit
@@ -194,7 +195,10 @@ class RivalCommander:
     def _can_support(self, kind: str) -> bool:
         """Whether income still covers upkeep with one more unit of ``kind``."""
         income = net_income(self.state, self.owner)
-        return all(income[resource] >= cost for resource, cost in unit_upkeep(kind).items())
+        return all(
+            income[resource] >= cost * modifier(self.owner, "upkeep", resource)
+            for resource, cost in unit_upkeep(kind).items()
+        )
 
     def _develop(self) -> Iterator[Action]:
         """Recruit what the realm can feed, then spend what is left on construction."""

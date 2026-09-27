@@ -10,6 +10,7 @@ from cars.sim.defines import DEFINES
 from cars.sim.economy import forecast
 from cars.sim.entities import RESOURCES
 from cars.sim.journal import record
+from cars.sim.nations import modifier
 from cars.sim.supply import refresh_supply
 
 if TYPE_CHECKING:
@@ -29,7 +30,7 @@ def upkeep(state: "GameState", owner: str) -> dict[str, float]:
         if unit.owner == owner:
             for resource, amount in unit_upkeep(unit.kind).items():
                 total[resource] += amount
-    return total
+    return {resource: amount * modifier(owner, "upkeep", resource) for resource, amount in total.items()}
 
 
 def net_income(state: "GameState", owner: str) -> dict[str, float]:

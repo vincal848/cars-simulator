@@ -11,6 +11,7 @@ from cars.sim.air import support_bonus_at
 from cars.sim.defines import DEFINES
 from cars.sim.entities import AIR, ARTILLERY, LAND_KINDS
 from cars.sim.journal import LAND_BATTLE, battle_report, snapshot
+from cars.sim.nations import modifier
 
 if TYPE_CHECKING:
     from cars.sim.entities import Unit
@@ -74,7 +75,7 @@ def assess(
     high_ground = state.provinces[origin].terrain == "mountains"
     origin_bonus = RULES.mountain_origin_bonus if high_ground else 1
     strength = attacker.attack_power() * crossing * origin_bonus
-    strength *= supply_factor(attacker)
+    strength *= supply_factor(attacker) * modifier(attacker.owner, "attack", attacker.kind)
 
     guns = tuple(
         unit
@@ -90,13 +91,24 @@ def assess(
     air_bonus = support_bonus_at(state, attacker.owner, destination)
     strength *= (1 + artillery_bonus) * (1 + air_bonus)
 
-    defense = sum(unit.defense_power() * supply_factor(unit) for unit in defenders)
+    defense = sum(
+        unit.defense_power() * supply_factor(unit) * _defence_traits(unit.owner, province)
+        for unit in defenders
+    )
     defense = max(RULES.minimum_defense, defense) * terrain
     factors = (
         f"Terrain ×{terrain:g}; river ×{crossing:g}; origin ×{origin_bonus:g}; "
         f"supply ×{supply_factor(attacker):g}; artillery +{artillery_bonus:.0%}; air +{air_bonus:.0%}."
     )
     return Assessment(strength, defense, guns, factors)
+
+
+def _defence_traits(owner: str, province) -> float:
+    """National traits that strengthen ``owner``'s defenders in ``province``."""
+    factor = modifier(owner, "defense_terrain", province.terrain)
+    if province.owner == owner:
+        factor *= modifier(owner, "defense_home")
+    return factor
 
 
 def _fight(

@@ -8,6 +8,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 from cars.paths import load_content
+from cars.sim.nations import modifier
 
 if TYPE_CHECKING:
     from cars.sim.state import GameState
@@ -91,4 +92,4 @@ def replenish(state: "GameState") -> None:
 
 def treasury_income(state: "GameState", owner: str) -> int:
     held = sum(state.provinces[c.province].controller == owner for c in state.cities.values())
-    return RULES.gold_per_city * held
+    return RULES.gold_per_city * held + round(modifier(owner, "gold_income", default=0))

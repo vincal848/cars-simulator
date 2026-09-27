@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING
 from cars.sim.buildings import BUILDINGS
 from cars.sim.defines import DEFINES
 from cars.sim.entities import RESOURCES
+from cars.sim.nations import modifier
 
 if TYPE_CHECKING:
     from cars.sim.entities import Province
@@ -39,13 +40,15 @@ def forecast(state: "GameState", owner: str) -> dict[str, float]:
             spec = BUILDINGS[kind]
             if spec.produces:
                 gains[spec.resource] += level * spec.output * _yield(province)
+    for resource in RESOURCES:
+        gains[resource] *= modifier(owner, "production", resource)
     return gains
 
 
 def storage(state: "GameState", owner: str) -> int:
     """The most of each resource ``owner`` can stockpile."""
     cities = sum(state.provinces[city.province].controller == owner for city in state.cities.values())
-    return RULES.storage_base + RULES.storage_per_city * cities
+    return RULES.storage_base + RULES.storage_per_city * cities + round(modifier(owner, "storage", default=0))
 
 
 def produce(state: "GameState", owner: str) -> dict[str, float]:

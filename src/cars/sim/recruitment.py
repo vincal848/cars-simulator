@@ -7,6 +7,7 @@ from cars.paths import load_content
 from cars.sim.defines import DEFINES
 from cars.sim.entities import AIR, FLEET, UNIT_STATS, Unit
 from cars.sim.journal import record
+from cars.sim.nations import modifier
 from cars.sim.regional import charter_for
 from cars.sim.supply import refresh_supply
 
@@ -42,7 +43,7 @@ def recruit_option(state: "GameState", province: str, kind: str) -> RecruitOptio
         return RecruitOption(
             name=charter.name,
             role=f"Regional charter: {charter.discount:.0%} lower terrain cost in {charter.terrain}.",
-            cost={resource: amount + surcharge for resource, amount in base["cost"].items()},
+            cost=_priced(state, charter.kind, {r: amount + surcharge for r, amount in base["cost"].items()}),
             base_kind=charter.kind,
             stats=UNIT_STATS[charter.kind],
             charter=charter.id,
@@ -50,7 +51,15 @@ def recruit_option(state: "GameState", province: str, kind: str) -> RecruitOptio
     if kind not in RECRUITS:
         return None
     spec = RECRUITS[kind]
-    return RecruitOption(spec["name"], spec["role"], spec["cost"], kind, UNIT_STATS[kind])
+    return RecruitOption(
+        spec["name"], spec["role"], _priced(state, kind, spec["cost"]), kind, UNIT_STATS[kind]
+    )
+
+
+def _priced(state: "GameState", kind: str, cost: dict[str, int]) -> dict[str, int]:
+    """``cost`` after the active nation's recruitment traits."""
+    factor = modifier(state.active, "recruit_cost", kind)
+    return {resource: round(amount * factor) for resource, amount in cost.items()}
 
 
 def quote_recruit(state: "GameState", province: str, kind: str) -> tuple[dict[str, int], str]:

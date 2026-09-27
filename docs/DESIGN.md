@@ -159,6 +159,10 @@ Everything a designer would tune is data under `src/cars/content/`:
 - `common/defines.json`: movement, combat, naval, air and AI constants
 - `common/units.json`, `recruitment.json`, `buildings.json`, `market.json`,
   `factions.json`, `regional_units.json`, `calendar.json`
+- `common/nations.json`: each nation's history, ruler, capital and two national
+  traits. A trait is a set of modifiers (see `sim/nations.py` for the keys) that
+  the rules look up for recruitment costs, attack, defence, movement, production,
+  upkeep, gold income and storage; an unknown key fails at start-up.
 - `gfx/uniform_styles.json`: the eight regional uniform styles
 - `text/`: CARSapedia entries, unit notes and tutorial lessons
 - `events/`: scripted events. Each has a `trigger` (all conditions must hold) and
