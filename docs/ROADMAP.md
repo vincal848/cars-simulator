@@ -7,7 +7,7 @@ Victoria and Civilization V, reached in sprints that each land as their own comm
 
 1. **The map** (done): relief under translucent nation colours, frontier glow,
    two border weights, a dark sea with depths and shallows, cached tiles.
-2. **The interface layout:** a full-width top bar for date, treasury and
+2. **The interface layout** (done): a full-width top bar for date, treasury and
    stockpiles; a large End Turn button and unit controls bottom right; the
    province window docked to the left edge; objectives as a collapsible tab;
    less ornament, textured panels and stronger text contrast.

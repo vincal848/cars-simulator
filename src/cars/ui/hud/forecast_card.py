@@ -62,8 +62,8 @@ class ForecastCard:
         mouse_x, mouse_y = t.mouse_pos()
         x = mouse_x + 20 if mouse_x < 440 else mouse_x - 378
         y = mouse_y + 24 if mouse_y < 480 else mouse_y - 163
-        x = max(12, min(822, x))
-        y = max(112, min(575, y))
+        x = max(12, min(1188 - SIZE[0], x))
+        y = max(52, min(600 - SIZE[1], y))
         t.panel(pygame.Rect(x, y, *SIZE))
         t.text("ORDER FORECAST", x + 12, y + 9, t.small, GOLD)
         t.text(result["message"], x + 12, y + 32, t.body, width=334)

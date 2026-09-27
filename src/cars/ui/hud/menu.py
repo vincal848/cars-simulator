@@ -1,4 +1,4 @@
-"""The top bar's Menu drop-down and CARSapedia button."""
+"""The top bar's Menu drop-down and CARSapedia button, at the right end of the bar."""
 
 from collections.abc import Callable
 from typing import TYPE_CHECKING
@@ -13,27 +13,27 @@ if TYPE_CHECKING:
 
 
 class GameMenu:
-    button = pygame.Rect(704, 16, 128, 32)
-    pedia_button = pygame.Rect(334, 16, 140, 32)
-    panel = pygame.Rect(582, 56, 250, 484)
+    button = pygame.Rect(1076, 7, 114, 30)
+    pedia_button = pygame.Rect(948, 7, 122, 30)
+    panel = pygame.Rect(938, 44, 250, 484)
 
     def __init__(self, context: "UiContext") -> None:
         self.context = context
         self.open = False
         # Item key -> (button, label). Keys double as the action taken when clicked.
         self.items: dict[str, tuple[pygame.Rect, Callable[[], str]]] = {
-            "save": (pygame.Rect(590, 66, 236, 32), lambda: "Save campaign   /   F5"),
-            "load": (pygame.Rect(590, 104, 236, 32), lambda: "Load campaign   /   F9"),
-            "font": (pygame.Rect(590, 142, 236, 32), self._font_label),
-            "market": (pygame.Rect(590, 180, 236, 32), lambda: "Merchant Exchange / M"),
-            "display": (pygame.Rect(590, 220, 236, 32), self._display_label),
-            "reports": (pygame.Rect(590, 260, 236, 32), lambda: "Campaign chronicle / J"),
-            "settings": (pygame.Rect(590, 300, 236, 32), lambda: "Sound & preferences / F10"),
-            "roster": (pygame.Rect(590, 340, 236, 32), lambda: "Military overview / U"),
-            "diplomacy": (pygame.Rect(590, 380, 236, 32), lambda: "Diplomacy / D"),
-            "pedia": (pygame.Rect(590, 420, 236, 32), lambda: "CARSapedia / F1"),
-            "strategy": (pygame.Rect(590, 460, 236, 32), lambda: "Strategy graph / G"),
-            "replay": (pygame.Rect(590, 500, 236, 32), lambda: "Replay studio / R"),
+            "save": (pygame.Rect(946, 52, 234, 32), lambda: "Save campaign   /   F5"),
+            "load": (pygame.Rect(946, 91, 234, 32), lambda: "Load campaign   /   F9"),
+            "font": (pygame.Rect(946, 130, 234, 32), self._font_label),
+            "market": (pygame.Rect(946, 169, 234, 32), lambda: "Merchant Exchange / M"),
+            "display": (pygame.Rect(946, 208, 234, 32), self._display_label),
+            "reports": (pygame.Rect(946, 247, 234, 32), lambda: "Campaign chronicle / J"),
+            "settings": (pygame.Rect(946, 286, 234, 32), lambda: "Sound & preferences / F10"),
+            "roster": (pygame.Rect(946, 325, 234, 32), lambda: "Military overview / U"),
+            "diplomacy": (pygame.Rect(946, 364, 234, 32), lambda: "Diplomacy / D"),
+            "pedia": (pygame.Rect(946, 403, 234, 32), lambda: "CARSapedia / F1"),
+            "strategy": (pygame.Rect(946, 442, 234, 32), lambda: "Strategy graph / G"),
+            "replay": (pygame.Rect(946, 481, 234, 32), lambda: "Replay studio / R"),
         }
 
     def _font_label(self) -> str:
@@ -55,7 +55,7 @@ class GameMenu:
     def draw(self) -> None:
         t = self.context.theme
         t.button(self.button, "Menu")
-        t.button(self.pedia_button, "CARSapedia / F1")
+        t.button(self.pedia_button, "CARSapedia")
         x, y = self.button.right - 17, self.button.centery
         if self.open:
             chevron = [(x - 4, y + 2), (x, y - 3), (x + 4, y + 2)]

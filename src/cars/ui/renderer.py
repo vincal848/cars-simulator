@@ -13,14 +13,15 @@ from cars.sim.movement import reachable
 from cars.sim.naval import reachable_seas
 from cars.sim.supply import supplied_provinces
 from cars.sim.visibility import visible_nodes
-from cars.ui.hud.bottom_bar import EMBLEM_RECT, SelectionCard, draw_compass, draw_emblem, draw_status_bar
-from cars.ui.hud.council import CouncilPanel
+from cars.ui.hud.bottom_bar import SelectionCard, draw_status_bar
 from cars.ui.hud.faction_picker import FactionPicker
 from cars.ui.hud.forecast_card import ForecastCard
 from cars.ui.hud.market import MarketPanel
 from cars.ui.hud.menu import GameMenu
-from cars.ui.hud.objectives import CalendarHeader, ObjectivesPanel
+from cars.ui.hud.objectives import ObjectivesPanel
 from cars.ui.hud.province_window import ProvinceWindow
+from cars.ui.hud.top_bar import TopBar
+from cars.ui.hud.turn_controls import TurnControls
 from cars.ui.map.animation import MoveAnimation
 from cars.ui.map.map_view import MapView, Scene
 from cars.ui.palette import MAP_AREA
@@ -59,10 +60,10 @@ class GameRenderer:
         self.seas = seas
         self.campaign = campaign
         self.map = MapView(state, shapes, seas, self.theme)
-        self.council = CouncilPanel(self.theme)
+        self.top_bar = TopBar(self.theme)
+        self.controls = TurnControls(self.theme)
         self.selection = SelectionCard(self.theme)
         self.province_window = ProvinceWindow(self.theme, self.map.sprites)
-        self.calendar = CalendarHeader(self.theme)
         self.objectives = ObjectivesPanel(self.theme)
         self.forecast = ForecastCard(self.theme)
         self.picker = FactionPicker(self.theme, list(state.factions))
@@ -95,12 +96,11 @@ class GameRenderer:
             any(blocker(point) for blocker in self.blockers)
             or (layer == "air" and self.selection.air_mode_at(point))
             or self.market.open
-            or (self.state.player and self.calendar.rect.collidepoint(point))
-            or EMBLEM_RECT.collidepoint(point)
+            or self.top_bar.rect.collidepoint(point)
             or self.menu.blocks(point)
             or self.objectives.blocks(point)
             or not MAP_AREA.collidepoint(point)
-            or self.council.rect.collidepoint(point)
+            or self.controls.rect.collidepoint(point)
             or self.province_window.contains(point)
         )
 
@@ -159,19 +159,20 @@ class GameRenderer:
             viewer=self.campaign.player,
             visible=visible,
         )
-        covered = [self.council.rect]
+        covered = [self.controls.rect]
         if self.province_window.is_open:
             covered.append(self.province_window.rect)
-        message = self.map.draw(theme.screen, scene, view.message, [EMBLEM_RECT], covered)
+        reserved = [self.top_bar.rect, self.objectives.button]
+        if not self.objectives.collapsed:
+            reserved.append(self.objectives.rect)
+        message = self.map.draw(theme.screen, scene, view.message, reserved, covered)
 
-        self.council.draw(state, self.player, view.layer)
-        draw_emblem(theme)
-        draw_compass(theme)
+        self.controls.draw(state, self.player, view.layer)
         self.selection.draw(state, unit, hover, paths, view.debug, view.air_mode)
         draw_status_bar(theme, message)
         self.province_window.draw(state, view.inspected, self.player, self.time, self.build_effects)
-        self.calendar.draw(state)
         self.objectives.draw(state)
+        self.top_bar.draw(state, self.player)
         overlay_open = self.market.open or self.province_window.is_open or self.menu.open or dialog_open
         # A forecast would reveal hidden defenders, so only forecast what can be seen.
         hover_seen = visible is None or hover in visible

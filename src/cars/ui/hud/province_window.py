@@ -1,4 +1,4 @@
-"""The draggable province window: control, regional statistics, construction and recruitment."""
+"""The province window, docked on the left: control, statistics, construction and recruitment."""
 
 from typing import TYPE_CHECKING
 
@@ -20,7 +20,8 @@ if TYPE_CHECKING:
     from cars.ui.theme import Theme
 
 SIZE = (366, 560)
-DRAG_BOUNDS = pygame.Rect(10, 140, 1180, 592)
+DOCK = (8, 52)
+DRAG_BOUNDS = pygame.Rect(0, 44, 1200, 698)
 TITLE_HEIGHT = 44
 TABS = {
     "build": (
@@ -56,15 +57,10 @@ class ProvinceWindow:
     def contains(self, point) -> bool:
         return self.rect is not None and self.rect.collidepoint(point)
 
-    def open(self, point, avoid: pygame.Rect) -> None:
-        """Open beside ``point``, keeping clear of the ``avoid`` panel."""
-        x = point[0] + 26
-        if x + SIZE[0] > 1190:
-            x = point[0] - 392
-        y = max(140, min(point[1] - 30, 172))
-        self.rect = pygame.Rect(max(10, min(x, 824)), y, *SIZE)
-        if self.rect.colliderect(avoid):
-            self.rect.right = avoid.left - 16
+    def open(self) -> None:
+        """Open docked at the left edge, or wherever the player last dragged it."""
+        if self.rect is None:
+            self.rect = pygame.Rect(*DOCK, *SIZE)
         self.layout()
 
     def close(self) -> None:

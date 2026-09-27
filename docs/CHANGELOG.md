@@ -6,13 +6,19 @@
   glow inside each nation's frontier, strong nation borders, faint province
   borders, and a dark sea with visible depths and lighter shallows along the
   coasts. Unclaimed land is left grey.
+- **A new interface layout:** a full-width top bar holds your nation, treasury,
+  stockpiles and the date; a large round End Turn button sits in the bottom-right
+  corner with the map layers, next unit and world view; the province window docks
+  on the left; and the objectives panel is narrower and collapses to a tab. The
+  title plaque, compass and panel wallpaper are gone, leaving more of the map
+  visible.
 - **Smooth panning:** the map is painted once per zoom level in cached tiles;
   panning costs about 3 ms a frame instead of about 145 ms.
 - **Recovery:** damaged units regain strength at the start of their turn: +1 when
   supplied in friendly territory (+2 in a city), fleets beside a friendly port and
   air groups at an airbase. The replay ruleset is now 0.25.
 - **Upkeep:** units consume food, wood or iron each turn. Shortfalls cost the
-  affected units strength and can disband them. The council shows net income,
+  affected units strength and can disband them. The top bar shows net income,
   and rival AIs only recruit what they can feed.
 - **Fog of war:** enemy forces are only shown near your territory, units, ports
   and fleets; unseen provinces are shaded. Replays and the F3 view show everything.

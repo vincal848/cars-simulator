@@ -31,9 +31,9 @@ LESSONS = [Lesson(**lesson) for lesson in load_content("text", "tutorial.json")]
 
 
 class Tutorial:
-    rect = pygame.Rect(16, 443, 322, 192)
+    rect = pygame.Rect(866, 404, 322, 192)
     buttons: ClassVar[dict] = {
-        name: pygame.Rect(28 + i * 101, 599, 94, 27) for i, name in enumerate(("next", "skip", "hide"))
+        name: pygame.Rect(878 + i * 101, 560, 94, 27) for i, name in enumerate(("next", "skip", "hide"))
     }
 
     def __init__(self, game: "GameScreen") -> None:
@@ -119,12 +119,13 @@ class Tutorial:
         lesson = LESSONS[step]
         complete = lesson.goal in self.progress.get("seen", [])
         t.panel(self.rect, True)
-        t.seal("reports", (38, 464), 24)
-        t.text(f"LESSON {step + 1} / {len(LESSONS)}", 58, 456, t.small, GOLD)
-        t.text(lesson.title, 28, 484, t.heading, GOLD, width=296)
+        x, y = self.rect.x + 12, self.rect.y
+        t.seal("reports", (x + 10, y + 21), 24)
+        t.text(f"LESSON {step + 1} / {len(LESSONS)}", x + 30, y + 13, t.small, GOLD)
+        t.text(lesson.title, x, y + 41, t.heading, GOLD, width=296)
         for i, line in enumerate(wrap(lesson.body, t.small, 294)):
-            t.text(line, 28, 512 + i * 18, t.small)
+            t.text(line, x, y + 69 + i * 18, t.small)
         status = "Completed - continue when ready" if complete else "Try it on the map / H hides this guide"
-        t.text(status, 28, 579, t.small, DIM, width=295)
+        t.text(status, x, y + 136, t.small, DIM, width=295)
         for name, rect in self.buttons.items():
             t.button(rect, name.title(), enabled=name != "next" or complete)

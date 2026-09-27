@@ -9,6 +9,7 @@ from cars.sim.entities import Unit
 from cars.sim.movement import reachable
 from cars.sim.scenario import DETAILED_SCENARIO
 from cars.ui.map.map_view import Scene
+from cars.ui.screens.game import FOCUS_POINT
 from cars.ui.screens.replay import ReplayScreen
 from tests.ui.screen_case import ScreenTestCase
 
@@ -54,7 +55,9 @@ class OrdersTests(ScreenTestCase):
         self.game.next_ready()
         self.assertEqual(self.game.view.selected, fleet.id)
         self.assertEqual(self.game.view.layer, "naval")
-        self.assertAlmostEqual(self.map.camera.nearest(self.map.anchors[fleet.location])[0], 490, delta=2)
+        self.assertAlmostEqual(
+            self.map.camera.nearest(self.map.anchors[fleet.location])[0], FOCUS_POINT[0], delta=2
+        )
         self.game.focus_unit("infantry1")
         self.assertEqual(self.game.view.selected, fleet.id)
         fleet.remaining = 0
@@ -95,13 +98,10 @@ class ProvinceWindowTests(ScreenTestCase):
 
     def test_build_close_select_and_zoom(self):
         province = self.game.view.inspected
-        self.assertIsNone(self.game.hit(self.renderer.council.rect.center))
-        for button in [
-            self.renderer.council.end_button,
-            self.renderer.council.home_button,
-            *self.renderer.council.view_buttons.values(),
-        ]:
-            self.assertTrue(self.renderer.council.rect.contains(button))
+        controls = self.renderer.controls
+        self.assertIsNone(self.game.hit(controls.end_button.center))
+        for button in [controls.end_button, controls.home_button, *controls.view_buttons.values()]:
+            self.assertTrue(controls.rect.contains(button))
         self.press(self.map.anchors[province], button=3)
         window = self.renderer.province_window
         self.assertTrue(window.is_open)
@@ -129,13 +129,13 @@ class ProvinceWindowTests(ScreenTestCase):
         self.assertEqual(self.game.view.inspected, province)
         self.press((window.rect.x + 30, window.rect.y + 20))
         self.send(pygame.MOUSEMOTION, rel=(2000, 2000), pos=(1199, 779))
-        self.assertTrue(pygame.Rect(10, 140, 1180, 592).contains(window.rect))
+        self.assertTrue(pygame.Rect(0, 44, 1200, 698).contains(window.rect))
         self.send(pygame.MOUSEBUTTONUP, button=1, pos=(1199, 779))
         self.key(pygame.K_ESCAPE)
         self.assertFalse(window.is_open)
         self.assertEqual(window.build_buttons, {})
         for layer, kind in (("naval", "fleet"), ("air", "air")):
-            self.click(self.renderer.council.view_buttons[layer].center)
+            self.click(self.renderer.controls.view_buttons[layer].center)
             self.assertEqual(self.state.units[self.game.view.selected].kind, kind)
             self.draw()
 
@@ -203,7 +203,7 @@ class HudTests(ScreenTestCase):
         self.click(self.renderer.menu.button.center)
         self.click(self.renderer.menu.items["display"][0].center)
         self.assertTrue(self.context.display_toggle_requested)
-        self.assertFalse(self.renderer.menu.panel.colliderect(self.renderer.calendar.rect))
+        self.assertFalse(self.renderer.menu.panel.colliderect(self.renderer.top_bar.date_rect))
 
     def test_f6_cycles_fonts(self):
         self.assertEqual(self.context.theme.font_index, 1)

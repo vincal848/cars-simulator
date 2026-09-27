@@ -111,7 +111,8 @@ ui/screens/        TitleScreen, GameScreen (input and turn flow), ReplayScreen
 ui/renderer.py     GameRenderer: map plus HUD for a GameState; drawing and hit testing only
 ui/map/            MapView (camera, hit testing, overlays), Atlas (the painted base map),
                    border geometry, labels, relief, march animation
-ui/hud/            council, province window, objectives, menu, market, forecast card, faction picker
+ui/hud/            top bar, turn controls, province window, objectives, menu, market,
+                   forecast card, faction picker
 ui/dialogs/        modal dialogs sharing one frame: library, roster, chronicle, settings, music,
                    calendar, CARSapedia, strategy atlas, replay studio
 ui/art/            procedural sprites, insignia, cities, buildings and ornament

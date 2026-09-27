@@ -1,6 +1,5 @@
 """The selected-unit card, air mission buttons and the status line along the bottom."""
 
-import math
 from typing import TYPE_CHECKING, ClassVar
 
 import pygame
@@ -9,7 +8,6 @@ from cars.sim.air import MISSIONS
 from cars.sim.entities import AIR, FULL_STRENGTH
 from cars.sim.recovery import recovery_rate
 from cars.sim.regional import unit_name
-from cars.ui.art.emblem import americas_emblem
 from cars.ui.palette import DIM, GOLD, PAPER
 
 if TYPE_CHECKING:
@@ -21,8 +19,6 @@ if TYPE_CHECKING:
 CONTROLS_HINT = (
     "SCROLL Zoom   /   LEFT-DRAG Pan   /   RIGHT-CLICK Province window   /   ESC Close   /   F3 Debug"
 )
-EMBLEM_RECT = pygame.Rect(16, 16, 304, 98)
-COMPASS_CENTER = (92, 634)
 
 
 class SelectionCard:
@@ -76,26 +72,3 @@ def draw_status_bar(theme: "Theme", message: str) -> None:
     theme.panel((0, 742, 1200, 38))
     theme.text(message, 17, 745, theme.small, PAPER, width=1160)
     theme.text(CONTROLS_HINT, 17, 762, theme.small, DIM)
-
-
-def draw_emblem(theme: "Theme") -> None:
-    key = ("emblem", theme.font_index)
-    if key not in theme.cache:
-        theme.cache[key] = americas_emblem(theme.font(43), theme.font(22))
-    theme.screen.blit(theme.cache[key], EMBLEM_RECT.topleft)
-
-
-def draw_compass(theme: "Theme") -> None:
-    x, y = COMPASS_CENTER
-    s = theme.screen
-    pygame.draw.circle(s, (60, 82, 86), (x, y), 34, 1)
-    pygame.draw.circle(s, (60, 82, 86), (x, y), 29, 1)
-    for i in range(8):
-        a = i * math.pi / 4
-        length = 30 if i % 2 == 0 else 19
-        tip = (x + math.sin(a) * length, y - math.cos(a) * length)
-        side_a = (x + math.cos(a) * 5, y + math.sin(a) * 5)
-        side_b = (x - math.cos(a) * 5, y - math.sin(a) * 5)
-        pygame.draw.polygon(s, (139, 141, 113) if i % 2 == 0 else (62, 86, 89), [(x, y), tip, side_a])
-        pygame.draw.polygon(s, (66, 93, 96), [(x, y), tip, side_b])
-    theme.text("N", x - 5, y - 52, theme.heading, GOLD)

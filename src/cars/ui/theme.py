@@ -95,6 +95,7 @@ class Theme:
 
     @staticmethod
     def _panel_surface(size: tuple[int, int], light: bool) -> pygame.Surface:
+        """Lacquer with a fine grain, lit from above and darkening towards the edges."""
         width, height = size
         surface = pygame.Surface(size)
         base = PANEL_LIGHT if light else PANEL_DARK
@@ -102,15 +103,34 @@ class Theme:
             shade = int(8 * (1 - y / max(1, height)))
             pygame.draw.line(surface, tuple(c + shade for c in base), (0, y), (width, y))
         rng = random.Random(9)
-        for _ in range(width * height // 14):
+        for _ in range(width * height // 9):
             x, y = rng.randrange(width), rng.randrange(height)
             color = surface.get_at((x, y))
-            surface.set_at((x, y), tuple(max(0, v - 4) for v in color[:3]))
-        if _is_large(size):
-            for fx in range(30, width, 64):
-                for fy in range(25, height, 70):
-                    fleur(surface, (fx, fy), 15, (43, 28, 33))
+            step = rng.choice((-5, -3, 3))
+            surface.set_at((x, y), tuple(min(255, max(0, v + step)) for v in color[:3]))
+        vignette = pygame.Surface(size, pygame.SRCALPHA)
+        for inset in range(0, min(12, width // 4, height // 4)):
+            pygame.draw.rect(
+                vignette, (0, 0, 0, 14 - inset), (inset, inset, width - 2 * inset, height - 2 * inset), 1
+            )
+        surface.blit(vignette, (0, 0))
         return surface
+
+    def bar(self, rect) -> None:
+        """A full-width lacquered strip with a gilt lower edge, e.g. the top bar."""
+        rect = pygame.Rect(rect)
+        key = ("bar", rect.size)
+        if key not in self.cache:
+            self.cache[key] = self._panel_surface(rect.size, False)
+        screen = self.screen
+        shade = pygame.Surface((rect.width, 6), pygame.SRCALPHA)
+        for i in range(6):
+            pygame.draw.line(shade, (0, 0, 0, 90 - i * 15), (0, i), (rect.width, i))
+        screen.blit(shade, (rect.x, rect.bottom))
+        screen.blit(self.cache[key], rect)
+        pygame.draw.line(screen, (230, 197, 128), (rect.x, rect.bottom - 3), (rect.right, rect.bottom - 3))
+        pygame.draw.line(screen, (149, 111, 61), (rect.x, rect.bottom - 2), (rect.right, rect.bottom - 2))
+        pygame.draw.line(screen, (26, 15, 18), (rect.x, rect.bottom - 1), (rect.right, rect.bottom - 1))
 
     def shadow(self, rect: pygame.Rect, spread: int, offset: int, alpha: int) -> None:
         """Soft drop shadow behind a floating window."""
@@ -184,12 +204,13 @@ class Theme:
         icon = badge(kind, size)
         self.screen.blit(icon, icon.get_rect(center=center))
 
-    def shield(self, x: int, y: int, color) -> None:
-        points = [(x, y), (x + 42, y), (x + 40, y + 34), (x + 21, y + 47), (x + 2, y + 34)]
+    def shield(self, x: int, y: int, color, scale: float = 1) -> None:
+        outline = [(0, 0), (42, 0), (40, 34), (21, 47), (2, 34)]
+        points = [(x + px * scale, y + py * scale) for px, py in outline]
         pygame.draw.polygon(self.screen, (9, 17, 24), [(a + 3, b + 3) for a, b in points])
         pygame.draw.polygon(self.screen, color, points)
         pygame.draw.polygon(self.screen, GOLD, points, 2)
-        fleur(self.screen, (x + 21, y + 22), 27)
+        fleur(self.screen, (x + 21 * scale, y + 22 * scale), round(27 * scale))
 
 
 def _is_large(size: tuple[int, int]) -> bool:

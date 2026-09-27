@@ -33,8 +33,9 @@ if TYPE_CHECKING:
     from cars.sim.state import GameState
     from cars.ui.context import UiContext
 
-# Where a focused unit is placed on screen: left of centre, clear of the council.
-FOCUS_POINT = (490, 365)
+# Where a focused unit is placed on screen: the middle of the open map, clear of the
+# province window on the left and the objectives on the right.
+FOCUS_POINT = (620, 390)
 DRAG_THRESHOLD = 6
 AI_ACTION_SECONDS = 0.35
 BUILD_EFFECT_SECONDS = 2
@@ -170,7 +171,7 @@ class GameScreen:
 
     def inspect(self, province: str, point) -> None:
         self.view.inspected = province
-        self.renderer.province_window.open(point, self.renderer.council.rect)
+        self.renderer.province_window.open()
 
     def focus_unit(self, unit_id: str | None) -> None:
         """Select a unit, switch to its layer and centre the camera on it."""
@@ -360,7 +361,7 @@ class GameScreen:
     def _top_bar_input(self, event) -> bool:
         renderer = self.renderer
         if self._is_left_press(event):
-            if renderer.objectives.button.collidepoint(event.pos):
+            if renderer.objectives.button.collidepoint(event.pos) and not renderer.menu.open:
                 renderer.objectives.toggle()
                 return True
             if renderer.menu.pedia_button.collidepoint(event.pos):
@@ -369,7 +370,7 @@ class GameScreen:
         if event.type == pygame.KEYDOWN and event.key in DIALOG_KEYS:
             self.dialogs.open(DIALOG_KEYS[event.key])
             return True
-        on_calendar = self._is_left_press(event) and renderer.calendar.rect.collidepoint(event.pos)
+        on_calendar = self._is_left_press(event) and renderer.top_bar.date_rect.collidepoint(event.pos)
         if self.campaign.player and (self._is_key(event, pygame.K_t) or on_calendar):
             self.dialogs.open("timeline")
             return True
@@ -509,7 +510,7 @@ class GameScreen:
         if renderer.province_window.contains(point):
             self._province_window_click(point)
             return
-        if renderer.council.ready_button.collidepoint(point):
+        if renderer.controls.ready_button.collidepoint(point):
             self.next_ready()
             return
         if view.layer == "air" and self._air_click(point):
@@ -518,7 +519,7 @@ class GameScreen:
         if city:
             self.inspect(self.state.cities[city].province, point)
             return
-        action = renderer.council.action_at(point)
+        action = renderer.controls.action_at(point)
         if action == "home":
             renderer.map.reset_camera()
         elif action in LAYER_UNIT_KIND:

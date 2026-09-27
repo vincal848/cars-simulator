@@ -63,7 +63,7 @@
     "id": "upkeep",
     "title": "Upkeep",
     "category": "Economy",
-    "body": "Every unit consumes resources at the end of your turn, after production: land regiments eat food (cavalry more, artillery also some iron), fleets need wood and air groups iron. The council shows each resource's net change per turn in green or red. If a stockpile cannot cover the bill it is emptied and every unit that needed it loses 1 strength; units reduced to nothing disband. Hover a regiment in Muster to see its upkeep."
+    "body": "Every unit consumes resources at the end of your turn, after production: land regiments eat food (cavalry more, artillery also some iron), fleets need wood and air groups iron. The top bar shows each resource's net change per turn in green or red. If a stockpile cannot cover the bill it is emptied and every unit that needed it loses 1 strength; units reduced to nothing disband. Hover a regiment in Muster to see its upkeep."
   },
   {
     "id": "market",
