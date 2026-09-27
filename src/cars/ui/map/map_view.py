@@ -57,7 +57,7 @@ OWN, AT_WAR, AT_PEACE = (78, 138, 201), (196, 78, 64), (104, 164, 98)
 SUPPLIED, CUT_OFF = (104, 180, 110), (205, 96, 76)
 SEA_HIT_RADIUS = 28
 ATLAS_CACHE = 4  # Zoom levels and modes whose painted tiles are kept.
-DETAIL_ZOOM = 1.8  # Terrain symbols, big towns and building icons.
+DETAIL_ZOOM = 1.8  # Heavier borders, big towns and building icons.
 FIGURES_ZOOM = 1.3  # Unit figures, and towns with their names.
 
 
@@ -185,6 +185,7 @@ class MapView:
                 detail=zoom >= DETAIL_ZOOM,
                 pixel=self.ui.scale,
                 fill=self.fill(self.mode),
+                zoom=zoom,
             )
             while len(self._atlases) > ATLAS_CACHE:
                 self._atlases.popitem(last=False)

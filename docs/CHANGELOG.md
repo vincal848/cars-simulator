@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- **A modern map.** Nations are clean colours over the hill shading, deepening
+  towards their frontiers, and give way to the terrain as you zoom in. The sea
+  is a deep blue that lightens towards the coasts. The forest and mountain
+  symbols, the paper grain and the painted landscape in the province panel are
+  gone; the panel lists the province's town instead.
 - **New type.** The interface now uses bundled open-licensed fonts, Adobe's
   Source Sans 3 for text and figures and Source Serif 4 for titles, so it looks
   the same on every machine. Settings offers Modern (sans with serif titles, the

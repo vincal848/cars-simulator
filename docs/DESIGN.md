@@ -123,7 +123,7 @@ ui/windows/        modal windows: menu, save and load, settings, music, keyboard
 ui/pedia/          the CARSapedia: its generated library and the window that reads it
 ui/map/            MapView (camera, hit testing, overlays), Atlas (the painted base map),
                    border geometry, labels, nation names, markers, arrows, animation
-ui/art/            procedural sprites, icons, cities, buildings, landscapes and paintings
+ui/art/            procedural sprites, icons, cities, buildings and paintings
 ```
 
 The game draws straight onto the window at its native resolution. Every size in
@@ -163,11 +163,13 @@ map modes are kept. A map mode is a colouring: each province's colour comes from
 its controller (political), from nothing (terrain), from its supply (supply) or
 from its relation to the player (diplomatic). When a province changes hands, only the tiles it touches are repainted.
 
-Each tile is painted in layers: the Natural Earth relief, graded into a dark sea
-wash; lighter shallows along the coasts; each nation's land as relief dyed and
-tinted in its colour, with a glow along its frontiers; engraved forest and
-mountain symbols; then faint province borders, strong nation borders and the
-coastline. Borders come from `geometry.borders`, which classifies every outline
+Each tile is painted in layers: a deep sea that lightens towards every coast
+(from a blurred land mask of the Natural Earth relief); each nation's land in its
+colour over the relief's hill shading, with the raster's land-cover tints taken
+out so only slopes show, and the colour deepening towards its frontiers; then
+faint province borders, nation borders and the coastline. How much colour covers
+the terrain depends on the zoom: bold at world view, fading as the camera comes
+in so the relief shows through. Borders come from `geometry.borders`, which classifies every outline
 segment by the provinces on either side of it. Fog of war is a separate tile
 layer, cached per set of hidden provinces. Pins, units, routes and labels are
 drawn over the atlas in screen space every frame. Each stack is one plate

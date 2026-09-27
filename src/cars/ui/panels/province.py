@@ -11,14 +11,9 @@ from cars.sim.recruitment import RECRUITS, REGIONAL, quote_recruit, recruit_opti
 from cars.sim.regional import unit_name
 from cars.sim.supply import supplied_provinces
 from cars.sim.upkeep import unit_upkeep
-from cars.ui.art.buildings import draw_building
-from cars.ui.art.cities import city_sprite
-from cars.ui.art.landscape import landscape
 from cars.ui.frames import DockedPanel
 from cars.ui.kit import style
 from cars.ui.kit.grid import draw_grid, facts, section
-
-VIGNETTE_HEIGHT = 96
 
 
 def short_cost(cost: dict) -> str:
@@ -45,13 +40,6 @@ class ProvincePanel(DockedPanel):
         state = self.state
         y = rect.y
         region = state.regions[province.region_id]
-        setting = ", ".join(
-            filter(None, (province.geography.get("admin"), province.geography.get("country")))
-        )
-        ui.text(setting or region.name, (rect.x, y), style.BODY, style.INK_MUTED, width=rect.width)
-        y += ui.px(24)
-        y += self._vignette(ui, rect.x, y, rect.width, province)
-        y += ui.px(10)
         y += self._summary(ui, rect.x, y, rect.width, province, region)
         y += ui.px(8)
         y += section(ui, "Production each turn", rect.x, y, rect.width)
@@ -73,32 +61,6 @@ class ProvincePanel(DockedPanel):
             )
         return y - rect.y + ui.px(8)
 
-    def _vignette(self, ui, x: int, y: int, width: int, province) -> int:
-        height = ui.px(VIGNETTE_HEIGHT)
-        key = ("landscape", province.terrain, width, height)
-        if key not in ui.cache:
-            ui.cache[key] = landscape((width, height), province.terrain)
-        ui.surface.blit(ui.cache[key], (x, y))
-        cities = self.state.cities_in(province.id)
-        if cities:
-            city = cities[0]
-            town_style = city.style or self.state.factions[province.owner].style
-            size = (ui.px(92), ui.px(77))
-            town = pygame.transform.smoothscale(city_sprite(town_style), size)
-            ui.surface.blit(town, (x + ui.px(10), y + height - size[1] - ui.px(2)))
-            label = f"{city.name}{' · supply hub' if city.supply_hub else ''}{' · port' if city.port else ''}"
-            ui.text(label, (x + ui.px(112), y + height - ui.px(26)), style.BODY, style.ON_SLATE, bold=True)
-        for i, kind in enumerate(province.buildings):
-            draw_building(
-                ui.surface,
-                kind,
-                (x + width - ui.px(30) - i * ui.px(40), y + ui.px(30)),
-                ui.px(34),
-                self.game.renderer.time,
-            )
-        pygame.draw.rect(ui.surface, style.FRAME, (x, y, width, height), max(1, ui.px(1)))
-        return height
-
     def _summary(self, ui, x: int, y: int, width: int, province, region) -> int:
         state = self.state
         controller = state.factions[province.controller]
@@ -119,6 +81,12 @@ class ProvincePanel(DockedPanel):
         ]
         if province.controller != viewer and state.at_war(viewer, province.controller):
             pairs[0] = ("Held by", (held + ", at war with you", style.BAD))
+        cities = state.cities_in(province.id)
+        if cities:
+            city = cities[0]
+            roles = [role for role, has in (("supply hub", city.supply_hub), ("port", city.port)) if has]
+            towns = ", ".join(c.name for c in cities) + (f" ({', '.join(roles)})" if roles else "")
+            pairs.insert(0, ("Town", towns))
         return facts(ui, x, y, width, pairs)
 
     def _production(self, ui, x: int, y: int, width: int, province, region) -> int:
