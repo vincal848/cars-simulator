@@ -1,11 +1,11 @@
-"""The selected unit's card along the bottom of the map, with its air missions."""
+"""The selected unit's card along the bottom of the map, with a balloon corps' missions."""
 
 from typing import TYPE_CHECKING
 
 import pygame
 
-from cars.sim.air import MISSIONS
-from cars.sim.entities import AIR, FULL_STRENGTH
+from cars.sim.balloons import MISSIONS
+from cars.sim.entities import BALLOON, FULL_STRENGTH
 from cars.sim.recovery import recovery_rate
 from cars.sim.regional import unit_name
 from cars.sim.upkeep import unit_upkeep
@@ -19,9 +19,9 @@ if TYPE_CHECKING:
 
 SIZE = (470, 108)
 MISSION_HELP = {
-    "strike": "Attack an enemy army or fleet in range. Uses the sortie; expect return fire.",
-    "support": "Give +25% attack to your land attacks into one province until your next turn.",
-    "rebase": "Fly to another airbase you control within range.",
+    "observe": "Go up over a province in range: it and its neighbours stay in view, and your "
+    "artillery attacking it is more effective, until your next turn.",
+    "relocate": "Move the corps to another province you control within range.",
 }
 
 
@@ -51,7 +51,7 @@ class UnitCard:
         unit: "Unit | None",
         hover: str | None,
         paths: "Paths | None",
-        air_mode: str,
+        mission_mode: str,
         place_name,
     ) -> None:
         self.areas = []
@@ -94,8 +94,8 @@ class UnitCard:
             strength,
             style.GOOD if strength > 0.6 else style.WARN if strength > 0.3 else style.BAD,
         )
-        if unit.kind == AIR:
-            orders = "Sortie ready" if unit.remaining > 0 else "Sortie spent"
+        if unit.kind == BALLOON:
+            orders = "Ready to ascend" if unit.remaining > 0 else "Aloft this turn"
             self._stat("Orders", orders, rect.x + pad + column, top)
         else:
             self._stat("Movement", f"{unit.remaining:.1f} / {unit.allowance:g}", rect.x + pad + column, top)
@@ -117,8 +117,8 @@ class UnitCard:
             f"Attack {unit.attack:g}, defence {unit.defense:g}. Upkeep {upkeep} per turn. "
             "Tab cycles the units here; F centres this one.",
         )
-        if unit.kind == AIR:
-            self._missions(air_mode)
+        if unit.kind == BALLOON:
+            self._missions(mission_mode)
         elif paths and hover in paths.costs:
             ui.text(
                 f"Route: {paths.costs[hover]:.1f} movement",
@@ -136,7 +136,7 @@ class UnitCard:
         if detail:
             ui.text(detail, (x, y + ui.px(34)), style.SMALL, style.GOOD)
 
-    def _missions(self, air_mode: str) -> None:
+    def _missions(self, mission_mode: str) -> None:
         ui = self.ui
         width, height = ui.px(96), ui.px(26)
         x = self.rect.right - ui.px(style.PAD) - width * 3 - ui.px(8)
@@ -144,7 +144,7 @@ class UnitCard:
             button = pygame.Rect(
                 x + i * (width + ui.px(4)), self.rect.bottom - height - ui.px(8), width, height
             )
-            ui.button(button, mission.title(), selected=mission == air_mode)
+            ui.button(button, mission.title(), selected=mission == mission_mode)
             ui.hint(button, mission.title(), MISSION_HELP.get(mission, ""))
             self.areas.append((button, "mission:" + mission))
 

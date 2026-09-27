@@ -16,7 +16,7 @@ from pathlib import Path
 from cars.paths import replays_dir, write_text_atomic
 from cars.persist.savegame import decode_game, encode_game
 from cars.sim.ai import faction_actions
-from cars.sim.air import mission
+from cars.sim.balloons import mission
 from cars.sim.buildings import build
 from cars.sim.diplomacy import declare_war, propose_peace
 from cars.sim.events import choose_option
@@ -28,7 +28,7 @@ from cars.sim.turn import end_turn
 
 REPLAY_VERSION = 1
 # Bump whenever a rule change would alter the outcome of a recorded command.
-RULESET = "0.25"
+RULESET = "0.26"
 MAX_COMMANDS = 20_000
 MAX_FILE_BYTES = 50_000_000
 
@@ -46,7 +46,7 @@ def digest(state: GameState) -> str:
         objectives=state.objectives,
         market=state.market,
         recruited=state.recruited,
-        air_support=state.air_support,
+        ascents=state.ascents,
         reports=state.reports,
         relations=state.relations,
         events=state.events,
@@ -72,7 +72,7 @@ COMMANDS: dict[str, tuple[int, Callable[..., object]]] = {
     "move": (2, issue_move),
     "build": (2, build),
     "recruit": (2, recruit),
-    "air": (3, mission),
+    "balloon": (3, mission),
     "trade": (2, lambda state, resource, side: trade(state, state.active, resource, side)),
     "peace": (1, lambda state, faction: propose_peace(state, state.active, faction)),
     "war": (1, lambda state, faction: declare_war(state, state.active, faction)),

@@ -11,10 +11,10 @@
     "attack": 3,
     "defense": 3
   },
-  "air": {
-    "allowance": 3,
-    "remaining": 3,
-    "attack": 2,
+  "balloon": {
+    "allowance": 2,
+    "remaining": 2,
+    "attack": 0,
     "defense": 1
   },
   "scout": {

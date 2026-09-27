@@ -52,5 +52,6 @@ def resolve_naval(state: "GameState", attacker: "Unit", sea: str) -> tuple[bool,
         message = "Fleet lost."
     else:
         message = "Naval engagement; enemy still holds the sea."
-    battle_report(state, before, NAVAL_BATTLE, message, sea, f"Attack {strength:.1f} / defense {defense:.1f}")
+    factors = (("Attack strength", f"{strength:.1f}"), ("Defence strength", f"{defense:.1f}"))
+    battle_report(state, before, NAVAL_BATTLE, message, sea, factors)
     return success, message

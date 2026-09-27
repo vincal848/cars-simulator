@@ -29,7 +29,7 @@ how the map is drawn.
 | `entities`, `state` | Provinces, regions, cities, factions and units; the `GameState` that owns them and the four graphs |
 | `scenario` | Loads and validates a scenario |
 | `movement`, `supply` | Dynamic step costs and reachability; supply as connectivity to a controlled hub |
-| `combat`, `naval`, `air` | Land, sea and air engagements |
+| `combat`, `naval`, `balloons` | Land and sea engagements; balloon observation and spotting |
 | `orders`, `turn` | Move orders; ending a turn (income, hand-over, calendar) |
 | `buildings`, `economy`, `market`, `recruitment`, `regional` | Construction, production, trade and raising units |
 | `objectives`, `calendar`, `journal` | Victory conditions and stages, seasonal dates, the chronicle |
@@ -51,18 +51,18 @@ the battle itself uses.
 | Land | provinces | Movement. Step cost combines terrain, unit role, regional charter, roads, rivers, passes and the zones of control of enemies in sight; unsupplied units pay 50% more. Hostile provinces can be entered but not crossed. |
 | Supply | provinces | A land unit is supplied if a chain of provinces its faction controls links it to a controlled supply hub. |
 | Naval | sea zones | Fleet movement; a sea zone holding an enemy fleet ends the route and starts a battle. |
-| Air | provinces and sea zones | Operational range from a controlled airbase. |
+| Air | provinces | A balloon corps' range from a province its nation controls. |
 
 Every pair of factions is at war unless `state.relations` records a peace treaty.
 All hostility checks go through `GameState.at_war`: peace makes the partner's
-provinces impassable and removes its units from combat, zones of control, air
-strikes and interception.
+provinces impassable and removes its units from combat and zones of control,
+and ends any artillery spotting over its ground.
 
 Ownership and control are separate: capturing a province changes its controller,
 never its rightful owner, and buildings stay with the province.
 Damage is not permanent: when a faction's turn begins its units recover strength
 if they are supplied on friendly ground (more in a city), fleets beside a friendly
-port and air groups at a working airbase, so supply lines also decide how fast an
+port and balloon corps in a city their nation holds, so supply lines also decide how fast an
 army can fight again. Armies also cost upkeep every turn, so the size of a realm's
 forces is bounded by what it produces.
 
@@ -186,7 +186,7 @@ whose land changed.
 
 Everything a designer would tune is data under `src/cars/content/`:
 
-- `common/defines.json`: movement, combat, naval, air and AI constants
+- `common/defines.json`: movement, combat, naval, balloon and AI constants
 - `common/units.json`, `recruitment.json`, `buildings.json`, `market.json`,
   `factions.json`, `regional_units.json`, `calendar.json`
 - `common/nations.json`: each nation's history, ruler, capital and two national

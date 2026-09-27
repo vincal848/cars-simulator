@@ -6,7 +6,7 @@
     "summary": "What the game is, and how to win it.",
     "body": [
       "C.A.R.S. (Combat Arms Region Simulator) is a turn-based strategy game set in an imagined Americas of 1800. Eight nations, each with its own history and [[traits|national traits]], contest a continent divided into provinces. You lead one of them; the other seven are played by the computer.",
-      "You win by [[victory|holding enough cities for long enough]]. To get there you will march and fight with armies, fleets and air groups, build up your provinces, keep your armies fed and supplied, and decide whom to fight and with whom to make [[war-and-peace|peace]].",
+      "You win by [[victory|holding enough cities for long enough]]. To get there you will march and fight with armies, fleets and balloon corps, build up your provinces, keep your armies fed and supplied, and decide whom to fight and with whom to make [[war-and-peace|peace]].",
       "New to the game? Read [[first-turn|Your first turn]], then [[interface|The interface]]. Every rule has its own article in this library, and the numbers in it are read from the game itself, so they are always current."
     ],
     "see_also": ["first-turn", "interface", "victory", "nations"]
@@ -34,7 +34,7 @@
     "body": [
       "The top bar shows your nation, your treasury and your three stockpiles with their change each turn, and the date. Hover any figure for its breakdown; click the date for the [[calendar|campaign calendar]].",
       "The icon bar on the left opens the Nation, Military, Diplomacy, Merchant Exchange and Chronicle panels, and this library. The menu at its foot holds saving, loading and settings. Panels open beside the icon bar; opening a province does the same.",
-      "The outliner on the right tracks your [[victory|objective]] and lists every army, fleet, air group and city. A gold dot marks a unit that still has orders; click it to select it. Click a section heading to fold it away.",
+      "The outliner on the right tracks your [[victory|objective]] and lists every army, fleet, balloon corps and city. A gold dot marks a unit that still has orders; click it to select it. Click a section heading to fold it away.",
       "The bar in the bottom right switches [[map-modes|map modes]], returns to the world view and finds the next unit with orders; the round button beside it ends your turn. The selected unit's card appears at the bottom of the map.",
       "The interface grows with your window. Settings (F10) sets its size, from 100% to 200%, and the typeface."
     ],
@@ -118,9 +118,9 @@
     "category": "Warfare",
     "summary": "Reading the plates on the map.",
     "body": [
-      "Every group of units in one place is drawn as a single plate in its nation's colour. The symbol on the plate shows the leading unit's arm: a cross for infantry, one slash for cavalry, a slash and a bar for scouts, a dot for artillery, a hull for a fleet and propeller blades for an air group. The number is how many units are in the stack, and the bar beneath it their combined strength.",
+      "Every group of units in one place is drawn as a single plate in its nation's colour. The symbol on the plate shows the leading unit's arm: a cross for infantry, one slash for cavalry, a slash and a bar for scouts, a dot for artillery, a hull for a fleet and a balloon for a balloon corps. The number is how many units are in the stack, and the bar beneath it their combined strength.",
       "A red mark on the plate means the stack is out of [[supply]]; a gold diamond marks a [[charters|regional formation]]. Zoomed in, the leading unit's figure stands on its plate.",
-      "Click a plate to select its leading unit; click again, or press Tab, to step through the rest of the stack. Air groups stand beside the armies at their airbase; fleets sit in their sea zone."
+      "Click a plate to select its leading unit; click again, or press Tab, to step through the rest of the stack. Balloon corps stand beside the armies at their post; fleets sit in their sea zone."
     ],
     "see_also": ["movement", "unit-infantry"]
   },
@@ -155,7 +155,7 @@
     "summary": "How an attack is decided, step by step.",
     "body": [
       "A battle happens when a land unit moves into a province held by a nation at war with it. Battles are not random: the same attack under the same conditions always ends the same way, which is why the [[forecast|order forecast]] can predict it exactly.",
-      "The attacker's strength is its attack rating scaled by its current strength. It is multiplied by ×{combat.river_attack_factor} when crossing a river, ×{combat.mountain_origin_bonus} when attacking down from mountains, ×{combat.unsupplied_factor} when out of [[supply]], by up to +{combat.artillery_bonus_cap:%} for artillery in the province it attacks from (+{combat.artillery_bonus_per_gun:%} per gun, and the first {combat.artillery_guns_committed} guns spend their movement), and by +{air.support_bonus:%} under [[air|close air support]]. [[traits|National traits]] can add to it.",
+      "The attacker's strength is its attack rating scaled by its current strength. It is multiplied by ×{combat.river_attack_factor} when crossing a river, ×{combat.mountain_origin_bonus} when attacking down from mountains, ×{combat.unsupplied_factor} when out of [[supply]], by up to +{combat.artillery_bonus_cap:%} for artillery in the province it attacks from (+{combat.artillery_bonus_per_gun:%} per gun, and the first {combat.artillery_guns_committed} guns spend their movement), an artillery bonus that grows by {balloons.spotting_bonus:%} when a [[balloons|balloon]] observes the province. [[traits|National traits]] can add to it.",
       "The defence is the sum of every defending unit's defence, scaled by strength and supply, and never less than {combat.minimum_defense}. It is multiplied by the terrain: ×{combat.terrain_defense.plains} on plains, ×{combat.terrain_defense.forest} in forest and ×{combat.terrain_defense.mountains} in mountains.",
       "Both sides always lose strength. The attacker loses {combat.attacker_loss_ratio:%} of the defence (at least {combat.attacker_minimum_loss}); the defence is spread across the defenders, each losing {combat.defender_loss_ratio:%} of the attacking strength divided among them (at least {combat.defender_minimum_loss}). If every defender is destroyed and the attacker survives, the province is captured. Its owner does not change: it becomes occupied, yields half its [[production]] to the occupier, and can be retaken.",
       "An attack spends the attacker's remaining movement, whether it succeeds or not."
@@ -168,10 +168,10 @@
     "category": "Warfare",
     "summary": "Seeing a battle's result before you fight it.",
     "body": [
-      "Hover an enemy province (or, with an air group selected, a target in range) and the forecast card shows what the order would do: whether the province falls, both sides' losses and how many units would be destroyed. It runs the real rules on a copy of the campaign, so it is exact for current conditions.",
-      "Conditions can change before you act: moving artillery up, calling in [[air|air support]] or letting the enemy reinforce all change the result. Forecasts are only shown for targets you can see (see [[fog]])."
+      "Hover an enemy province and the forecast card shows what the order would do: whether the province falls, both sides' losses and how many units would be destroyed. It runs the real rules on a copy of the campaign, so it is exact for current conditions.",
+      "Conditions can change before you act: moving artillery up, sending up a [[balloons|balloon]] or letting the enemy reinforce all change the result. Forecasts are only shown for targets you can see (see [[fog]])."
     ],
-    "see_also": ["combat", "air"]
+    "see_also": ["combat", "balloons"]
   },
   {
     "id": "supply",
@@ -190,7 +190,7 @@
     "category": "Warfare",
     "summary": "How units regain strength, and how they lose it outside battle.",
     "body": [
-      "Damaged units regain strength when their nation's turn begins. A supplied land unit in your own territory recovers {recovery.per_turn} strength a turn, or {recovery.per_turn} + {recovery.city_bonus} in a city. Fleets recover beside one of your ports and air groups at an airbase you control. Units that are cut off, or standing on enemy ground, do not recover.",
+      "Damaged units regain strength when their nation's turn begins. A supplied land unit in your own territory recovers {recovery.per_turn} strength a turn, or {recovery.per_turn} + {recovery.city_bonus} in a city. Fleets recover beside one of your ports and balloon corps in a city you control. Units that are cut off, or standing on enemy ground, do not recover.",
       "Units also lose strength when their nation cannot pay their [[upkeep]]: each unit that needed the missing resource loses {upkeep.shortfall_attrition} strength, and a unit reduced to nothing disbands."
     ],
     "see_also": ["upkeep", "supply"]
@@ -208,15 +208,16 @@
     "see_also": ["unit-fleet", "building-shipyard"]
   },
   {
-    "id": "air",
-    "title": "Air groups",
+    "id": "balloons",
+    "title": "Balloon corps",
     "category": "Warfare",
-    "summary": "Strikes, support and rebasing.",
+    "summary": "Observation from the air, and fire directed onto what is seen.",
     "body": [
-      "Each air group has one sortie a turn, flown from its airbase to anywhere within range. The unit card offers three missions. Strike attacks an enemy army or fleet: it hits for ×{air.strike_factor} its attack (at least {air.minimum_strike}), takes {air.return_fire_ratio:%} return fire, and enemy air groups in range intercept. Support gives your land attacks into one province +{air.support_bonus:%} until your next turn. Rebase moves the group to another airbase you control.",
-      "Air groups are raised in cities with an [[building-airfield|airfield]]. An air group caught at a base that is captured is destroyed. An air service in 1800 is one of this game's deliberate mixes of periods."
+      "A balloon corps goes up once a turn, over any province within range of its post. The unit card offers two orders. Observe keeps that province and its neighbours in view until your next turn, through the [[fog|fog of war]], and your artillery attacking it gains {balloons.spotting_bonus:%} more effect. Relocate moves the corps to another province you control within range.",
+      "Corps are raised in cities with a [[building-gasworks|gas works]] and refill and mend in any city you hold. A corps has no fighting strength: if its post is captured, the corps is lost with it.",
+      "Tethered balloons were proposed for observation long before armies adopted them. France had used them in the 1790s; the Americas would not field them until the 1860s. Here they arrive a generation early."
     ],
-    "see_also": ["unit-air", "building-airfield", "forecast"]
+    "see_also": ["unit-balloon", "building-gasworks", "forecast"]
   },
   {
     "id": "resources",
@@ -224,7 +225,7 @@
     "category": "Economy",
     "summary": "Wood, food, iron and gold, and what each is for.",
     "body": [
-      "Wood, food and iron pay for [[construction]] and [[recruitment]], and units consume them as [[upkeep]]: armies eat food, artillery also uses iron, fleets need wood and air groups iron.",
+      "Wood, food and iron pay for [[construction]] and [[recruitment]], and units consume them as [[upkeep]]: armies eat food, artillery also uses iron, fleets need wood and balloon corps food and iron.",
       "Gold comes from the cities you hold and pays for contracts at the [[market|Merchant Exchange]], where you can buy the resources you lack or sell a surplus.",
       "The top bar shows each stockpile and its change per turn; the Nation panel breaks it down into income, upkeep and net."
     ],
@@ -270,7 +271,7 @@
     "summary": "Improving your provinces.",
     "body": [
       "Open a province you hold to see its buildings table. Each building has up to three levels, and each level costs more than the last. Construction is finished at once, and a building stays with the province if it changes hands.",
-      "Farms, lumber mills and iron mines raise production. Roads make movement cheaper. A shipyard lets a port city raise fleets and an airfield lets a city raise air groups (and serves as an airbase). See the [[buildings]] for each one."
+      "Farms, lumber mills and iron mines raise production. Roads make movement cheaper. A shipyard lets a port city raise fleets and a gas works lets a city raise balloon corps. See the [[buildings]] for each one."
     ],
     "see_also": ["buildings", "production", "recruitment"]
   },
@@ -280,7 +281,7 @@
     "category": "Economy",
     "summary": "Raising new units.",
     "body": [
-      "Any city you hold can raise one unit a turn from the recruitment table in its province panel. New units appear at once but cannot move until your next turn. Fleets need a [[building-shipyard|shipyard]] and a port, and are launched into the city's sea zone; air groups need an [[building-airfield|airfield]].",
+      "Any city you hold can raise one unit a turn from the recruitment table in its province panel. New units appear at once but cannot move until your next turn. Fleets need a [[building-shipyard|shipyard]] and a port, and are launched into the city's sea zone; balloon corps need a [[building-gasworks|gas works]].",
       "Some regions can also raise a [[charters|regional charter]]: a named formation of a standard arm that moves faster in its home terrain, costing {recruitment.regional_surcharge} more of each resource.",
       "Before recruiting, check the unit's [[upkeep]]: an army your income cannot feed will waste away."
     ],
@@ -304,7 +305,7 @@
     "summary": "Making peace, and breaking it.",
     "body": [
       "Every nation begins at war with every other. The Diplomacy panel (D) lists each rival, its strength and its relation to you.",
-      "You can offer peace to a rival no stronger than you. Peace closes both borders: neither side may enter the other's provinces, attack its armies or fleets, or strike them from the air. A truce follows for {diplomacy.truce_rounds} rounds, after which either side may declare war again, and a rival more than ×{diplomacy.war_strength_ratio} your strength will.",
+      "You can offer peace to a rival no stronger than you. Peace closes both borders: neither side may enter the other's provinces, or attack its armies or fleets. A truce follows for {diplomacy.truce_rounds} rounds, after which either side may declare war again, and a rival more than ×{diplomacy.war_strength_ratio} your strength will.",
       "Rivals also fight each other, until one grows too large: see [[coalitions]]."
     ],
     "see_also": ["coalitions", "victory-points"]
@@ -381,7 +382,7 @@
     "category": "Tools",
     "summary": "Seeing the map as the simulation sees it.",
     "body": [
-      "Behind the painted map, the game plays on four networks: land adjacency, your supply network, sea lanes and air coverage. The strategic atlas (G) draws them as diagrams.",
+      "Behind the painted map, the game plays on four networks: land adjacency, your supply network, sea lanes and balloon range. The strategic atlas (G) draws them as diagrams.",
       "Ringed nodes are cut points: lose one and its network splits in two. Gold links are bridges, whose loss does the same. On the supply network, green nodes are connected to a hub and red nodes are cut off. With a unit selected, the atlas draws its route. These are properties of the network, not bonuses; a cut point is only a potential choke point."
     ],
     "see_also": ["supply", "design"]
@@ -423,7 +424,7 @@
     "category": "Tools",
     "summary": "Graphs under the painted map.",
     "body": [
-      "You play on a map; the simulation plays on graphs. Each province has a stable identity that links its drawing to its place in four networks. Movement is a shortest-path search over the land network weighted by terrain, roads, rivers and zones of control; supply is connectivity from your hubs through provinces you control; fleets and aircraft use networks of their own. Rivers and passes are properties of the links between provinces.",
+      "You play on a map; the simulation plays on graphs. Each province has a stable identity that links its drawing to its place in four networks. Movement is a shortest-path search over the land network weighted by terrain, roads, rivers and zones of control; supply is connectivity from your hubs through provinces you control; fleets and balloons use networks of their own. Rivers and passes are properties of the links between provinces.",
       "The rules are deterministic, so the same orders always produce the same campaign. That is what makes exact forecasts and verified replays possible."
     ],
     "see_also": ["strategy-atlas", "replays"]

@@ -13,10 +13,10 @@ import pygame
 from cars.persist.replay import Recorder
 from cars.persist.savegame import SaveLibrary, load_game, save_game
 from cars.sim.ai import Action, faction_actions
-from cars.sim.air import REBASE, STRIKE, SUPPORT
+from cars.sim.balloons import OBSERVE, RELOCATE
 from cars.sim.calendar import date_label
 from cars.sim.campaign import Campaign
-from cars.sim.entities import AIR, FLEET, INFANTRY
+from cars.sim.entities import BALLOON, FLEET, INFANTRY
 from cars.sim.journal import BATTLE_KINDS
 from cars.sim.objectives import campaign_stage
 from cars.sim.scenario import DETAILED_SCENARIO, load_scenario
@@ -57,16 +57,10 @@ WINDOW_KEYS = {
     pygame.K_F9: "load",
     pygame.K_F10: "settings",
 }
-AIR_MODE_HELP = {
-    STRIKE: "Click an enemy force within range. One sortie per turn.",
-    SUPPORT: "Click a province to grant +25% land attack there.",
-    REBASE: "Click another controlled airbase within range.",
+MISSION_HELP = {
+    OBSERVE: "Click a province within range to observe it and spot for your guns.",
+    RELOCATE: "Click another province you control within range.",
 }
-
-
-def headline(message: str) -> str:
-    """A battle report without its list of modifiers, which the chronicle keeps."""
-    return message.split(" Terrain ×")[0]
 
 
 class GameScreen:
@@ -311,7 +305,7 @@ class GameScreen:
         if any(entry["kind"] in BATTLE_KINDS for entry in new_entries):
             self.context.play("battle")
         self.renderer.map.invalidate_labels()
-        self.view.message = self.state.factions[self.state.active].name + ": " + headline(message)
+        self.view.message = self.state.factions[self.state.active].name + ": " + message
 
     def _finish_rival_turn(self) -> None:
         end_turn(self.state)
@@ -465,8 +459,8 @@ class GameScreen:
             if action == "deselect":
                 self.view.selected = None
             elif action.startswith("mission:"):
-                self.view.air_mode = action.removeprefix("mission:")
-                self.view.message = AIR_MODE_HELP[self.view.air_mode]
+                self.view.mission_mode = action.removeprefix("mission:")
+                self.view.message = MISSION_HELP[self.view.mission_mode]
             return True
         return renderer.blocks_map(point)
 
@@ -513,7 +507,7 @@ class GameScreen:
         if not self.campaign.human_turn:
             return
         selected = state.units.get(view.selected)
-        if selected and selected.kind == AIR and self._air_order(selected, point):
+        if selected and selected.kind == BALLOON and self._balloon_order(selected, point):
             return
         stack = [u for u in self.renderer.map.stack_at(point) if state.units[u].owner == state.active]
         destination = self.renderer.map.node_at(point, selected.layer if selected else "land")
@@ -525,13 +519,13 @@ class GameScreen:
         elif destination in state.provinces:
             self.inspect(destination)
 
-    def _air_order(self, unit, point) -> bool:
+    def _balloon_order(self, unit, point) -> bool:
         target = self.renderer.map.node_at(point, "air")
         if not target or target == unit.location:
             return False
-        ok, self.view.message = self.campaign.air_mission(unit.id, target, self.view.air_mode)
+        ok, self.view.message = self.campaign.balloon_mission(unit.id, target, self.view.mission_mode)
         if ok:
-            self.context.play("battle" if self.view.air_mode == STRIKE else "move")
+            self.context.play("move")
         if self.view.selected not in self.state.units:
             self.view.selected = None
         return True
@@ -548,7 +542,7 @@ class GameScreen:
     def _move(self, unit_id: str, destination: str) -> None:
         view = self.view
         route, message = self.campaign.move(unit_id, destination)
-        view.message = headline(message)
+        view.message = message
         self.renderer.map.invalidate_labels()
         if route:
             self.context.play("move" if "Movement completed" in view.message else "battle")

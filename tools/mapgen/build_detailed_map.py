@@ -154,7 +154,7 @@ def build(source: Path) -> None:
             units.append(unit)
     capital = next(c for c in cities if owner_of(c["province"]) == "f0")
     units += [
-        dict(id="air0", kind="air", owner="f0", location=capital["province"]),
+        dict(id="balloon0", kind="balloon", owner="f0", location=capital["province"]),
         dict(id="fleet0", kind="fleet", owner="f0", location="north_pacific"),
     ]
 

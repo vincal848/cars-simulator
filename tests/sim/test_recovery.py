@@ -37,9 +37,9 @@ class RecoveryTests(unittest.TestCase):
         self.assertEqual(recovery_rate(self.state, self.unit), 0)
 
     def test_fleets_recover_beside_their_own_ports_and_air_groups_at_a_base(self):
-        fleet, air = self.state.units["fleet0"], self.state.units["air0"]
+        fleet, corps = self.state.units["fleet0"], self.state.units["balloon0"]
         self.assertGreater(recovery_rate(self.state, fleet), 0)
-        self.assertGreater(recovery_rate(self.state, air), 0)
+        self.assertGreater(recovery_rate(self.state, corps), 0)
         fleet.location = next(
             sea
             for sea in self.state.naval.adj
@@ -47,8 +47,8 @@ class RecoveryTests(unittest.TestCase):
             and sea not in {s for p, s in self.state.ports.items() if self.state.controls("f0", p)}
         )
         self.assertEqual(recovery_rate(self.state, fleet), 0)
-        self.state.provinces[air.location].controller = "f1"
-        self.assertEqual(recovery_rate(self.state, air), 0)
+        self.state.provinces[corps.location].controller = "f1"
+        self.assertEqual(recovery_rate(self.state, corps), 0)
 
     def test_units_recover_when_their_turn_begins(self):
         self.unit.hp = 5

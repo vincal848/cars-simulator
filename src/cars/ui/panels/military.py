@@ -1,15 +1,15 @@
-"""The military panel: every army, fleet and air group in one sortable table."""
+"""The military panel: every army, fleet and balloon corps in one sortable table."""
 
 import pygame
 
-from cars.sim.entities import AIR, FLEET
+from cars.sim.entities import BALLOON, FLEET
 from cars.sim.regional import unit_name
 from cars.ui.frames import DockedPanel
 from cars.ui.kit import style
 from cars.ui.kit.table import Column, Table
 
 FILTERS = (("all", "All"), ("ready", "Ready"), ("cut off", "Cut off"), ("wounded", "Wounded"))
-ARMS = {"land": "Army", FLEET: "Fleet", AIR: "Air group"}
+ARMS = {"land": "Army", FLEET: "Fleet", BALLOON: "Balloon corps"}
 
 
 class MilitaryPanel(DockedPanel):
@@ -44,7 +44,7 @@ class MilitaryPanel(DockedPanel):
 
     @staticmethod
     def _orders(unit) -> str:
-        if unit.kind == AIR:
+        if unit.kind == BALLOON:
             return "Sortie" if unit.remaining > 0 else "Spent"
         return f"{unit.remaining:g} / {unit.allowance:g}" if unit.remaining > 0 else "Spent"
 

@@ -30,11 +30,11 @@ def end_turn(state: "GameState") -> dict[str, float]:
     if state.active_index == 0:
         state.round += 1
         replenish(state)
-    # Close air support lasts until the ordering faction's next turn.
-    state.air_support = [
-        order
-        for order in state.air_support
-        if order["owner"] != state.active and order["unit"] in state.units
+    # A balloon stays aloft until its own nation's next turn.
+    state.ascents = [
+        ascent
+        for ascent in state.ascents
+        if ascent["owner"] != state.active and ascent["unit"] in state.units
     ]
     refresh_supply(state)
     for unit in state.units.values():

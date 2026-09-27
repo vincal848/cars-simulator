@@ -50,11 +50,11 @@ def _anchor(s) -> None:
     _poly(s, [(102, 69), (85, 79), (100, 88)])
 
 
-def _aircraft(s) -> None:
-    _poly(s, [
-        (64, 28), (70, 49), (102, 43), (91, 58), (71, 66), (77, 91),
-        (64, 82), (51, 91), (57, 66), (37, 58), (26, 43), (58, 49),
-    ])  # fmt: skip
+def _balloon(s) -> None:
+    pygame.draw.circle(s, GILT, (64, 50), 28, 5)
+    _line(s, (44, 70), (56, 94), 3)
+    _line(s, (84, 70), (72, 94), 3)
+    pygame.draw.rect(s, GILT, (54, 94, 20, 12))
 
 
 def _wagon(s) -> None:
@@ -180,7 +180,7 @@ _EMBLEMS = {
     "land": _crossed_swords,
     "recruit": _crossed_swords,
     "naval": _anchor,
-    "air": _aircraft,
+    "air": _balloon,
     "supply": _wagon,
     "ready": _wagon,
     "infrastructure": _bridge,

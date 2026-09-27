@@ -5,7 +5,7 @@
 C.A.R.S. is a turn-based grand-strategy prototype set in an imagined Americas of
 1800. Eight nations, each with its own history and national traits, compete over
 186 provinces drawn on real Natural Earth geography. You command one; seven AI rivals take their turns. Armies, fleets,
-air groups and supply lines each move on their own graph, and every rule works
+balloon corps and supply lines each move on their own graph, and every rule works
 on those graphs. The map you see is only a way to click on them.
 
 ![The campaign map with a route and order forecast](docs/img/campaign.png)
@@ -20,14 +20,15 @@ on those graphs. The map you see is only a way to click on them.
   4K screen.
 - **Land warfare** on a road-, river- and terrain-weighted province graph, with
   zones of control, supply cut-offs, fog of war and deterministic attrition combat.
-- **Four unit roles plus navy and air**: infantry, scouts, cavalry and field
-  artillery; fleets that fight for sea zones; air groups that strike, support or rebase.
+- **Four unit roles, a navy and a balloon corps**: infantry, scouts, cavalry and
+  field artillery; fleets that fight for sea zones; observation balloons that see
+  through the fog of war and direct the guns.
 - **Scripted events** defined in data files: harvests, veterans, fevers,
   convoys and more, each with a real choice.
 - **Diplomacy**: make peace with rivals that are no stronger than you, and watch
   for the ones that grow strong enough to break it.
 - **Economy**: regional wood, food and iron; farms, mills, mines, roads, shipyards
-  and airfields; unit upkeep; a merchant exchange for gold.
+  and gas works; unit upkeep; a merchant exchange for gold.
 - **24 regional charters**: named local regiments with their own uniforms and a
   terrain specialty.
 - **Order forecasts** that run the real combat rules on a copy of the game, so the

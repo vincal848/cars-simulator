@@ -3,10 +3,11 @@ import unittest
 from pathlib import Path
 
 from cars.persist.replay import Playback, Recorder, apply_command, digest, read_replay_file
-from cars.sim.air import coverage
+from cars.sim.balloons import coverage
 from cars.sim.campaign import Campaign
 from cars.sim.movement import reachable
 from cars.sim.naval import reachable_seas
+from cars.sim.supply import refresh_supply
 from tests.support import compact, detailed
 
 EXAMPLE = Path(__file__).resolve().parents[2] / "examples" / "opening.json"
@@ -55,14 +56,15 @@ class ReplayTests(unittest.TestCase):
         enemy.location = target
         enemy.defense = enemy.attack = 100
         state.reindex_units()
+        refresh_supply(state)
         campaign.recorder = Recorder(state, shapes, seas, "f0")
         campaign.move(infantry.id, target)
         fleet = next(u for u in state.units.values() if u.owner == "f0" and u.kind == "fleet")
         sea = next(p for p in reachable_seas(state, fleet).costs if p != fleet.location)
         self.assertTrue(campaign.move(fleet.id, sea)[0])
-        air = next(u for u in state.units.values() if u.owner == "f0" and u.kind == "air")
-        self.assertIn(air.location, coverage(state, air))
-        self.assertTrue(campaign.air_mission(air.id, air.location, "support")[0])
+        corps = next(u for u in state.units.values() if u.owner == "f0" and u.kind == "balloon")
+        self.assertIn(corps.location, coverage(state, corps))
+        self.assertTrue(campaign.balloon_mission(corps.id, corps.location, "observe")[0])
         city = next(
             c.province for c in state.cities.values() if state.provinces[c.province].controller == "f0"
         )

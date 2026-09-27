@@ -1,8 +1,8 @@
 {
-  "infantry": "Historical role: infantry fought on foot and held ground. This game uses a stylized musket-era silhouette.",
-  "scout": "Historical role: scouts gathered information and reconnoitered routes ahead of the main army.",
-  "cavalry": "Historical role: mounted troops provided speed, pursuit and reconnaissance.",
-  "artillery": "Historical role: field guns supported armies with concentrated fire.",
-  "fleet": "Historical role: naval forces protected routes and contested sea control. Amphibious transport is a future feature.",
-  "air": "Historical role: military aviation came much later than the starting calendar. C.A.R.S. deliberately mixes periods; its air service is a game abstraction."
+  "infantry": "Line infantry carried the smoothbore musket in close order, the backbone of every army of the 1830s.",
+  "scout": "Light troops and mounted rangers went ahead of the columns to find roads, fords and the enemy.",
+  "cavalry": "Lancers and dragoons gave an army its speed, its pursuit and, on open ground, its shock.",
+  "artillery": "Smoothbore field guns fired roundshot and canister; they decided many battles of the period.",
+  "fleet": "Sailing frigates and the first steam vessels guarded coasts and trade. Carrying armies by sea is not yet possible.",
+  "balloon": "Tethered observation balloons had served France in the 1790s. Here the American armies adopt them a generation before they really did."
 }

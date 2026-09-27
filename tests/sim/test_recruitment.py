@@ -1,6 +1,6 @@
 import unittest
 
-from cars.sim.air import coverage
+from cars.sim.balloons import coverage
 from cars.sim.buildings import build
 from cars.sim.economy import forecast
 from cars.sim.graph import Edge
@@ -62,11 +62,11 @@ class ServiceRecruitmentTests(unittest.TestCase):
         self.assertEqual(state.units[unit_id].remaining, 0)
         self.assertIsNone(recruit(state, self.port, "infantry")[0])
 
-    def test_air_groups_need_an_airfield_and_lose_range_with_their_base(self):
+    def test_balloon_corps_need_gas_works_and_lose_range_with_their_post(self):
         state = self.state
-        self.assertIsNone(recruit(state, self.port, "air")[0])
-        self.assertTrue(build(state, self.port, "airfield")[0])
-        unit_id, _ = recruit(state, self.port, "air")
+        self.assertIsNone(recruit(state, self.port, "balloon")[0])
+        self.assertTrue(build(state, self.port, "gasworks")[0])
+        unit_id, _ = recruit(state, self.port, "balloon")
         self.assertIn(self.port, coverage(state, state.units[unit_id]))
         state.provinces[self.port].controller = "f1"
         self.assertFalse(coverage(state, state.units[unit_id]))

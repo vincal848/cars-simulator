@@ -2,7 +2,7 @@
 
 import pygame
 
-from cars.sim.entities import AIR, FLEET
+from cars.sim.entities import BALLOON, FLEET
 from cars.sim.nations import NATIONS
 from cars.sim.objectives import controlled_cities
 from cars.ui.frames import Window
@@ -76,8 +76,8 @@ class PickerWindow(Window):
             forces = f"{sum(u.is_land for u in units)} armies"
             if any(u.kind == FLEET for u in units):
                 forces += ", a fleet"
-            if any(u.kind == AIR for u in units):
-                forces += ", an air group"
+            if any(u.kind == BALLOON for u in units):
+                forces += ", a balloon corps"
             y += facts(
                 ui,
                 x,

@@ -14,7 +14,7 @@ from dataclasses import dataclass, field
 from cars.paths import load_content
 from cars.sim.buildings import BUILDINGS
 from cars.sim.defines import DEFINES
-from cars.sim.entities import AIR, FLEET, LAND_KINDS, UNIT_STATS
+from cars.sim.entities import BALLOON, FLEET, LAND_KINDS, UNIT_STATS
 from cars.sim.events import EVENTS
 from cars.sim.market import RULES as MARKET
 from cars.sim.nations import NATIONS
@@ -129,7 +129,7 @@ def _unit_articles() -> list[Article]:
                 for terrain in TERRAINS
             ]
             tables.append(("Movement cost by terrain", ["Terrain", "Terrain", "This arm", "Combined"], rows))
-        link = {FLEET: "naval", AIR: "air"}.get(kind, "combat")
+        link = {FLEET: "naval", BALLOON: "balloons"}.get(kind, "combat")
         articles.append(
             Article(
                 id="unit-" + kind,
@@ -188,7 +188,7 @@ def _building_articles() -> list[Article]:
             effect = spec.description + "."
         extra = {
             "shipyard": "A port city needs one to raise [[unit-fleet|fleets]].",
-            "airfield": "A city needs one to raise [[unit-air|air groups]], and it serves as an airbase.",
+            "gasworks": "A city needs one to raise [[unit-balloon|balloon corps]], and they refill there.",
             "roads": "Roads cut the terrain part of every step into the province; see [[movement]].",
         }.get(kind, "")
         articles.append(

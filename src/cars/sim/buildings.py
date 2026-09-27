@@ -57,7 +57,7 @@ def quote(state: "GameState", province_id: str, kind: str) -> tuple[dict[str, in
     cost = spec.cost_at(level)
     if province.controller != state.active:
         return cost, "Requires your control."
-    if kind in ("shipyard", "airfield") and not state.has_city(province_id):
+    if kind in ("shipyard", "gasworks") and not state.has_city(province_id):
         return cost, "Requires a city or supply hub."
     if kind == "shipyard" and state.ports.get(province_id) not in state.naval:
         return cost, "Requires an existing port connection."

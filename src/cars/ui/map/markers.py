@@ -10,7 +10,7 @@ from functools import lru_cache
 
 import pygame
 
-from cars.sim.entities import AIR, ARTILLERY, CAVALRY, FLEET, INFANTRY, SCOUT
+from cars.sim.entities import ARTILLERY, BALLOON, CAVALRY, FLEET, INFANTRY, SCOUT
 
 PLATE_SIZE = (40, 19)
 SYMBOL_SIZE = (15, 11)
@@ -120,12 +120,11 @@ def _draw_symbol(surface: pygame.Surface, kind: str, box: pygame.Rect, line: int
         ]
         pygame.draw.polygon(surface, INK, hull)
         pygame.draw.line(surface, INK, (box.centerx, top + line), (box.centerx, middle), line)
-    elif kind == AIR:
-        # Two propeller blades.
-        half = box.width // 2 - 2 * line
-        blade = max(3, box.height // 3)
-        pygame.draw.ellipse(surface, INK, (left + line, box.centery - blade // 2, half, blade), line)
-        pygame.draw.ellipse(surface, INK, (box.centerx, box.centery - blade // 2, half, blade), line)
+    elif kind == BALLOON:
+        # An envelope over its basket.
+        radius = max(3, box.height // 3)
+        pygame.draw.circle(surface, INK, (box.centerx, top + radius), radius, line)
+        pygame.draw.line(surface, INK, (box.centerx, top + 2 * radius), (box.centerx, bottom), line)
 
 
 def _shade(color, factor: float) -> tuple[int, int, int]:

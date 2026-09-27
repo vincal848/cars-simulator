@@ -49,12 +49,8 @@ class NavalDefines:
 
 
 @dataclass(frozen=True)
-class AirDefines:
-    strike_factor: float
-    minimum_strike: float
-    return_fire_ratio: float
-    interceptor_factor: float
-    support_bonus: float
+class BalloonDefines:
+    spotting_bonus: float
 
 
 @dataclass(frozen=True)
@@ -112,7 +108,7 @@ class Defines:
     movement: MovementDefines
     combat: CombatDefines
     naval: NavalDefines
-    air: AirDefines
+    balloons: BalloonDefines
     recruitment: RecruitmentDefines
     economy: EconomyDefines
     recovery: RecoveryDefines
@@ -129,7 +125,7 @@ class Defines:
             movement=MovementDefines(**raw["movement"]),
             combat=CombatDefines(**raw["combat"]),
             naval=NavalDefines(**raw["naval"]),
-            air=AirDefines(**raw["air"]),
+            balloons=BalloonDefines(**raw["balloons"]),
             recruitment=RecruitmentDefines(**raw["recruitment"]),
             economy=EconomyDefines(**raw["economy"]),
             recovery=RecoveryDefines(**raw["recovery"]),

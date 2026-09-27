@@ -1,4 +1,4 @@
-"""The outliner down the right edge: the objective, then every army, fleet, air group and city.
+"""The outliner down the right edge: the objective, then every army, fleet, balloon corps and city.
 
 Sections collapse by clicking their headers. Clicking a unit selects and centres it;
 clicking a city opens its province. A gold dot marks units that still have orders.
@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING
 
 import pygame
 
-from cars.sim.entities import AIR, FLEET
+from cars.sim.entities import BALLOON, FLEET
 from cars.sim.objectives import ACTIVE, campaign_stage, controlled_cities
 from cars.sim.regional import unit_name
 from cars.ui.kit import style
@@ -20,14 +20,14 @@ if TYPE_CHECKING:
 WIDTH = 286
 HEADER = 30
 ROW = 26
-SECTIONS = (("armies", "Armies"), ("fleets", "Fleets"), ("air", "Air groups"), ("cities", "Cities"))
+SECTIONS = (("armies", "Armies"), ("fleets", "Fleets"), ("balloons", "Balloon corps"), ("cities", "Cities"))
 
 
 class Outliner:
     def __init__(self, ui: "Ui") -> None:
         self.ui = ui
         self.rect = pygame.Rect(0, 0, 0, 0)
-        self.open = {"goal": True, "armies": True, "fleets": False, "air": False, "cities": False}
+        self.open = {"goal": True, "armies": True, "fleets": False, "balloons": False, "cities": False}
         self.scroll = 0
         self.areas: list[tuple[pygame.Rect, str]] = []
         self.limit = pygame.Rect(0, 0, 0, 0)
@@ -52,7 +52,7 @@ class Outliner:
         groups = {
             "armies": [u for u in own if u.is_land],
             "fleets": [u for u in own if u.kind == FLEET],
-            "air": [u for u in own if u.kind == AIR],
+            "balloons": [u for u in own if u.kind == BALLOON],
             "cities": controlled_cities(state, player),
         }
         rows: list[tuple] = [("header", "goal", "Objective", None)]

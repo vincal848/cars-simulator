@@ -4612,8 +4612,8 @@
       "location": "province_173"
     },
     {
-      "id": "air0",
-      "kind": "air",
+      "id": "balloon0",
+      "kind": "balloon",
       "owner": "f0",
       "location": "province_053"
     },

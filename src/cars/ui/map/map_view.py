@@ -12,8 +12,7 @@ from typing import TYPE_CHECKING
 
 import pygame
 
-from cars.sim.air import STRIKE_TARGET_KINDS, is_airbase
-from cars.sim.entities import AIR, FULL_STRENGTH
+from cars.sim.entities import BALLOON, FULL_STRENGTH
 from cars.sim.regional import CHARTERS
 from cars.sim.supply import supplied_provinces, supply_route, threatened_route
 from cars.sim.visibility import can_see
@@ -80,7 +79,7 @@ class Scene:
     inspected: str | None = None
     debug: bool = False
     animation: MoveAnimation | None = None
-    air_mode: str = "strike"
+    mission_mode: str = "observe"
     paths: "Paths | None" = None
     highlights: set[str] = field(default_factory=set)
     city_hover: str | None = None
@@ -304,11 +303,11 @@ class MapView:
         return []
 
     def node_at(self, point: tuple[int, int], layer: str) -> str | None:
-        """The province (or, on the naval and air layers, sea zone) under ``point``."""
+        """The province (or, on the naval layer, sea zone) under ``point``."""
         city = self.city_at(point)
         if city:
             return self.state.cities[city].province
-        if layer in ("naval", "air"):
+        if layer == "naval":
             radius = self.ui.px(SEA_HIT_RADIUS)
             for sea in self.seas:
                 for x, y in self.camera.copies(self.anchors[sea]):
@@ -356,7 +355,7 @@ class MapView:
         self._draw_towns(screen, scene.city_hover)
         self._draw_units(screen, scene)
         if scene.layer == "air" and scene.unit:
-            description = self._draw_air_targets(screen, scene) or description
+            description = self._draw_observation(screen, scene) or description
         if self.labels is None or (self._labels_moved and not self._panned):
             self.labels = layout_labels(self, self.ui, reserved)
         self._labels_moved, self._panned = self._panned, False
@@ -409,7 +408,7 @@ class MapView:
 
     def _draw_sea_zones(self, screen, scene: Scene) -> None:
         # Waterways come from the relief artwork; province borders are never drawn as rivers.
-        naval = scene.layer in ("naval", "air")
+        naval = scene.layer == "naval"
         for sea, data in self.seas.items():
             lit = sea in scene.highlights
             for x, y in self.camera.copies(self.anchors[sea]):
@@ -444,7 +443,7 @@ class MapView:
 
     def _draw_routes(self, screen, scene: Scene) -> None:
         unit, hover = scene.unit, scene.hover
-        if unit and unit.kind == AIR and hover in scene.highlights and hover != unit.location:
+        if unit and unit.kind == BALLOON and hover in scene.highlights and hover != unit.location:
             self.route_arrow(screen, [unit.location, hover], ROUTE)
         if scene.paths and hover in scene.paths.costs and scene.layer != "supply":
             hostile = (
@@ -522,8 +521,8 @@ class MapView:
             x, y = self.anchors[location]
             # Plates stand beside a town rather than on it...
             x += self._clear_of_towns(x, y + self.ui.px(14) if figures else y)
-            if arm == AIR:
-                # ...and air groups beside the armies at their base.
+            if arm == BALLOON:
+                # ...and balloon corps beside the armies at their post.
                 x += self.ui.px(PLATE_SIZE[0] + 6)
             self._draw_stack(screen, stack, lead, (x, y), lead.id == selected)
         unit = self.state.units.get(marching)
@@ -569,16 +568,10 @@ class MapView:
         towns = [m.rect for m in self.city_markers if plate.colliderect(m.rect)]
         return max((town.right - plate.left + self.ui.px(4) for town in towns), default=0)
 
-    def _draw_air_targets(self, screen, scene: Scene) -> str | None:
+    def _draw_observation(self, screen, scene: Scene) -> str | None:
+        """Sights over the provinces the corps' nation has under observation."""
         unit, hover, in_range = scene.unit, scene.hover, scene.highlights
-        targets = {
-            other.location
-            for other in self.state.units.values()
-            if self.state.at_war(unit.owner, other.owner)
-            and other.kind in STRIKE_TARGET_KINDS
-            and other.location in in_range
-            and scene.shows(other)
-        }
+        targets = {ascent["target"] for ascent in self.state.ascents if ascent["owner"] == unit.owner}
         radius, reach, width = self.ui.px(15), self.ui.px(21), max(2, self.ui.px(2))
         for target in targets:
             for cx, cy in self.camera.copies(self.anchors[target]):
@@ -587,9 +580,11 @@ class MapView:
                     tip = (cx + dx * 0.72, cy + dy * 0.72)
                     pygame.draw.line(screen, TARGET, (cx + dx, cy + dy), tip, width)
         if hover in targets:
-            return "Enemy force in range: a strike uses the sortie, and return fire is possible."
-        if hover in in_range and scene.air_mode == "rebase":
-            if is_airbase(self.state, unit.owner, hover):
-                return "Controlled airbase: click to rebase."
-            return "Rebasing needs a controlled city airbase or an airfield."
-        return None
+            return "Under observation until your next turn."
+        if hover not in in_range or hover == unit.location:
+            return None
+        if scene.mission_mode == "relocate":
+            if self.state.controls(unit.owner, hover):
+                return "Click to move the corps here."
+            return "The corps can only move to a province you control."
+        return "Click to go up over this province and spot for your guns."

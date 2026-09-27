@@ -10,11 +10,12 @@ if TYPE_CHECKING:
 
 LAND_BATTLE = "land battle"
 NAVAL_BATTLE = "naval battle"
-AIR_STRIKE = "air strike"
-BATTLE_KINDS = (LAND_BATTLE, NAVAL_BATTLE, AIR_STRIKE)
+BATTLE_KINDS = (LAND_BATTLE, NAVAL_BATTLE)
 
 # Unit id -> (owner, kind, hp), taken before a battle to report its losses.
 Snapshot = dict[str, tuple[str, str, float]]
+# What decided a battle, as (label, value) rows: ("River crossing", "x0.8").
+Factors = tuple[tuple[str, str], ...]
 
 
 def record(
@@ -50,7 +51,7 @@ def battle_report(
     kind: str,
     summary: str,
     location: str,
-    factors: str = "",
+    factors: Factors = (),
 ) -> dict:
     """Record a battle, listing every unit that lost strength since ``before``."""
     losses = []
@@ -62,6 +63,6 @@ def battle_report(
             participants.add(owner)
             outcome = " / destroyed" if survivor is None else f" / {survivor.hp:.1f} left"
             losses.append(f"{unit_id}: -{lost:.1f} strength{outcome}")
-    if factors:
-        losses.insert(0, factors)
-    return record(state, kind, summary, location, losses, sorted(participants))
+    entry = record(state, kind, summary, location, losses, sorted(participants))
+    entry["factors"] = [list(row) for row in factors]
+    return entry

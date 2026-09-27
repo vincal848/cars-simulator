@@ -20,7 +20,18 @@ from cars.paths import content_path, read_json, saves_dir, write_text_atomic
 from cars.sim.buildings import BUILDINGS
 from cars.sim.calendar import date_label, validate_clock
 from cars.sim.defines import DEFINES
-from cars.sim.entities import AIR, FLEET, RESOURCES, UNIT_KINDS, City, Faction, Province, Region, Unit
+from cars.sim.entities import (
+    BALLOON,
+    FLEET,
+    RESOURCES,
+    UNIT_KINDS,
+    UNIT_STATS,
+    City,
+    Faction,
+    Province,
+    Region,
+    Unit,
+)
 from cars.sim.events import EVENTS
 from cars.sim.graph import Edge, Graph
 from cars.sim.market import RULES as MARKET_RULES
@@ -31,7 +42,7 @@ from cars.sim.scenario import LAYERS, load_scenario
 from cars.sim.state import FACTION_COUNT, PEACE, GameState, relation_key
 from cars.sim.supply import refresh_supply
 
-SAVE_VERSION = 4
+SAVE_VERSION = 5
 # Bundled scenarios a save may refer to instead of embedding the map.
 SCENARIOS = ("americas_detailed", "americas")
 MAP_KEYS = ("shapes", "seas", "graphs")
@@ -57,9 +68,30 @@ def _reference_map(data: dict) -> dict:
     return _compact_map(data)
 
 
+def _balloons(data: dict) -> dict:
+    """Version 5 replaced air groups with balloon corps and airfields with gas works."""
+    for unit in data["units"]:
+        if unit.get("kind") == "air":
+            unit.update(UNIT_STATS[BALLOON], kind=BALLOON, remaining=0)
+    for city in data["cities"]:
+        city.pop("airbase", None)
+    for province in data["provinces"]:
+        buildings = province.get("buildings", {})
+        if "airfield" in buildings:
+            buildings["gasworks"] = buildings.pop("airfield")
+    data.pop("air_support", None)
+    data["ascents"] = []
+    return data
+
+
 # UPGRADES[n] converts a version-n save into version n + 1. When the format changes,
 # bump SAVE_VERSION and register a step here instead of breaking players' saves.
-UPGRADES: dict[int, Callable[[dict], dict]] = {1: _add_relations, 2: _add_event_log, 3: _reference_map}
+UPGRADES: dict[int, Callable[[dict], dict]] = {
+    1: _add_relations,
+    2: _add_event_log,
+    3: _reference_map,
+    4: _balloons,
+}
 ENTITY_TYPES = {
     "provinces": Province,
     "regions": Region,
@@ -125,7 +157,7 @@ def encode_game(state: GameState, shapes: dict, seas: list, player: str) -> dict
         recruited=state.recruited,
         market=state.market,
         reports=state.reports,
-        air_support=state.air_support,
+        ascents=state.ascents,
         relations=state.relations,
         events=state.events,
         clock=state.clock,
@@ -249,8 +281,8 @@ def _decode(data: dict) -> Loaded:
     _check_relations(state)
     state.events = data["events"]
     _check_event_log(state.events)
-    state.air_support = data["air_support"]
-    _check_air_support(state)
+    state.ascents = data["ascents"]
+    _check_ascents(state)
     state.recruited = data["recruited"]
     if not isinstance(state.recruited, list) or any(
         not isinstance(p, str) or p not in state.provinces for p in state.recruited
@@ -386,6 +418,11 @@ def _check_journal(state: GameState) -> None:
             and isinstance(entry.get("round"), int)
             and isinstance(entry.get("details"), list)
             and all(isinstance(line, str) for line in entry["details"])
+            and isinstance(entry.get("factors", []), list)
+            and all(
+                isinstance(row, list) and len(row) == 2 and all(isinstance(cell, str) for cell in row)
+                for row in entry.get("factors", [])
+            )
             and isinstance(entry.get("participants"), list)
             and all(faction in state.factions for faction in entry["participants"])
         )
@@ -422,24 +459,24 @@ def _check_relations(state: GameState) -> None:
         raise ValueError("Invalid diplomatic relations.")
 
 
-def _check_air_support(state: GameState) -> None:
-    orders = state.air_support
-    well_formed = isinstance(orders, list) and all(
-        isinstance(order, dict)
-        and order.get("owner") in state.factions
-        and order.get("target") in state.provinces
-        and isinstance(order.get("unit"), str)
-        for order in orders
+def _check_ascents(state: GameState) -> None:
+    ascents = state.ascents
+    well_formed = isinstance(ascents, list) and all(
+        isinstance(ascent, dict)
+        and ascent.get("owner") in state.factions
+        and ascent.get("target") in state.provinces
+        and isinstance(ascent.get("unit"), str)
+        for ascent in ascents
     )
     if not well_formed:
-        raise ValueError("Invalid air support orders.")
-    # Orders for air groups that no longer exist simply lapse.
-    state.air_support = [
-        order
-        for order in orders
-        if order["unit"] in state.units
-        and state.units[order["unit"]].kind == AIR
-        and state.units[order["unit"]].owner == order["owner"]
+        raise ValueError("Invalid balloon ascents.")
+    # Ascents by corps that no longer exist simply lapse.
+    state.ascents = [
+        ascent
+        for ascent in ascents
+        if ascent["unit"] in state.units
+        and state.units[ascent["unit"]].kind == BALLOON
+        and state.units[ascent["unit"]].owner == ascent["owner"]
     ]
 
 

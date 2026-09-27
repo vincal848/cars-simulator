@@ -1,7 +1,7 @@
 import unittest
 from copy import deepcopy
 
-from cars.sim.air import coverage, mission, support_bonus_at
+from cars.sim.balloons import coverage, mission, spotting_at
 from cars.sim.combat import resolve
 from cars.sim.entities import LAND_KINDS, Unit
 from cars.sim.graph import Edge, Graph
@@ -10,6 +10,7 @@ from cars.sim.naval import reachable_seas
 from cars.sim.orders import issue_move
 from cars.sim.supply import refresh_supply
 from cars.sim.turn import end_turn
+from cars.sim.visibility import visible_nodes
 from tests.support import compact
 
 
@@ -73,8 +74,8 @@ class LandOrderTests(unittest.TestCase):
             "gun": Unit("gun", "f0", city, "artillery"),
             "defense": Unit("defense", "f1", "cascadia", "cavalry", hp=100),
         }
-        _, message = resolve(self.state, self.state.units["attack"], city, "cascadia", Edge())
-        self.assertIn("artillery +25%", message)
+        resolve(self.state, self.state.units["attack"], city, "cascadia", Edge())
+        self.assertIn(["Artillery support", "+25%"], self.state.reports[-1]["factors"])
         self.assertEqual(self.state.units["gun"].remaining, 0)
         self.assertEqual(self.state.provinces["cascadia"].controller, "f1")
 
@@ -129,78 +130,87 @@ class NavalTests(unittest.TestCase):
         self.assertLess(fleet.hp, 10)
 
 
-class AirTests(unittest.TestCase):
+class BalloonTests(unittest.TestCase):
     def setUp(self):
         self.state, _, _ = compact()
-        self.air = self.state.units["air0"]
-        self.air.remaining = self.air.allowance
-        self.target = next(
-            p for p in coverage(self.state, self.air) if p in self.state.provinces and p != self.air.location
-        )
+        self.corps = self.state.units["balloon0"]
+        self.corps.remaining = self.corps.allowance
+        self.target = next(p for p in sorted(coverage(self.state, self.corps)) if p != self.corps.location)
         self.state.units["target"] = Unit("target", "f1", self.target, defense=4)
+        self.state.reindex_units()
 
-    def test_coverage_depends_on_holding_the_base(self):
-        self.assertIn("north_pacific", coverage(self.state, self.air))
-        self.assertIn("canadian_shield", coverage(self.state, self.air))
+    def test_range_depends_on_holding_the_post(self):
+        self.assertIn("canadian_shield", coverage(self.state, self.corps))
+        self.assertNotIn("north_pacific", coverage(self.state, self.corps))
         self.state.provinces["yukon"].controller = "f1"
-        self.assertEqual(coverage(self.state, self.air), set())
+        self.assertEqual(coverage(self.state, self.corps), set())
 
-    def test_strike_uses_the_single_sortie(self):
-        origin = self.air.location
-        self.assertTrue(mission(self.state, self.air.id, self.target, "strike")[0])
-        self.assertEqual(self.air.location, origin)
-        self.assertLess(self.state.units["target"].hp, 10)
-        self.assertLess(self.air.hp, 10)
+    def test_an_ascent_reveals_the_province_and_its_neighbours(self):
+        before = visible_nodes(self.state, "f0")
+        self.assertTrue(mission(self.state, self.corps.id, self.target, "observe")[0])
+        seen = visible_nodes(self.state, "f0")
+        self.assertLessEqual(before, seen)
+        self.assertIn(self.target, seen)
+        for neighbor, _ in self.state.land.neighbors(self.target):
+            self.assertIn(neighbor, seen)
+        self.assertEqual(self.state.reports[-1]["kind"], "ascent")
+
+    def test_one_ascent_a_turn(self):
+        self.assertTrue(mission(self.state, self.corps.id, self.target, "observe")[0])
         snapshot = deepcopy(self.state.units)
-        self.assertFalse(mission(self.state, self.air.id, self.target, "strike")[0])
+        self.assertFalse(mission(self.state, self.corps.id, self.target, "observe")[0])
         self.assertEqual(self.state.units, snapshot)
-        self.assertEqual(self.state.reports[-1]["kind"], "air strike")
-
-    def test_interceptors_spend_their_sortie(self):
-        base = next(c.province for c in self.state.cities.values() if c.province != self.air.location)
-        self.state.provinces[base].controller = "f1"
-        self.state.air.connect(base, self.target)
-        interceptor = Unit("interceptor", "f1", base, "air", attack=3)
-        self.state.units[interceptor.id] = interceptor
-        mission(self.state, self.air.id, self.target, "strike")
-        self.assertEqual(interceptor.remaining, 0)
-        self.assertIn("interceptors 1", self.state.reports[-1]["details"][0])
 
     def test_invalid_missions_change_nothing(self):
         before = deepcopy(self.state.units)
-        self.assertFalse(mission(self.state, self.air.id, "missing", "strike")[0])
-        self.assertFalse(mission(self.state, "target", self.target, "strike")[0])
-        self.assertFalse(mission(self.state, self.air.id, self.air.location, "strike")[0])
+        self.assertFalse(mission(self.state, self.corps.id, "missing", "observe")[0])
+        self.assertFalse(mission(self.state, "target", self.target, "observe")[0])
+        self.assertFalse(mission(self.state, self.corps.id, self.target, "strike")[0])
         self.assertEqual(before, self.state.units)
-        self.state.provinces[self.air.location].controller = "f1"
-        self.assertFalse(mission(self.state, self.air.id, self.target, "strike")[0])
+        self.state.provinces[self.corps.location].controller = "f1"
+        self.assertFalse(mission(self.state, self.corps.id, self.target, "observe")[0])
 
-    def test_support_expires_and_rebase_needs_an_airbase(self):
-        self.assertTrue(mission(self.state, self.air.id, self.target, "support")[0])
-        self.assertEqual(support_bonus_at(self.state, "f0", self.target), 0.25)
+    def test_observation_expires_and_relocation_needs_control(self):
+        self.assertTrue(mission(self.state, self.corps.id, self.target, "observe")[0])
+        self.assertEqual(spotting_at(self.state, "f0", self.target), 0.5)
         for _ in range(8):
             end_turn(self.state)
-        self.assertEqual(support_bonus_at(self.state, "f0", self.target), 0)
+        self.assertEqual(spotting_at(self.state, "f0", self.target), 0)
+        self.state.provinces[self.target].controller = "f1"
+        self.assertFalse(mission(self.state, self.corps.id, self.target, "relocate")[0])
         self.state.provinces[self.target].controller = "f0"
-        self.state.provinces[self.target].buildings["airfield"] = 1
-        self.assertTrue(mission(self.state, self.air.id, self.target, "rebase")[0])
-        self.assertEqual(self.air.location, self.target)
-        self.assertEqual(self.air.remaining, 0)
+        self.assertTrue(mission(self.state, self.corps.id, self.target, "relocate")[0])
+        self.assertEqual(self.corps.location, self.target)
+        self.assertEqual(self.corps.remaining, 0)
 
-    def test_support_increases_land_damage(self):
-        origin = self.air.location
+    def test_spotting_strengthens_artillery_only(self):
+        origin = self.corps.location
         attacker = self.state.units["infantry0"]
         attacker.location = origin
         self.state.provinces[self.target].controller = "f1"
-        baseline = deepcopy(self.state)
-        mission(self.state, self.air.id, self.target, "support")
-        resolve(self.state, attacker, origin, self.target, Edge())
-        resolve(baseline, baseline.units[attacker.id], origin, self.target, Edge())
 
-        def target_hp(state):
+        def attack(with_guns: bool, spotted: bool) -> float:
+            state = deepcopy(self.state)
+            if with_guns:
+                state.units["gun"] = Unit("gun", "f0", origin, "artillery")
+            if spotted:
+                mission(state, "balloon0", self.target, "observe")
+            resolve(state, state.units[attacker.id], origin, self.target, Edge())
             return state.units["target"].hp if "target" in state.units else 0
 
-        self.assertLess(target_hp(self.state), target_hp(baseline))
+        self.assertEqual(attack(False, True), attack(False, False))
+        self.assertLess(attack(True, True), attack(True, False))
+
+    def test_a_captured_post_takes_the_corps_with_it(self):
+        self.state.units["raider"] = Unit("raider", "f1", self.target, attack=100)
+        self.state.provinces[self.corps.location].controller = "f0"
+        for unit_id in [u for u, unit in self.state.units.items() if unit.location == self.corps.location]:
+            if self.state.units[unit_id].is_land:
+                del self.state.units[unit_id]
+        self.state.active_index = 1
+        self.state.reindex_units()
+        resolve(self.state, self.state.units["raider"], self.target, self.corps.location, Edge())
+        self.assertNotIn("balloon0", self.state.units)
 
 
 class JournalTests(unittest.TestCase):

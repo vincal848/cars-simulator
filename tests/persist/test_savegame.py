@@ -7,7 +7,7 @@ from unittest.mock import patch
 
 from cars.persist import savegame
 from cars.persist.savegame import SaveLibrary, load_game, save_game
-from cars.sim.air import coverage, mission
+from cars.sim.balloons import coverage, mission
 from cars.sim.campaign import Campaign
 from cars.sim.entities import Unit
 from cars.sim.market import trade
@@ -47,7 +47,7 @@ class RoundTripTests(SaveTestCase):
         unit = state.units["infantry0"]
         unit.remaining = 2.25
         unit.hp = 7.5
-        state.provinces[unit.location].buildings.update(farm=2, roads=3, shipyard=1, airfield=1)
+        state.provinces[unit.location].buildings.update(farm=2, roads=3, shipyard=1, gasworks=1)
         state.factions["f0"].resources["food"] = 123
         state.round = 9
         restored, geometry, zones, player = self.round_trip(state, shapes, seas)
@@ -55,7 +55,7 @@ class RoundTripTests(SaveTestCase):
         self.assertEqual(restored.round, 9)
         self.assertEqual(asdict(restored.units[unit.id]), asdict(unit))
         self.assertEqual(
-            restored.provinces[unit.location].buildings, dict(farm=2, roads=3, shipyard=1, airfield=1)
+            restored.provinces[unit.location].buildings, dict(farm=2, roads=3, shipyard=1, gasworks=1)
         )
         self.assertEqual(restored.factions["f0"].resources["food"], 123)
         self.assertEqual(geometry, shapes)
@@ -73,18 +73,18 @@ class RoundTripTests(SaveTestCase):
         self.assertEqual(restored.factions["f0"].gold, state.factions["f0"].gold)
         self.assertEqual(restored.clock, state.clock)
 
-    def test_objectives_journal_and_air_support(self):
+    def test_objectives_journal_and_ascents(self):
         state, shapes, seas = compact()
         begin(state, "f0")
         evaluate(state, True)
-        air = state.units["air0"]
-        target = next(p for p in coverage(state, air) if p in state.provinces and p != air.location)
+        corps = state.units["balloon0"]
+        target = next(p for p in sorted(coverage(state, corps)) if p != corps.location)
         state.units["target"] = Unit("target", "f1", target)
-        mission(state, air.id, target, "support")
+        mission(state, corps.id, target, "observe")
         restored, *_ = self.round_trip(state, shapes, seas)
         self.assertEqual(restored.objectives, state.objectives)
         self.assertEqual(restored.reports, state.reports)
-        self.assertEqual(restored.air_support, state.air_support)
+        self.assertEqual(restored.ascents, state.ascents)
 
     def test_new_units_styles_and_recruitment_limits(self):
         state, shapes, seas = compact()

@@ -14,7 +14,7 @@ BUTTON = 44
 # (action, icon, title, help)
 ITEMS = (
     ("nation", "nation", "Nation", "Your nation's history, traits, economy and objective. Shortcut: I."),
-    ("military", "military", "Military", "Every army, fleet and air group, sortable. Shortcut: U."),
+    ("military", "military", "Military", "Every army, fleet and balloon corps, sortable. Shortcut: U."),
     ("diplomacy", "diplomacy", "Diplomacy", "War, peace and the state of every rival. Shortcut: D."),
     ("market", "market", "Merchant Exchange", "Buy and sell lots of wood, food and iron. Shortcut: M."),
     ("chronicle", "chronicle", "Chronicle", "Battles and events of your campaign. Shortcut: J."),

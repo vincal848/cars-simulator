@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+- **Balloon corps replace air groups.** A corps goes up once a turn over a
+  province in range: it and its neighbours stay in view through the fog of war
+  until your next turn, and your artillery attacking it is half again as
+  effective. It can also relocate within your territory. Corps are raised in
+  cities with a gas works, which replaces the airfield. Saves are upgraded to
+  version 5; the replay ruleset is now 0.26.
+- **Itemised battle reports.** Every modifier of a battle (terrain, river,
+  high ground, supply, national traits, artillery, spotting and both sides'
+  strength) is kept as its own row in the chronicle entry.
 - **A new interface, in the manner of Victoria 3:**
   - The game draws at your screen's own resolution, sharp at any size, and the
     interface scales with it: 125% at 1080p, 150% at 1440p, 200% at 4K, or any
@@ -10,7 +19,7 @@
     brass accents.
   - An icon bar on the left opens docked panels for your nation, military,
     diplomacy, the market and the chronicle. An outliner on the right tracks
-    the objective and lists every army, fleet, air group and city.
+    the objective and lists every army, fleet, balloon corps and city.
   - Map modes (political, terrain, supply, diplomatic) replace the layer
     buttons; selecting a unit picks its layer. The command strip along the
     bottom is gone; messages appear as notifications, and help lives in

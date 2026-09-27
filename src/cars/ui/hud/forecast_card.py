@@ -8,8 +8,7 @@ from typing import TYPE_CHECKING
 
 import pygame
 
-from cars.sim.air import coverage
-from cars.sim.entities import AIR, FLEET
+from cars.sim.entities import BALLOON, FLEET
 from cars.sim.forecast import MOVE, forecast_order, signature
 from cars.ui.kit import style
 
@@ -36,20 +35,17 @@ class ForecastCard:
         unit: "Unit | None",
         target: str | None,
         paths: "Paths | None",
-        air_mode: str,
     ) -> None:
         self.rect = None
-        if not unit or unit.owner != state.active or not target:
+        # Balloon ascents fight no battles, so only attacks get a forecast.
+        if not unit or unit.owner != state.active or not target or unit.kind == BALLOON:
             return
-        mode = air_mode if unit.kind == AIR else MOVE
-        if mode == MOVE and not self._is_attack(state, unit, target, paths):
+        if not self._is_attack(state, unit, target, paths):
             return
-        if unit.kind == AIR and (target not in coverage(state, unit) or target == unit.location):
-            return
-        key = (unit.id, target, mode, signature(state))
+        key = (unit.id, target, signature(state))
         if self.key != key:
             self.key = key
-            self.result = forecast_order(state, unit.id, target, mode)
+            self.result = forecast_order(state, unit.id, target, MOVE)
         self._draw_card(state, unit, target, self.result)
 
     @staticmethod

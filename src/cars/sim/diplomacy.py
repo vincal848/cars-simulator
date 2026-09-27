@@ -92,12 +92,12 @@ def join_coalition(state: "GameState", member: str, partner: str) -> str:
 
 def _sign_peace(state: "GameState", a: str, b: str, message: str) -> None:
     state.relations[relation_key(a, b)] = {"status": PEACE, "since": state.round}
-    # Close air support can no longer be flown over the new partner's territory.
+    # Batteries no longer fire on the new partner's territory.
     partners = {a, b}
-    state.air_support = [
-        order
-        for order in state.air_support
-        if {order["owner"], state.provinces[order["target"]].controller} != partners
+    state.ascents = [
+        ascent
+        for ascent in state.ascents
+        if {ascent["owner"], state.provinces[ascent["target"]].controller} != partners
     ]
     record(state, DIPLOMACY, message, participants=[a, b])
 

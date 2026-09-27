@@ -3,7 +3,7 @@
 from typing import TYPE_CHECKING
 
 from cars.sim.combat import resolve
-from cars.sim.entities import AIR, FLEET
+from cars.sim.entities import BALLOON, FLEET
 from cars.sim.journal import record
 from cars.sim.movement import movement_cost, reachable
 from cars.sim.naval import enemy_fleets, reachable_seas, resolve_naval
@@ -24,7 +24,7 @@ def issue_move(state: "GameState", unit_id: str, destination: str) -> tuple[list
     A fleet ordered to its own sea zone attacks any enemy fleet sharing it.
     """
     unit = state.units.get(unit_id)
-    if unit is None or unit.owner != state.active or unit.kind == AIR:
+    if unit is None or unit.owner != state.active or unit.kind == BALLOON:
         return [], "Select an active faction unit."
     engage_here = unit.kind == FLEET and destination == unit.location and unit.remaining > 0
     if engage_here and enemy_fleets(state, unit, destination):

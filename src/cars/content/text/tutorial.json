@@ -6,7 +6,7 @@
   {"title": "Raise a regiment", "body": "Open one of your cities and press Raise in the recruitment table. Mind the upkeep: every regiment eats food.", "goal": "recruit"},
   {"title": "Check your supply", "body": "Select an army and switch to the supply map mode (press 3, or the wagon in the bottom-right bar). The green line runs back to its supply hub.", "goal": "supply"},
   {"title": "Consult the CARSapedia", "body": "Press F1 or the book in the icon bar. Search it, and follow the links between articles.", "goal": "pedia"},
-  {"title": "Inspect the network", "body": "Press G for the strategic atlas: the land, supply, sea and air networks the rules play on.", "goal": "strategy"},
+  {"title": "Inspect the network", "body": "Press G for the strategic atlas: the land, supply, sea and balloon networks the rules play on.", "goal": "strategy"},
   {"title": "Review the replay studio", "body": "Press R for the replay studio. Replays verify each recorded command.", "goal": "replay"},
   {"title": "End the season", "body": "Press the round End Turn button or Space. Watch the seven rivals act, then plan your next move.", "goal": "turn"}
 ]

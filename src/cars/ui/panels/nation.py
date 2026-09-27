@@ -3,7 +3,7 @@
 import pygame
 
 from cars.sim.economy import forecast, storage
-from cars.sim.entities import AIR, FLEET, RESOURCES
+from cars.sim.entities import BALLOON, FLEET, RESOURCES
 from cars.sim.market import treasury_income
 from cars.sim.nations import NATIONS
 from cars.sim.objectives import ACTIVE, campaign_stage, controlled_cities
@@ -124,7 +124,7 @@ class NationPanel(DockedPanel):
             ("Lost to enemies", (str(lost), style.BAD) if lost else "None"),
             ("Armies", str(sum(u.is_land for u in units))),
             ("Fleets", str(sum(u.kind == FLEET for u in units))),
-            ("Air groups", str(sum(u.kind == AIR for u in units))),
+            ("Balloon corps", str(sum(u.kind == BALLOON for u in units))),
         ]
         return facts(ui, x, y, width, pairs, columns=3)
 

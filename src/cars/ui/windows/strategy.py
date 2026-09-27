@@ -5,7 +5,7 @@ Normal play stays geographic; this view exposes components, cut points and bridg
 
 import pygame
 
-from cars.sim.entities import AIR, FLEET
+from cars.sim.entities import BALLOON, FLEET
 from cars.sim.movement import reachable
 from cars.sim.naval import reachable_seas
 from cars.sim.supply import supplied_provinces
@@ -82,7 +82,7 @@ class StrategyWindow(Window):
         unit = state.units.get(self.game.view.selected)
         if unit is None:
             return None
-        if self.layer == "land" and unit.kind not in (FLEET, AIR):
+        if self.layer == "land" and unit.kind not in (FLEET, BALLOON):
             return reachable(state, unit)
         if self.layer == "naval" and unit.kind == FLEET:
             return reachable_seas(state, unit)

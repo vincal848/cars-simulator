@@ -804,8 +804,8 @@
       "location": "north_pacific"
     },
     {
-      "id": "air0",
-      "kind": "air",
+      "id": "balloon0",
+      "kind": "balloon",
       "owner": "f0",
       "location": "yukon"
     }

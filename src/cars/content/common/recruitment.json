@@ -44,13 +44,13 @@
     },
     "role": "Shipyard required; deploys to its connected sea"
   },
-  "air": {
-    "name": "Air group",
+  "balloon": {
+    "name": "Balloon corps",
     "cost": {
-      "wood": 8,
-      "food": 6,
-      "iron": 15
+      "wood": 6,
+      "food": 4,
+      "iron": 8
     },
-    "role": "Airfield required; provides operational coverage"
+    "role": "Gas works required; observes and spots for artillery"
   }
 }

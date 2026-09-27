@@ -2,7 +2,7 @@ import pickle
 import unittest
 
 from cars.sim.ai import faction_actions
-from cars.sim.air import coverage
+from cars.sim.balloons import coverage
 from cars.sim.calendar import date_label, turn_phase
 from cars.sim.campaign import Campaign
 from cars.sim.entities import Unit
@@ -69,11 +69,14 @@ class CampaignTests(unittest.TestCase):
 
 
 class RivalTests(unittest.TestCase):
-    def test_rivals_use_air_and_naval_commands(self):
+    def test_rivals_use_balloons_and_fleets(self):
         state, _, _ = compact()
-        air = state.units["air0"]
-        target = next(p for p in coverage(state, air) if p in state.provinces and p != air.location)
-        state.units["target"] = Unit("target", "f1", target, defense=4)
+        corps = state.units["balloon0"]
+        target = next(p for p in sorted(coverage(state, corps)) if p != corps.location)
+        state.provinces[target].controller = "f1"
+        front = min(p for p, _ in state.land.neighbors(target))
+        state.provinces[front].controller = "f0"
+        state.units["infantry0"].location = front
         naval = Graph()
         naval.connect("a", "b")
         state.naval = naval
@@ -81,7 +84,7 @@ class RivalTests(unittest.TestCase):
         state.units["enemyfleet"] = Unit("enemyfleet", "f1", "b", "fleet")
         list(faction_actions(state))
         kinds = {report["kind"] for report in state.reports}
-        self.assertIn("air strike", kinds)
+        self.assertIn("ascent", kinds)
         self.assertIn("naval battle", kinds)
 
     def test_rivals_never_trade(self):
@@ -203,11 +206,12 @@ class ForecastTests(unittest.TestCase):
 
         own_hp, enemy_hp = strength(True), strength(False)
         _, message = issue_move(state, unit.id, target)
-        self.assertEqual(result["message"], message.split(" Terrain")[0])
+        self.assertEqual(result["message"], message)
+        self.assertIn(["River crossing", "×1"], result["factors"])
         self.assertAlmostEqual(result["own_loss"], own_hp - strength(True))
         self.assertAlmostEqual(result["enemy_loss"], enemy_hp - strength(False))
 
-    def test_signature_changes_with_supply_roads_and_air_support(self):
+    def test_signature_changes_with_supply_roads_and_ascents(self):
         state, _, _ = compact()
         unit = state.units["infantry0"]
         before = signature(state)
@@ -217,7 +221,7 @@ class ForecastTests(unittest.TestCase):
         state.provinces[unit.location].buildings["roads"] = 1
         self.assertNotEqual(before, signature(state))
         before = signature(state)
-        state.air_support.append(dict(unit="air0", owner="f0", target=unit.location))
+        state.ascents.append(dict(unit="balloon0", owner="f0", target=unit.location))
         self.assertNotEqual(before, signature(state))
 
 

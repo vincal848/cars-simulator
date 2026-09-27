@@ -1,14 +1,14 @@
 """Recovery: damaged units regain strength at the start of their faction's turn.
 
 Land units recover when supplied inside their own territory (faster in a city),
-fleets beside one of their own ports, and air groups at a working airbase.
+fleets beside one of their own ports, and balloon corps at a city they control.
 """
 
 from typing import TYPE_CHECKING
 
-from cars.sim.air import is_airbase
+from cars.sim.balloons import is_station
 from cars.sim.defines import DEFINES
-from cars.sim.entities import AIR, FLEET, FULL_STRENGTH
+from cars.sim.entities import BALLOON, FLEET, FULL_STRENGTH
 
 if TYPE_CHECKING:
     from cars.sim.entities import Unit
@@ -19,8 +19,8 @@ RULES = DEFINES.recovery
 
 def recovery_rate(state: "GameState", unit: "Unit") -> float:
     """Strength ``unit`` would regain this turn where it stands (0 if none)."""
-    if unit.kind == AIR:
-        return RULES.per_turn if is_airbase(state, unit.owner, unit.location) else 0
+    if unit.kind == BALLOON:
+        return RULES.per_turn if is_station(state, unit.owner, unit.location) else 0
     if unit.kind == FLEET:
         home_ports = {sea for province, sea in state.ports.items() if state.controls(unit.owner, province)}
         return RULES.per_turn if unit.location in home_ports else 0

@@ -7,10 +7,10 @@ movement; a successful one changes the province's controller, never its owner.
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
-from cars.sim.air import support_bonus_at
+from cars.sim.balloons import spotting_at
 from cars.sim.defines import DEFINES
-from cars.sim.entities import AIR, ARTILLERY, LAND_KINDS
-from cars.sim.journal import LAND_BATTLE, battle_report, snapshot
+from cars.sim.entities import ARTILLERY, BALLOON, LAND_KINDS
+from cars.sim.journal import LAND_BATTLE, Factors, battle_report, snapshot
 from cars.sim.nations import modifier
 
 if TYPE_CHECKING:
@@ -28,14 +28,14 @@ def supply_factor(unit: "Unit") -> float:
 def resolve(
     state: "GameState", attacker: "Unit", origin: str, destination: str, edge: "Edge"
 ) -> tuple[bool, str]:
-    """Fight for ``destination``; returns success and a message that lists the modifiers."""
+    """Fight for ``destination``; the modifiers go into the battle report."""
     before = snapshot(state)
     previous_controller = state.provinces[destination].controller
     success, outcome, factors = _fight(state, attacker, origin, destination, edge)
     report = battle_report(state, before, LAND_BATTLE, outcome, destination, factors)
     if previous_controller not in report["participants"]:
         report["participants"].append(previous_controller)
-    return success, f"{outcome} {factors}"
+    return success, outcome
 
 
 @dataclass(frozen=True)
@@ -45,7 +45,7 @@ class Assessment:
     strength: float
     defense: float
     guns: tuple["Unit", ...]
-    factors: str
+    factors: Factors
 
     def attacker_loss(self) -> float:
         return max(RULES.attacker_minimum_loss, self.defense * RULES.attacker_loss_ratio)
@@ -75,7 +75,8 @@ def assess(
     high_ground = state.provinces[origin].terrain == "mountains"
     origin_bonus = RULES.mountain_origin_bonus if high_ground else 1
     strength = attacker.attack_power() * crossing * origin_bonus
-    strength *= supply_factor(attacker) * modifier(attacker.owner, "attack", attacker.kind)
+    trait = modifier(attacker.owner, "attack", attacker.kind)
+    strength *= supply_factor(attacker) * trait
 
     guns = tuple(
         unit
@@ -88,8 +89,9 @@ def assess(
         and unit.supplied
     )
     artillery_bonus = min(RULES.artillery_bonus_cap, len(guns) * RULES.artillery_bonus_per_gun)
-    air_bonus = support_bonus_at(state, attacker.owner, destination)
-    strength *= (1 + artillery_bonus) * (1 + air_bonus)
+    spotting = spotting_at(state, attacker.owner, destination)
+    artillery_bonus *= 1 + spotting
+    strength *= 1 + artillery_bonus
 
     defense = sum(
         unit.defense_power() * supply_factor(unit) * _defence_traits(unit.owner, province)
@@ -97,8 +99,15 @@ def assess(
     )
     defense = max(RULES.minimum_defense, defense) * terrain
     factors = (
-        f"Terrain ×{terrain:g}; river ×{crossing:g}; origin ×{origin_bonus:g}; "
-        f"supply ×{supply_factor(attacker):g}; artillery +{artillery_bonus:.0%}; air +{air_bonus:.0%}."
+        ("Defender's terrain", f"×{terrain:g}"),
+        ("River crossing", f"×{crossing:g}"),
+        ("Attacking from high ground", f"×{origin_bonus:g}"),
+        ("Attacker's supply", f"×{supply_factor(attacker):g}"),
+        ("Attacker's national traits", f"×{trait:g}"),
+        ("Artillery support", f"+{artillery_bonus:.0%}"),
+        ("Balloon spotting for the guns", f"+{spotting:.0%}"),
+        ("Attack strength", f"{strength:.1f}"),
+        ("Defence strength", f"{defense:.1f}"),
     )
     return Assessment(strength, defense, guns, factors)
 
@@ -132,8 +141,8 @@ def _fight(
         return False, "Attack repulsed; defenders suffered attrition.", odds.factors
 
     province.controller = attacker.owner
-    # Enemy air groups cannot fly from a captured base.
+    # Enemy balloon corps at the post are captured with their equipment.
     for unit_id, unit in list(state.units.items()):
-        if unit.kind == AIR and unit.location == destination and unit.owner != attacker.owner:
+        if unit.kind == BALLOON and unit.location == destination and unit.owner != attacker.owner:
             del state.units[unit_id]
     return True, "Province captured; ownership unchanged.", odds.factors

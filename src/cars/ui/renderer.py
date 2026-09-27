@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING
 
 import pygame
 
-from cars.sim.air import STRIKE, coverage
+from cars.sim.balloons import OBSERVE, coverage
 from cars.sim.entities import FLEET
 from cars.sim.movement import reachable
 from cars.sim.naval import reachable_seas
@@ -48,7 +48,7 @@ class ViewState:
     message: str = ""
     debug: bool = False
     animation: MoveAnimation | None = None
-    air_mode: str = STRIKE
+    mission_mode: str = OBSERVE
 
 
 class GameRenderer:
@@ -193,7 +193,7 @@ class GameRenderer:
             inspected=view.inspected if self.panel is not None else None,
             debug=view.debug,
             animation=view.animation,
-            air_mode=view.air_mode,
+            mission_mode=view.mission_mode,
             paths=paths,
             highlights=highlights if layer != "supply" else set(),
             city_hover=self.city_at(ui.mouse()),
@@ -205,7 +205,7 @@ class GameRenderer:
         rects = self.interface_rects()
         description = self.map.draw(ui.surface, scene, rects, rects)
         if self.interactive:
-            self.unit_card.draw(state, unit, hover, paths, view.air_mode, self.place_name)
+            self.unit_card.draw(state, unit, hover, paths, view.mission_mode, self.place_name)
             self.sidebar.draw(getattr(self.panel, "name", None))
             if self.campaign.player:
                 self.outliner.draw(state, self.player, view.selected)
@@ -221,7 +221,7 @@ class GameRenderer:
         pointer_free = not window_open and not self.blocks_map(ui.mouse())
         # A forecast would reveal hidden defenders, so only forecast what can be seen.
         if pointer_free and (visible is None or hover in visible):
-            self.forecast.draw(state, unit, hover, paths, view.air_mode)
+            self.forecast.draw(state, unit, hover, paths)
         if pointer_free and description:
             self._pointer_note(description)
 

@@ -6,7 +6,7 @@ import math
 import pygame
 
 from cars.paths import load_content
-from cars.sim.entities import AIR, ARTILLERY, CAVALRY, FLEET, LAND_KINDS, SCOUT
+from cars.sim.entities import ARTILLERY, BALLOON, CAVALRY, FLEET, LAND_KINDS, SCOUT
 
 UNIFORMS: dict[str, dict] = load_content("gfx", "uniform_styles.json")
 DEFAULT_UNIFORM = "northern"
@@ -41,13 +41,15 @@ def _vessel(kind: str, color) -> pygame.Surface:
         pygame.draw.rect(s, INK, (12, 17, 13, 7))
         pygame.draw.line(s, INK, (18, 8), (18, 24), 2)
         pygame.draw.polygon(s, color, [(19, 9), (29, 13), (19, 16)])
-    elif kind == AIR:
-        airframe = [
-            (18, 3), (22, 17), (34, 24), (33, 27), (21, 24), (22, 33), (27, 36),
-            (9, 36), (14, 32), (15, 24), (3, 27), (2, 24), (14, 17),
-        ]  # fmt: skip
-        pygame.draw.polygon(s, INK, airframe)
-        pygame.draw.line(s, color, (18, 12), (18, 29), 3)
+    elif kind == BALLOON:
+        # A tethered envelope in the nation's colour, its basket and the mooring line.
+        pygame.draw.line(s, INK, (18, 25), (27, 35), 1)
+        pygame.draw.ellipse(s, color, (6, 1, 24, 22))
+        pygame.draw.ellipse(s, INK, (6, 1, 24, 22), 1)
+        pygame.draw.ellipse(s, INK, (13, 1, 10, 22), 1)
+        pygame.draw.line(s, INK, (12, 20), (16, 25), 1)
+        pygame.draw.line(s, INK, (24, 20), (20, 25), 1)
+        pygame.draw.rect(s, (120, 86, 52), (15, 25, 6, 4))
     return s
 
 

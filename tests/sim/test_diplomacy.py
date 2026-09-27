@@ -2,7 +2,7 @@ import unittest
 
 from cars.persist.replay import Playback, Recorder, digest
 from cars.sim.ai import faction_actions
-from cars.sim.air import mission
+from cars.sim.balloons import mission, spotting_at
 from cars.sim.campaign import Campaign
 from cars.sim.diplomacy import declare_war, leader, military_strength, propose_peace, truce_ends, wants_war
 from cars.sim.entities import Unit
@@ -39,13 +39,12 @@ class DiplomacyTests(unittest.TestCase):
         self.assertEqual(issue_move(self.state, self.infantry.id, "great_basin")[0], [])
         self.assertNotIn("canadian_shield", hostile_zoc(self.state, "f0"))
 
-    def test_partners_cannot_strike_each_other(self):
-        air = self.state.units["air0"]
+    def test_peace_stops_the_guns_on_observed_ground(self):
+        self.state.provinces["canadian_shield"].controller = "f1"
+        mission(self.state, "balloon0", "canadian_shield", "observe")
+        self.assertGreater(spotting_at(self.state, "f0", "canadian_shield"), 0)
         propose_peace(self.state, "f0", "f1")
-        self.state.units["partner"] = Unit("partner", "f1", "canadian_shield")
-        ok, message = mission(self.state, air.id, "canadian_shield", "strike")
-        self.assertFalse(ok)
-        self.assertIn("No enemy", message)
+        self.assertEqual(spotting_at(self.state, "f0", "canadian_shield"), 0)
 
     def test_the_truce_must_run_out_before_war(self):
         propose_peace(self.state, "f0", "f1")

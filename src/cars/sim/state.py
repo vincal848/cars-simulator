@@ -36,7 +36,8 @@ class GameState:
     tutorial: dict = field(default_factory=dict)
     clock: dict = field(default_factory=new_clock)
     reports: list[dict] = field(default_factory=list)
-    air_support: list[dict] = field(default_factory=list)
+    # Balloon ascents: provinces under observation until the observer's next turn.
+    ascents: list[dict] = field(default_factory=list)
     # Peace treaties keyed by relation_key(a, b); any pair without one is at war.
     relations: dict[str, dict] = field(default_factory=dict)
     # Scripted events: ids fired this campaign and those awaiting the player's choice.

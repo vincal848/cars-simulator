@@ -7,12 +7,12 @@ from collections.abc import Iterator
 from functools import partial
 from typing import TYPE_CHECKING
 
-from cars.sim.air import STRIKE, STRIKE_TARGET_KINDS, coverage, mission
+from cars.sim.balloons import OBSERVE, coverage, mission
 from cars.sim.buildings import BUILDINGS, build, quote
 from cars.sim.combat import assess
 from cars.sim.defines import DEFINES
 from cars.sim.diplomacy import coalition_partners, declare_war, join_coalition, wants_war
-from cars.sim.entities import AIR, FLEET, LAND_KINDS
+from cars.sim.entities import BALLOON, FLEET, LAND_KINDS
 from cars.sim.graph import step_cost
 from cars.sim.movement import reachable
 from cars.sim.nations import modifier
@@ -49,7 +49,7 @@ class RivalCommander:
     def take_turn(self) -> Iterator[Action]:
         yield from self._join_coalition()
         yield from self._consider_war()
-        yield from self._command_air_and_fleets()
+        yield from self._command_balloons_and_fleets()
         yield from self._command_armies()
         yield from self._develop()
 
@@ -72,33 +72,32 @@ class RivalCommander:
                 yield None, [], message
                 return
 
-    # Air groups and fleets ------------------------------------------------------------
+    # Balloons and fleets ------------------------------------------------------------
 
-    def _command_air_and_fleets(self) -> Iterator[Action]:
+    def _command_balloons_and_fleets(self) -> Iterator[Action]:
         for unit in self._own_units():
             if unit.remaining <= 0:
                 continue
-            if unit.kind == AIR:
-                yield from self._strike_nearest(unit)
+            if unit.kind == BALLOON:
+                yield from self._observe_front(unit)
             elif unit.kind == FLEET:
                 yield from self._hunt_fleets(unit)
 
     def _visible(self) -> set[str]:
         return visible_nodes(self.state, self.owner)
 
-    def _strike_nearest(self, unit: "Unit") -> Iterator[Action]:
-        in_range = coverage(self.state, unit) & self._visible()
+    def _observe_front(self, unit: "Unit") -> Iterator[Action]:
+        """Go up over the nearest enemy province next to our regiments, where the guns will fire."""
+        state = self.state
+        armies = {u.location for u in self._own_units() if u.is_land}
         targets = sorted(
-            {
-                other.location
-                for other in self.state.units.values()
-                if self.state.at_war(self.owner, other.owner)
-                and other.kind in STRIKE_TARGET_KINDS
-                and other.location in in_range
-            }
+            province
+            for province in coverage(state, unit)
+            if state.at_war(self.owner, state.provinces[province].controller)
+            and any(neighbor in armies for neighbor, _ in state.land.neighbors(province))
         )
         if targets:
-            ok, message = mission(self.state, unit.id, targets[0], STRIKE)
+            ok, message = mission(state, unit.id, targets[0], OBSERVE)
             if ok:
                 yield unit.id, [], message
 

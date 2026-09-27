@@ -1,12 +1,13 @@
 """Fog of war: what a faction can currently see.
 
 A faction sees its own provinces and their neighbours, everything next to its
-units and the sea zones beside its ports and fleets.
+units, the sea zones beside its ports and fleets, and what its balloons observe.
 The map itself is always known; only enemy forces are hidden.
 """
 
 from typing import TYPE_CHECKING
 
+from cars.sim.balloons import observed
 from cars.sim.entities import FLEET
 
 if TYPE_CHECKING:
@@ -30,6 +31,7 @@ def visible_nodes(state: "GameState", owner: str) -> set[str]:
         seen.add(unit.location)
         graph = state.naval if unit.kind == FLEET else state.land
         seen.update(neighbor for neighbor, _ in graph.neighbors(unit.location))
+    seen.update(observed(state, owner))
     return seen
 
 

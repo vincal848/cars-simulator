@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 
 from cars.paths import load_content
 from cars.sim.defines import DEFINES
-from cars.sim.entities import AIR, FLEET, UNIT_STATS, Unit
+from cars.sim.entities import BALLOON, FLEET, UNIT_STATS, Unit
 from cars.sim.journal import record
 from cars.sim.nations import modifier
 from cars.sim.regional import charter_for
@@ -18,7 +18,7 @@ REGIONAL = "regional"
 RECRUITS: dict[str, dict] = load_content("common", "recruitment.json")
 
 # Service branches need a facility in the recruiting province.
-REQUIRED_FACILITY = {FLEET: "shipyard", AIR: "airfield"}
+REQUIRED_FACILITY = {FLEET: "shipyard", BALLOON: "gasworks"}
 
 
 @dataclass(frozen=True)
@@ -109,6 +109,6 @@ def recruit(state: "GameState", province: str, kind: str) -> tuple[str | None, s
     state.reindex_units()
     refresh_supply(state)
     record(state, "recruitment", option.name + " recruited.", province, [unit_id])
-    if kind == AIR:
-        return unit_id, option.name + " formed. Select Air to see coverage."
+    if kind == BALLOON:
+        return unit_id, option.name + " formed. Select it to see its range."
     return unit_id, option.name + " recruited. Ready to move next turn."

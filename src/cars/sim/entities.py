@@ -9,10 +9,10 @@ SCOUT = "scout"
 CAVALRY = "cavalry"
 ARTILLERY = "artillery"
 FLEET = "fleet"
-AIR = "air"
+BALLOON = "balloon"
 
 LAND_KINDS = frozenset((INFANTRY, SCOUT, CAVALRY, ARTILLERY))
-UNIT_KINDS = LAND_KINDS | {FLEET, AIR}
+UNIT_KINDS = LAND_KINDS | {FLEET, BALLOON}
 RESOURCES = ("wood", "food", "iron")
 
 # Hit points of a regiment at full strength; combat scales ratings by hp / FULL_STRENGTH.
@@ -58,7 +58,6 @@ class City:
     population: int = 100
     supply_hub: bool = True
     port: str | None = None
-    airbase: bool = True
     coordinates: list | None = None
     style: str = ""
     location_source: str = "Province supply-hub anchor"
@@ -97,7 +96,7 @@ class Unit:
         """The map layer this unit is commanded from."""
         if self.kind == FLEET:
             return "naval"
-        if self.kind == AIR:
+        if self.kind == BALLOON:
             return "air"
         return "land"
 

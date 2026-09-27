@@ -3,7 +3,7 @@ import unittest
 import pygame
 
 from cars.persist.replay import digest
-from cars.sim.air import coverage
+from cars.sim.balloons import coverage
 from cars.sim.entities import Unit
 from cars.sim.movement import reachable
 from cars.sim.scenario import DETAILED_SCENARIO
@@ -68,18 +68,19 @@ class OrdersTests(ScreenTestCase):
         self.key(pygame.K_TAB)
         self.assertEqual(self.game.view.selected, "second")
 
-    def test_air_missions_from_the_unit_card(self):
-        air = self.state.units["air0"]
-        self.game.select(air.id)
+    def test_balloon_missions_from_the_unit_card(self):
+        corps = self.state.units["balloon0"]
+        self.game.select(corps.id)
         self.draw()
-        self.click(self.renderer.unit_card.mission_rect("support").center)
-        self.assertEqual(self.game.view.air_mode, "support")
-        self.click(self.renderer.unit_card.mission_rect("strike").center)
-        target = next(p for p in coverage(self.state, air) if p in self.state.provinces and p != air.location)
+        self.click(self.renderer.unit_card.mission_rect("relocate").center)
+        self.assertEqual(self.game.view.mission_mode, "relocate")
+        self.click(self.renderer.unit_card.mission_rect("observe").center)
+        target = next(p for p in sorted(coverage(self.state, corps)) if p != corps.location)
         self.state.units["target"] = Unit("target", "f1", target)
         self.draw()
         self.click(self.map.anchors[target])
-        self.assertEqual(self.state.units[air.id].remaining, 0)
+        self.assertEqual(self.state.units[corps.id].remaining, 0)
+        self.assertEqual(self.state.ascents[-1]["target"], target)
 
     def test_right_click_opens_the_province_and_escape_backs_out(self):
         self.game.select("infantry0")

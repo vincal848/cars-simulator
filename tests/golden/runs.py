@@ -19,7 +19,7 @@ import pygame
 from cars.persist.replay import Playback, Recorder, digest
 from cars.persist.savegame import decode_game, encode_game
 from cars.sim.ai import faction_actions
-from cars.sim.air import coverage
+from cars.sim.balloons import coverage
 from cars.sim.buildings import BUILDINGS
 from cars.sim.buildings import quote as quote_build
 from cars.sim.calendar import date_label, turn_phase
@@ -45,7 +45,7 @@ from cars.ui.screens.title import TitleScreen
 from cars.ui.typography import FONT_CHOICES, system_font
 
 EXAMPLE_REPLAY = Path(__file__).resolve().parents[2] / "examples" / "opening.json"
-RECRUIT_KINDS = ("infantry", "scout", "cavalry", "artillery", "fleet", "air", "regional", "bogus")
+RECRUIT_KINDS = ("infantry", "scout", "cavalry", "artillery", "fleet", "balloon", "regional", "bogus")
 OFF_SCREEN = (-100, -100)
 
 
@@ -66,7 +66,7 @@ def snapshot(state) -> dict:
         objectives=state.objectives,
         market=state.market,
         recruited=list(state.recruited),
-        air_support=state.air_support,
+        ascents=state.ascents,
         units=[
             (u.id, u.owner, u.kind, u.location, repr(u.hp), repr(u.remaining), u.supplied, u.regional)
             for u in state.units.values()
@@ -106,7 +106,7 @@ def probes(state, player: str) -> dict:
     own = sorted(p for p in state.provinces if state.provinces[p].controller == player)[:6]
     out["build"] = {p + k: quote_build(state, p, k) for p in own for k in BUILDINGS}
     out["recruit"] = {p + k: quote_recruit(state, p, k) for p in own for k in RECRUIT_KINDS}
-    out["coverage"] = {u.id: sorted(coverage(state, u)) for u in state.units.values() if u.kind == "air"}
+    out["coverage"] = {u.id: sorted(coverage(state, u)) for u in state.units.values() if u.kind == "balloon"}
     forecasts = {}
     for unit in sorted(state.units.values(), key=lambda u: u.id):
         if unit.owner != state.active or unit.remaining <= 0:
@@ -116,9 +116,9 @@ def probes(state, player: str) -> dict:
             out.setdefault("reach", {})[unit.id] = sorted((k, repr(v)) for k, v in costs.items())
             for target in sorted(costs)[:4]:
                 forecasts[unit.id + target] = forecast_order(state, unit.id, target)
-        elif unit.kind == "air":
+        elif unit.kind == "balloon":
             for target in sorted(coverage(state, unit))[:3]:
-                for mode in ("strike", "support", "rebase"):
+                for mode in ("observe", "relocate"):
                     forecasts[unit.id + target + mode] = forecast_order(state, unit.id, target, mode)
     out["forecasts"] = {k: {kk: repr(vv) for kk, vv in v.items()} for k, v in forecasts.items()}
     return out
@@ -166,19 +166,19 @@ def recorded_campaign() -> Iterator[tuple[str, dict]]:
                 costs = reachable(state, unit).costs
                 farthest = sorted(costs, key=lambda p: (-costs[p], p))
                 log.append(repr(campaign.move(unit_id, farthest[0])))
-            elif unit.kind == "air":
+            elif unit.kind == "balloon":
                 in_range = sorted(coverage(state, unit))
                 if in_range:
-                    mode = "support" if round_number % 2 else "strike"
-                    log.append(repr(campaign.air_mission(unit_id, in_range[-1], mode)))
+                    mode = "relocate" if round_number % 2 else "observe"
+                    log.append(repr(campaign.balloon_mission(unit_id, in_range[-1], mode)))
         provinces = sorted(p for p in state.provinces if state.provinces[p].controller == "f0")
         for province in provinces:
-            for kind in ("air", "fleet", "regional", "infantry", "cavalry"):
+            for kind in ("balloon", "fleet", "regional", "infantry", "cavalry"):
                 result = campaign.recruit(province, kind)
                 if result[0]:
                     log.append(repr(result))
         for province in provinces:
-            for kind in ("farm", "roads", "mine", "airfield", "shipyard"):
+            for kind in ("farm", "roads", "mine", "gasworks", "shipyard"):
                 result = campaign.construct(province, kind)
                 if result[0]:
                     log.append(repr(result))

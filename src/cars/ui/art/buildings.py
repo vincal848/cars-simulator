@@ -81,13 +81,17 @@ def _shipyard(tile, time, _active) -> None:
     pygame.draw.line(tile, STONE, (56, 30), (56, 38 + int(3 * math.sin(time))), 2)
 
 
-def _airfield(tile, time, _active) -> None:
-    pygame.draw.polygon(tile, (98, 101, 88), [(9, 70), (42, 29), (73, 39), (41, 78)])
-    pygame.draw.rect(tile, STONE, (7, 29, 36, 27))
-    pygame.draw.polygon(tile, ROOF, [(4, 30), (25, 15), (46, 30)])
-    pygame.draw.rect(tile, (36, 36, 33), (16, 38, 20, 18))
-    pygame.draw.line(tile, GILT, (65, 16), (65, 48), 2)
-    pygame.draw.polygon(tile, ROOF, [(65, 16), (48, 18 + int(2 * math.sin(time * 2))), (65, 23)])
+def _gasworks(tile, time, _active) -> None:
+    # A gasholder beside the retort house, its bell rising and falling.
+    lift = int(3 * math.sin(time))
+    pygame.draw.rect(tile, (72, 76, 80), (38, 30 + lift, 34, 38 - lift))
+    pygame.draw.ellipse(tile, (98, 104, 108), (38, 25 + lift, 34, 10))
+    for x in (38, 49, 60, 71):
+        pygame.draw.line(tile, STONE, (x, 22), (x, 70), 2)
+    pygame.draw.line(tile, STONE, (37, 22), (72, 22), 2)
+    pygame.draw.rect(tile, STONE, (6, 40, 30, 30))
+    pygame.draw.polygon(tile, ROOF, [(3, 41), (21, 27), (39, 41)])
+    pygame.draw.rect(tile, (60, 52, 46), (12, 12, 6, 22))
 
 
 def _mine(tile, time, active) -> None:
@@ -108,7 +112,7 @@ _DRAWERS = {
     "lumber_mill": _lumber_mill,
     "roads": _roads,
     "shipyard": _shipyard,
-    "airfield": _airfield,
+    "gasworks": _gasworks,
     "mine": _mine,
 }
 
