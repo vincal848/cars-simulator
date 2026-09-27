@@ -8,7 +8,7 @@ C.A.R.S. is a turn-based grand-strategy prototype set in an imagined Americas of
 air groups and supply lines each move on their own graph, and every rule works
 on those graphs. The map you see is only a way to click on them.
 
-![Campaign map with a route preview](docs/img/campaign.png)
+![The campaign map with a route and order forecast](docs/img/campaign.png)
 
 ## Features
 
@@ -42,10 +42,10 @@ on those graphs. The map you see is only a way to click on them.
 - Original procedural artwork, a classical music collection and fully offline play.
 
 <p>
-  <img src="docs/img/province.png" width="49%" alt="Province window with recruitment">
-  <img src="docs/img/strategy.png" width="49%" alt="Strategy inspector showing the land graph">
-  <img src="docs/img/carsapedia.png" width="49%" alt="CARSapedia unit page">
-  <img src="docs/img/replay.png" width="49%" alt="Replay playback">
+  <img src="docs/img/province.png" width="49%" alt="Province panel with its buildings table">
+  <img src="docs/img/diplomacy.png" width="49%" alt="Diplomacy panel and the war screen">
+  <img src="docs/img/carsapedia.png" width="49%" alt="CARSapedia article on land battles">
+  <img src="docs/img/picker.png" width="49%" alt="Choosing a nation">
 </p>
 
 ## Play
@@ -78,7 +78,7 @@ Useful options: `--tutorial`, `--faction f0` (skip the picker),
 Start with **Guided Tutorial**: ten short lessons that finish when you actually
 do each thing. To win a campaign, hold three cities for five consecutive rounds.
 
-![Moving, building and inspecting the strategy graph](docs/img/gameplay.gif)
+![Choosing a nation, marching, the province and diplomacy panels, map modes and the CARSapedia](docs/img/gameplay.gif)
 
 | Input | Action |
 | --- | --- |
