@@ -34,7 +34,7 @@ on those graphs. The map you see is only a way to click on them.
 
 <p>
   <img src="docs/img/province.png" width="49%" alt="Province window with recruitment">
-  <img src="docs/img/strategy.png" width="49%" alt="Strategy inspector showing the supply graph">
+  <img src="docs/img/strategy.png" width="49%" alt="Strategy inspector showing the land graph">
   <img src="docs/img/carsapedia.png" width="49%" alt="CARSapedia unit page">
   <img src="docs/img/replay.png" width="49%" alt="Replay playback">
 </p>
