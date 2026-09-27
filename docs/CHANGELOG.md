@@ -2,6 +2,29 @@
 
 ## Unreleased
 
+- **A new interface, in the manner of Victoria 3:**
+  - The game draws at your screen's own resolution, sharp at any size, and the
+    interface scales with it: 125% at 1080p, 150% at 1440p, 200% at 4K, or any
+    size you choose in Settings.
+  - A lighter palette: parchment panels with dark ink, slate-blue headers and
+    brass accents.
+  - An icon bar on the left opens docked panels for your nation, military,
+    diplomacy, the market and the chronicle. An outliner on the right tracks
+    the objective and lists every army, fleet, air group and city.
+  - Map modes (political, terrain, supply, diplomatic) replace the layer
+    buttons; selecting a unit picks its layer. The command strip along the
+    bottom is gone; messages appear as notifications, and help lives in
+    tooltips and a keyboard reference.
+  - The province panel is one page with production, buildings and recruitment
+    tables. Military, diplomacy and market panels are sortable tables. The
+    diplomacy panel includes a war screen, the only place victory points are
+    shown.
+  - Cities are drawn as their towns and names, without star pins. Travel
+    arrows are smooth, tapering curves.
+  - A new nation picker with each nation's history and traits.
+- **A complete CARSapedia:** nearly a hundred articles covering every rule,
+  nation, unit, charter, building, terrain and event, linked to one another,
+  with search, back and forward, and numbers read from the rules themselves.
 - **Nations with a history:** each nation has a ruler, capital, government,
   history and two national traits with real effects on recruitment, combat,
   movement, production, upkeep, gold and storage (`common/nations.json`).

@@ -38,6 +38,7 @@ from cars.sim.topology import analyze
 from cars.sim.turn import end_turn
 from cars.ui.audio import Audio
 from cars.ui.context import UiContext
+from cars.ui.map.map_view import MAP_MODES
 from cars.ui.screens.game import GameScreen
 from cars.ui.screens.replay import ReplayScreen
 from cars.ui.screens.title import TitleScreen
@@ -220,7 +221,7 @@ class _Camera:
         return game
 
     def frame(self, game: GameScreen, hover: str | None = None) -> pygame.Surface:
-        game.context.theme.tips.key = None  # Never let a tooltip's delay depend on wall time.
+        game.context.ui.tips.key = None  # Never let a tooltip's delay depend on wall time.
         game.draw(hover)
         return self.screen
 
@@ -245,20 +246,14 @@ def _screens(screen: pygame.Surface) -> Iterator[tuple[str, pygame.Surface]]:
     title = TitleScreen(game.context, game)
     title.draw()
     yield "title", screen
-    title.help = True
-    title.draw()
-    yield "title help", screen
-    yield "faction picker", camera.frame(game)
+    yield "nation picker", camera.frame(game)
 
     game = camera.new_game()
     state, renderer, context = game.state, game.renderer, game.context
     yield "campaign map", camera.frame(game)
-    renderer.objectives.collapsed = True
-    yield "objectives collapsed", camera.frame(game)
-    renderer.objectives.collapsed = False
 
     unit = next(u for u in sorted(state.units.values(), key=lambda u: u.id) if u.owner == "f0" and u.is_land)
-    game.view.selected = unit.id
+    game.select(unit.id)
     costs = reachable(state, unit).costs
     hostile = sorted(p for p in costs if state.provinces[p].controller != "f0")
     friendly = sorted(p for p in costs if state.provinces[p].controller == "f0" and p != unit.location)
@@ -270,67 +265,48 @@ def _screens(screen: pygame.Surface) -> Iterator[tuple[str, pygame.Surface]]:
     yield "debug graph", camera.frame(game, friendly[0] if friendly else None)
     game.view.debug = False
 
-    game.inspect(unit.location, renderer.map.anchors[unit.location])
-    for tab in ("build", "infrastructure", "recruit"):
-        renderer.province_window.select_tab(tab)
-        yield f"province {tab}", camera.frame(game)
-    for page in ("sea_air", "regional"):
-        renderer.province_window.select_recruit_page(page)
-        yield f"recruit {page}", camera.frame(game)
-    renderer.province_window.close()
+    for mode in MAP_MODES[1:]:
+        game.set_mode(mode)
+        yield f"map mode {mode}", camera.frame(game)
+    game.set_mode(MAP_MODES[0])
 
-    for layer in ("naval", "air", "supply"):
-        game.switch_layer(layer)
-        yield f"layer {layer}", camera.frame(game)
-    game.switch_layer("land")
-
-    renderer.menu.open = True
-    yield "menu", camera.frame(game)
-    renderer.menu.open = False
-    renderer.market.open = True
-    yield "market", camera.frame(game)
-    renderer.market.open = False
+    game.inspect(unit.location)
+    yield "province", camera.frame(game)
+    game.panel.scroll = 10_000
+    yield "province recruitment", camera.frame(game)
+    for name in ("nation", "military", "diplomacy", "market", "chronicle"):
+        game.open_panel(name)
+        yield f"panel {name}", camera.frame(game)
+    game.renderer.panel = None
 
     context.audio = Audio()
-    dialogs = (
-        "pedia",
-        "strategy",
-        "replay",
-        "reports",
-        "roster",
-        "diplomacy",
-        "settings",
-        "music",
-        "timeline",
-        "save",
-        "load",
-    )
-    for mode in dialogs:
-        game.dialogs.open(mode)
-        yield f"dialog {mode}", camera.frame(game)
+    for name in ("menu", "settings", "music", "keyboard", "timeline", "strategy", "replay", "save", "load"):
+        game.open_window(name)
+        yield f"window {name}", camera.frame(game)
     state.events["fired"].append("bountiful_harvest")
     state.events["pending"].append("bountiful_harvest")
-    game.dialogs.open("event")
-    yield "dialog event", camera.frame(game)
+    game.open_window("event")
+    yield "window event", camera.frame(game)
     state.events["pending"].clear()
-    pedia = game.dialogs.dialogs["pedia"]
-    game.dialogs.open("pedia")
-    pedia.section, pedia.index = "Units", 2
-    yield "pedia units", camera.frame(game)
-    pedia.section, pedia.index = "History", 0
-    yield "pedia history", camera.frame(game)
-    game.dialogs.open("strategy")
-    strategy = game.dialogs.active
+    for article in ("welcome", "combat", "unit-cavalry", "nation-f3", "traits"):
+        game.open_pedia(article)
+        yield f"pedia {article}", camera.frame(game)
+    pedia = game.windows["pedia"]
+    pedia.query = "supply"
+    yield "pedia search", camera.frame(game)
+    pedia.query = ""
+    game.open_window("strategy")
+    strategy = game.window
     strategy.layer = "supply"
     camera.frame(game)
     strategy.selected = sorted(strategy.points)[0]
     yield "strategy supply", camera.frame(game)
-    game.dialogs.close()
+    game.window = None
     context.audio = None
 
-    renderer.map.zoom(2.6, renderer.map.anchors[unit.location])
+    renderer.map.zoom(1.6, renderer.map.anchors[unit.location])
     yield "zoomed", camera.frame(game)
-    renderer.map.zoom(3.0, renderer.map.anchors[unit.location])
+    renderer.map.zoom(3.4, renderer.map.anchors[unit.location])
     yield "zoomed max", camera.frame(game)
 
     for _ in range(16):
@@ -341,12 +317,12 @@ def _screens(screen: pygame.Surface) -> Iterator[tuple[str, pygame.Surface]]:
     renderer.map.reset_camera()
     game.view.selected = None
     yield "after rival turns", camera.frame(game)
-    game.dialogs.open("reports")
-    yield "chronicle battles", camera.frame(game)
-    game.dialogs.active.battles_only = False
-    yield "chronicle all", camera.frame(game)
-    game.dialogs.open("roster")
-    yield "roster after rival turns", camera.frame(game)
+    for name in ("chronicle", "military", "diplomacy"):
+        game.open_panel(name)
+        yield f"{name} after rival turns", camera.frame(game)
+    game.panels["chronicle"].filter = "all"
+    game.open_panel("chronicle")
+    yield "chronicle everything", camera.frame(game)
 
     game = camera.new_game(None)
     game.start_tutorial()

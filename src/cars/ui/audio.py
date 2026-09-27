@@ -13,6 +13,8 @@ from typing import ClassVar
 import pygame
 
 from cars.paths import content_path, read_json, settings_path, write_text_atomic
+from cars.ui.kit.ui import SCALES
+from cars.ui.typography import DEFAULT_FONT, FONT_CHOICES
 
 MUSIC_DIR = content_path("music")
 EFFECT_NOTES = {
@@ -30,7 +32,15 @@ TOGGLES = ("autosave", "paused", "shuffle")
 
 class Audio:
     DEFAULTS: ClassVar[dict] = dict(
-        master=0.6, effects=0.7, music=0.25, autosave=True, track=0, paused=False, shuffle=False
+        master=0.6,
+        effects=0.7,
+        music=0.25,
+        autosave=True,
+        track=0,
+        paused=False,
+        shuffle=False,
+        ui_scale=0,  # 0 follows the window size
+        font=DEFAULT_FONT,
     )
 
     def __init__(self, path: Path | None = None) -> None:
@@ -74,6 +84,10 @@ class Audio:
                     self.settings[key] = values[key]
             if type(values.get("track")) is int:
                 self.settings["track"] = values["track"]
+            if values.get("ui_scale") in (0, *SCALES):
+                self.settings["ui_scale"] = values["ui_scale"]
+            if values.get("font") in range(len(FONT_CHOICES)):
+                self.settings["font"] = values["font"]
         except (OSError, ValueError, AttributeError):
             pass
 
@@ -91,6 +105,11 @@ class Audio:
         else:
             self.settings[key] = round(max(0, min(1, self.settings[key] + delta)), 2)
         self.apply()
+        self.persist()
+
+    def set(self, key: str, value) -> None:
+        """Store a preference that is not a volume or switch, such as the UI scale."""
+        self.settings[key] = value
         self.persist()
 
     def persist(self) -> None:

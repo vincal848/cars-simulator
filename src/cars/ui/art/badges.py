@@ -1,5 +1,6 @@
-"""Engraved circular insignia for buttons and headings, cached per kind and size."""
+"""The interface's icons: small engraved emblems, drawn flat in any colour and cached."""
 
+import math
 from functools import lru_cache
 
 import pygame
@@ -10,16 +11,15 @@ HIGHLIGHT = (250, 222, 163)
 RIM = (110, 74, 43)
 
 
-@lru_cache(maxsize=128)
-def badge(kind: str, size: int = 28) -> pygame.Surface:
+@lru_cache(maxsize=256)
+def glyph(kind: str, size: int, color: tuple[int, int, int]) -> pygame.Surface:
+    """The emblem alone, flat in one colour: the interface's icon set."""
     s = pygame.Surface((CANVAS, CANVAS), pygame.SRCALPHA)
-    pygame.draw.circle(s, (15, 13, 19, 170), (66, 68), 59)
-    pygame.draw.circle(s, RIM, (64, 64), 58)
-    pygame.draw.circle(s, (65, 24, 36), (64, 64), 54)
-    pygame.draw.circle(s, GILT, (64, 64), 52, 2)
-    pygame.draw.arc(s, HIGHLIGHT, (8, 8, 112, 112), 0.3, 2.9, 3)
     _EMBLEMS.get(kind, _document)(s)
-    return pygame.transform.smoothscale(s, (size, size))
+    icon = pygame.transform.smoothscale(s, (size, size))
+    icon.fill((0, 0, 0, 255), special_flags=pygame.BLEND_RGB_MULT)
+    icon.fill((*color, 0), special_flags=pygame.BLEND_RGBA_ADD)
+    return icon
 
 
 def _line(s, a, b, width=5) -> None:
@@ -128,6 +128,54 @@ def _document(s) -> None:
     _poly(s, [(79, 83), (105, 90), (95, 111), (80, 101)])
 
 
+def _flag(s) -> None:
+    _line(s, (36, 24), (36, 106), 6)
+    _poly(s, [(39, 28), (98, 36), (84, 52), (98, 68), (39, 64)])
+
+
+def _book(s) -> None:
+    _poly(s, [(22, 36), (60, 44), (60, 100), (22, 92)])
+    _poly(s, [(106, 36), (68, 44), (68, 100), (106, 92)])
+
+
+def _scales(s) -> None:
+    _line(s, (64, 26), (64, 100), 5)
+    _line(s, (30, 38), (98, 38), 5)
+    _line(s, (46, 104), (82, 104), 6)
+    for x in (30, 98):
+        _line(s, (x, 38), (x - 14, 70), 3)
+        _line(s, (x, 38), (x + 14, 70), 3)
+        pygame.draw.arc(s, GILT, (x - 17, 52, 34, 30), 3.14, 6.28, 6)
+
+
+def _treaty(s) -> None:
+    """A rolled treaty hung with a seal."""
+    pygame.draw.rect(s, GILT, (30, 34, 68, 44), 5)
+    for x in (30, 98):
+        pygame.draw.ellipse(s, GILT, (x - 9, 30, 18, 52))
+    _line(s, (64, 78), (58, 98), 4)
+    _line(s, (64, 78), (70, 98), 4)
+    pygame.draw.circle(s, GILT, (64, 78), 11)
+
+
+def _star(s) -> None:
+    points = []
+    for i in range(10):
+        angle = -math.pi / 2 + i * math.pi / 5
+        radius = 44 if i % 2 == 0 else 18
+        points.append((64 + math.cos(angle) * radius, 66 + math.sin(angle) * radius))
+    _poly(s, points)
+
+
+def _next(s) -> None:
+    for x in (34, 64):
+        _poly(s, [(x, 30), (x + 34, 64), (x, 98), (x, 82), (x + 18, 64), (x, 46)])
+
+
+def _mountain(s) -> None:
+    _poly(s, [(18, 100), (54, 34), (76, 70), (88, 52), (112, 100)])
+
+
 _EMBLEMS = {
     "land": _crossed_swords,
     "recruit": _crossed_swords,
@@ -145,4 +193,16 @@ _EMBLEMS = {
     "gold": _coin,
     "end": _clock,
     "settings": _gear,
+    "menu": _gear,
+    "nation": _flag,
+    "political": _flag,
+    "pedia": _book,
+    "market": _scales,
+    "diplomacy": _treaty,
+    "chronicle": _document,
+    "military": _crossed_swords,
+    "war": _crossed_swords,
+    "star": _star,
+    "terrain_mode": _mountain,
+    "next": _next,
 }

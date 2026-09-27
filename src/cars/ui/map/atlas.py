@@ -14,6 +14,7 @@ wash with lighter shallows along the coast.
 import math
 import random
 from collections import defaultdict
+from collections.abc import Callable
 from typing import TYPE_CHECKING
 
 import pygame
@@ -23,7 +24,6 @@ from cars.ui.camera import point_in_polygon
 from cars.ui.map.geometry import Border, Point, Rings
 from cars.ui.map.nation_labels import NationNames, render
 from cars.ui.map.relief import (
-    DETAIL_SCALE,
     RASTER_HEIGHT_DEGREES,
     RASTER_NORTH,
     RASTER_WEST,
@@ -38,6 +38,7 @@ if TYPE_CHECKING:
     from cars.sim.state import GameState
 
 TILE = 256
+Color = tuple[int, int, int]
 OPEN_SEA = (35, 62, 83)  # The graded raster sea at its edges, so the two meet unseen.
 SEA_GRADE = (80, 102, 112)  # Multiplies the raster's sea (and unclaimed land) into a dark wash.
 # The colour that SEA_GRADE turns into OPEN_SEA, used to fade out the raster's edges.
@@ -49,10 +50,10 @@ EDGE_GLOW_DEGREES = 1.1
 EDGE_GLOW_ALPHA = 70  # Per band; three bands overlap into a gradient at the frontier.
 PROVINCE_LINE_ALPHA = 120
 NATION_LINE = (34, 27, 23)
+TERRAIN_LINE = (150, 140, 120)
 COAST_LINE = (26, 38, 40, 210)
 FOG = (8, 14, 20, 105)
 SYMBOLS_PER_PROVINCE = 3
-NAMES_BELOW_SCALE = 8  # Zoomed in further, province names take over from nation names.
 
 
 class Atlas:
@@ -63,10 +64,22 @@ class Atlas:
         borders: list[Border],
         scale: float,
         names: NationNames | None = None,
+        detail: bool = False,
+        pixel: float = 1.0,
+        fill: Callable[[str], Color | None] | None = None,
     ) -> None:
+        """``fill`` gives each province's colour for the map mode (None leaves bare relief;
+        by default the controlling nation's colour). ``names`` letters nation names (zoomed
+        out); ``detail`` adds terrain symbols and heavier borders (zoomed in); ``pixel`` is
+        the UI scale, for line widths and lettering."""
         self.state = state
+        self.fill = fill or (
+            lambda province: tuple(state.factions[state.provinces[province].controller].color)
+        )
         self.scale = scale
-        self.names = names if scale < NAMES_BELOW_SCALE else None
+        self.names = names
+        self.detail = detail
+        self.pixel = pixel
         self._lettering: list[tuple[pygame.Surface, pygame.Rect]] | None = None
         self.size = (math.ceil(RASTER_WIDTH_DEGREES * scale), math.ceil(RASTER_HEIGHT_DEGREES * scale))
         self.columns = math.ceil(self.size[0] / TILE)
@@ -78,7 +91,7 @@ class Atlas:
         self.bounds = {province: _bounds(polygons) for province, polygons in self.polygons.items()}
         self.borders = [(border, [self.world(point) for point in border.line]) for border in borders]
         self.border_bounds = [_line_bounds(line) for _, line in self.borders]
-        self.symbols = _symbols(state, self.polygons) if scale >= DETAIL_SCALE else {}
+        self.symbols = _symbols(state, self.polygons) if detail else {}
         self._relief: pygame.Surface | None = None
         self._tiles: dict[tuple[int, int], pygame.Surface] = {}
         self._fog_tiles: dict[tuple[int, int], pygame.Surface] = {}
@@ -153,7 +166,9 @@ class Atlas:
         if self._lettering is None:
             self._lettering = []
             for nation, curve in self.names.curves() if self.names else []:
-                name = render(self.state.factions[nation].name, curve, self.scale, self.names.font)
+                name = render(
+                    self.state.factions[nation].name, curve, self.scale, self.names.font, self.pixel
+                )
                 if name:
                     self._lettering.append(name)
         return self._lettering
@@ -189,11 +204,11 @@ class Atlas:
             i for i, bounds in enumerate(self.border_bounds) if bounds.colliderect(area.inflate(64, 64))
         ]
         self._paint_shallows(tile, area, borders)
-        by_nation: dict[str, list[str]] = defaultdict(list)
+        by_fill: dict[Color | None, list[str]] = defaultdict(list)
         for province in provinces:
-            by_nation[self.state.provinces[province].controller].append(province)
-        for nation, members in sorted(by_nation.items()):
-            tile.blit(self._nation_layer(land, area, nation, members, borders), (0, 0))
+            by_fill[self.fill(province)].append(province)
+        for color, members in sorted(by_fill.items(), key=lambda item: str(item[0])):
+            tile.blit(self._land_layer(land, area, color, members, borders), (0, 0))
         self._paint_symbols(tile, area, provinces)
         self._paint_borders(tile, area, borders)
         grain = paper_grain()
@@ -212,26 +227,27 @@ class Atlas:
             layer.blit(stroke, (0, 0))
         tile.blit(layer, (0, 0))
 
-    def _nation_layer(self, land, area, nation, members, borders) -> pygame.Surface:
-        """Relief tinted in ``nation``'s colour, with a glow along its frontiers, cut to its land."""
-        color = self.state.factions[nation].color
+    def _land_layer(self, land, area, color: Color | None, members, borders) -> pygame.Surface:
+        """Relief tinted in ``color`` (bare relief for None), with a glow along its frontiers,
+        cut to the land of ``members``."""
         layer = land.convert_alpha()
-        # Dye the relief so its shading survives, then lay the flat colour over it.
-        layer.fill([int(c * 0.6 + 102) for c in color], special_flags=pygame.BLEND_RGB_MULT)
-        tint = pygame.Surface((TILE, TILE), pygame.SRCALPHA)
-        tint.fill((*color, LAND_TINT))
-        layer.blit(tint, (0, 0))
-        frontiers = [
-            _shift(line, area)
-            for border, line in (self.borders[index] for index in borders)
-            if self._is_frontier(border) and any(self._controller(p) == nation for p in border.provinces)
-        ]
-        glow_color = (*_brighten(color), EDGE_GLOW_ALPHA)
-        for fraction in (1, 0.66, 0.33):
-            band = pygame.Surface((TILE, TILE), pygame.SRCALPHA)
-            for points in frontiers:
-                _stroke(band, glow_color, points, max(2, round(self._glow_width() * fraction)))
-            layer.blit(band, (0, 0))
+        if color is not None:
+            # Dye the relief so its shading survives, then lay the flat colour over it.
+            layer.fill([int(c * 0.6 + 102) for c in color], special_flags=pygame.BLEND_RGB_MULT)
+            tint = pygame.Surface((TILE, TILE), pygame.SRCALPHA)
+            tint.fill((*color, LAND_TINT))
+            layer.blit(tint, (0, 0))
+            frontiers = [
+                _shift(line, area)
+                for border, line in (self.borders[index] for index in borders)
+                if self._is_frontier(border) and any(self.fill(p) == color for p in border.provinces)
+            ]
+            glow_color = (*_brighten(color), EDGE_GLOW_ALPHA)
+            for fraction in (1, 0.66, 0.33):
+                band = pygame.Surface((TILE, TILE), pygame.SRCALPHA)
+                for points in frontiers:
+                    _stroke(band, glow_color, points, max(2, round(self._glow_width() * fraction)))
+                layer.blit(band, (0, 0))
         mask = pygame.Surface((TILE, TILE), pygame.SRCALPHA)
         for province in members:
             for rings in self.polygons[province]:
@@ -243,7 +259,7 @@ class Atlas:
 
     def _paint_borders(self, tile: pygame.Surface, area: pygame.Rect, borders: list[int]) -> None:
         lines = pygame.Surface((TILE, TILE), pygame.SRCALPHA)
-        nation_width = 2 if self.scale < 10 else 3
+        nation_width = max(2, round((3 if self.detail else 2) * self.pixel))
         for index in borders:
             border, line = self.borders[index]
             points = _shift(line, area)
@@ -252,9 +268,7 @@ class Atlas:
             elif self._is_frontier(border):
                 _stroke(lines, NATION_LINE, points, nation_width)
             else:
-                shade = tuple(
-                    int(c * 0.5) for c in self.state.factions[self._controller(border.provinces[0])].color
-                )
+                shade = tuple(int(c * 0.5) for c in self.fill(border.provinces[0]) or TERRAIN_LINE)
                 pygame.draw.aalines(lines, (*shade, PROVINCE_LINE_ALPHA), False, points)
         tile.blit(lines, (0, 0))
 
@@ -275,11 +289,8 @@ class Atlas:
                     pygame.draw.polygon(fog, FOG, _shift(rings[0], area))
         return fog
 
-    def _controller(self, province: str) -> str:
-        return self.state.provinces[province].controller
-
     def _is_frontier(self, border: Border) -> bool:
-        return len({self._controller(p) for p in border.provinces}) > 1
+        return len({self.fill(p) for p in border.provinces}) > 1
 
     def _glow_width(self) -> int:
         return max(3, round(EDGE_GLOW_DEGREES * self.scale))

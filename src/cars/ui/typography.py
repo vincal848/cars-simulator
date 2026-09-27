@@ -10,5 +10,5 @@ FONT_CHOICES = [
 DEFAULT_FONT = 1
 
 
-def system_font(index: int, size: int, italic: bool = False) -> pygame.font.Font:
-    return pygame.font.SysFont(FONT_CHOICES[index][1], size, italic=italic)
+def system_font(index: int, size: int, italic: bool = False, bold: bool = False) -> pygame.font.Font:
+    return pygame.font.SysFont(FONT_CHOICES[index][1], size, bold=bold, italic=italic)

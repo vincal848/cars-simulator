@@ -118,10 +118,15 @@ def territories(polygons: list[list[Rings]]) -> list[NameCurve]:
 
 
 def render(
-    name: str, curve: NameCurve, scale: float, font: Callable[[int], pygame.font.Font]
+    name: str,
+    curve: NameCurve,
+    scale: float,
+    font: Callable[[int], pygame.font.Font],
+    pixel: float = 1.0,
 ) -> tuple[pygame.Surface, pygame.Rect] | None:
     """The name lettered along ``curve`` for a map at ``scale`` pixels per degree, with its
     world-pixel rectangle; None when it cannot be set legibly inside the territory.
+    ``pixel`` is the UI scale, which scales the smallest and largest letter sizes.
 
     Tries one line, then two, from the largest size down, sliding the name along
     and across the curve, and accepts the first setting whose every letter stands
@@ -136,8 +141,8 @@ def render(
         )
         settings.append([" ".join(words[:split]), " ".join(words[split:])])
     for lines in settings:
-        largest = min(MAX_SIZE, int(curve.thickness * zoom * 0.62 / len(lines)))
-        for size in range(largest, MIN_SIZE - 1, -1):
+        largest = min(round(MAX_SIZE * pixel), int(curve.thickness * zoom * 0.62 / len(lines)))
+        for size in range(largest, round(MIN_SIZE * pixel) - 1, -1):
             for across in ACROSS:
                 for along in ALONG:
                     glyphs = _set(lines, font(size), curve, zoom, along, across * curve.thickness)

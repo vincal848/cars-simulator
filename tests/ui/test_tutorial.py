@@ -24,6 +24,7 @@ class TutorialTests(ScreenTestCase):
         self.tutorial = self.game.tutorial
 
     def click_card(self, name: str) -> None:
+        self.game.draw(None)
         self.tutorial.event(
             pygame.event.Event(pygame.MOUSEBUTTONDOWN, button=1, pos=self.tutorial.buttons[name].center)
         )
@@ -31,8 +32,9 @@ class TutorialTests(ScreenTestCase):
     def complete(self, goal: str) -> None:
         self.tutorial.observe()
         self.assertIn(goal, self.game.state.tutorial["seen"])
-        self.game.renderer.province_window.close()
-        self.game.dialogs.close()
+        self.game.renderer.panel = None
+        self.game.window = None
+        self.game.draw(None)
         self.click_card("next")
 
     def test_progress_is_saved_and_skipping_never_traps_the_player(self):
@@ -61,12 +63,10 @@ class TutorialTests(ScreenTestCase):
         destination = next(p for p in reachable(game.state, unit).costs if p != unit.location)
         game.campaign.move(unit.id, destination)
         self.complete("move")
-        game.inspect(destination, (400, 300))
+        game.inspect(destination)
         self.complete("inspect")
         self.assertTrue(game.campaign.construct(destination, "farm")[0])
         self.complete("build")
-        game.switch_layer("supply")
-        self.complete("supply")
         city = next(
             c.province
             for c in game.state.cities.values()
@@ -74,24 +74,30 @@ class TutorialTests(ScreenTestCase):
         )
         self.assertTrue(game.campaign.recruit(city, "infantry")[0])
         self.complete("recruit")
+        game.set_mode("supply")
+        self.complete("supply")
+        for name in ("pedia", "strategy", "replay"):
+            game.open_window(name)
+            self.complete(name)
         game.advance()
         self.finish_rival_turns()
         self.complete("turn")
-        for mode in ("pedia", "strategy", "replay"):
-            game.dialogs.open(mode)
-            self.complete(mode)
         self.assertFalse(game.state.tutorial["active"])
         playback = Playback(game.campaign.recorder.data())
         while playback.step():
             pass
         self.assertEqual(digest(playback.state), digest(game.state))
 
-    def test_lesson_text_fits_the_card_in_every_font(self):
-        theme = self.context.theme
+    def test_the_card_grows_to_fit_every_lesson_in_every_font(self):
+        ui = self.context.ui
+        progress = self.game.state.tutorial
         for font in range(3):
-            theme.set_font(font)
-            for lesson in LESSONS:
-                self.assertLessEqual(len(wrap(lesson.body, theme.small, 294)), 4)
+            ui.set_font(font)
+            for step, lesson in enumerate(LESSONS):
+                progress["step"] = step
+                self.tutorial.layout()
+                text = wrap(lesson.body, ui.font(15), self.tutorial.rect.width - ui.px(24))
+                self.assertLessEqual(len(text) * ui.font(15).get_height(), self.tutorial.rect.height)
 
     def test_malformed_progress_is_rejected_on_load(self):
         with tempfile.TemporaryDirectory() as folder:

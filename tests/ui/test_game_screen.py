@@ -1,5 +1,4 @@
 import unittest
-from unittest.mock import patch
 
 import pygame
 
@@ -8,15 +7,18 @@ from cars.sim.air import coverage
 from cars.sim.entities import Unit
 from cars.sim.movement import reachable
 from cars.sim.scenario import DETAILED_SCENARIO
-from cars.ui.map.map_view import Scene
-from cars.ui.screens.game import FOCUS_POINT
+from cars.ui.map.map_view import POLITICAL, SUPPLY
 from cars.ui.screens.replay import ReplayScreen
 from tests.ui.screen_case import ScreenTestCase
 
 
 class OrdersTests(ScreenTestCase):
-    def test_select_move_animate_and_end_turn(self):
-        self.click(self.map.anchors["yukon"])
+    def plate_of(self, unit_id: str):
+        self.draw()
+        return next(rect for rect, units in self.map.plates if unit_id in units)
+
+    def test_select_a_plate_march_and_end_turn(self):
+        self.click(self.plate_of("infantry0").center)
         self.assertEqual(self.game.view.selected, "infantry0")
         self.draw(hover="cascadia")
         self.click(self.map.anchors["cascadia"])
@@ -24,11 +26,10 @@ class OrdersTests(ScreenTestCase):
         self.assertIsNotNone(self.game.view.animation)
         self.game.update(1)
         self.assertIsNone(self.game.view.animation)
-        for layer in ("naval", "air", "supply"):
-            self.game.switch_layer(layer)
-            self.draw()
         self.key(pygame.K_SPACE)
         self.assertEqual(self.state.active, "f1")
+        self.finish_rival_turns()
+        self.assertEqual(self.state.round, 2)
 
     def test_dragging_pans_without_issuing_orders(self):
         before, offset = digest(self.state), list(self.map.camera.offset)
@@ -37,213 +38,210 @@ class OrdersTests(ScreenTestCase):
         self.send(pygame.MOUSEBUTTONUP, button=1, pos=(545, 380))
         self.assertNotEqual(offset, self.map.camera.offset)
         self.assertEqual(before, digest(self.state))
-        self.assertFalse(self.renderer.province_window.is_open)
+        self.assertIsNone(self.game.panel)
 
-    def test_rival_turns_lock_input_until_the_player_is_back(self):
+    def test_rival_turns_lock_orders_until_the_player_is_back(self):
         self.game.advance()
         active = self.state.active
         self.key(pygame.K_SPACE)
         self.assertEqual(self.state.active, active)
         self.finish_rival_turns(dt=0.4)
 
-    def test_next_ready_skips_spent_units_and_switches_layer(self):
+    def test_next_unit_skips_spent_units_and_centres_the_map(self):
         for unit in self.state.units.values():
             if unit.owner == "f0":
                 unit.remaining = 0
         fleet = self.state.units["fleet0"]
         fleet.remaining = 1
-        self.game.next_ready()
+        self.key(pygame.K_n)
         self.assertEqual(self.game.view.selected, fleet.id)
         self.assertEqual(self.game.view.layer, "naval")
-        self.assertAlmostEqual(
-            self.map.camera.nearest(self.map.anchors[fleet.location])[0], FOCUS_POINT[0], delta=2
-        )
-        self.game.focus_unit("infantry1")
-        self.assertEqual(self.game.view.selected, fleet.id)
+        x, _ = self.map.camera.nearest(self.map.anchors[fleet.location])
+        self.assertAlmostEqual(x, self.map.viewport.centerx, delta=2)
         fleet.remaining = 0
         self.game.next_ready()
-        self.assertIn("All units", self.game.view.message)
+        self.assertIn("spent", self.game.view.message)
 
-    def test_air_mission_buttons_and_group_cycling(self):
-        game = self.game
-        game.switch_layer("air")
-        air = self.state.units[game.view.selected]
+    def test_tab_steps_through_a_stack(self):
+        self.state.units["second"] = Unit("second", "f0", "yukon")
+        self.game.select("infantry0")
+        self.key(pygame.K_TAB)
+        self.assertEqual(self.game.view.selected, "second")
+
+    def test_air_missions_from_the_unit_card(self):
+        air = self.state.units["air0"]
+        self.game.select(air.id)
+        self.draw()
+        self.click(self.renderer.unit_card.mission_rect("support").center)
+        self.assertEqual(self.game.view.air_mode, "support")
+        self.click(self.renderer.unit_card.mission_rect("strike").center)
         target = next(p for p in coverage(self.state, air) if p in self.state.provinces and p != air.location)
         self.state.units["target"] = Unit("target", "f1", target)
-        self.click(self.renderer.selection.air_buttons["strike"].center)
-        with patch.object(self.renderer, "hit", return_value=target):
-            self.click((500, 350))
-        self.assertLess(self.state.units["target"].hp, 10)
-        self.assertEqual(air.remaining, 0)
-        self.state.units["secondair"] = Unit("secondair", "f0", air.location, "air")
-        self.key(pygame.K_TAB)
-        self.assertEqual(game.view.selected, "secondair")
-
-    def test_recruiting_from_the_muster_tab_and_cycling_a_stack(self):
-        self.state.factions["f0"].resources = dict(wood=100, food=100, iron=100)
-        city = self.state.units["infantry0"].location
-        self.game.inspect(city, (10, 200))
-        window = self.renderer.province_window
-        self.click(window.tab_buttons["recruit"].center)
-        self.click(window.recruit_buttons["artillery"].center)
-        self.assertEqual(self.state.units[self.game.view.selected].kind, "artillery")
         self.draw()
-        window.close()
-        self.click(self.map.anchors[city])
-        self.assertEqual(self.state.units[self.game.view.selected].kind, "infantry")
+        self.click(self.map.anchors[target])
+        self.assertEqual(self.state.units[air.id].remaining, 0)
 
-
-class ProvinceWindowTests(ScreenTestCase):
-    scenario = DETAILED_SCENARIO
-
-    def test_build_close_select_and_zoom(self):
-        province = self.game.view.inspected
-        controls = self.renderer.controls
-        self.assertIsNone(self.game.hit(controls.end_button.center))
-        for button in [controls.end_button, controls.home_button, *controls.view_buttons.values()]:
-            self.assertTrue(controls.rect.contains(button))
-        self.press(self.map.anchors[province], button=3)
-        window = self.renderer.province_window
-        self.assertTrue(window.is_open)
-        self.click(window.build_buttons["farm"].center)
-        self.assertEqual(self.state.provinces[province].buildings["farm"], 1)
-        self.click(window.close_button.center)
-        self.assertFalse(window.is_open)
-        self.click(self.map.anchors[province])
-        unit = self.state.units[self.game.view.selected]
-        destination = next(p for p in reachable(self.state, unit).costs if p != province)
-        self.draw(hover=destination)
-        self.map.zoom(1.8, self.map.anchors[province])
-        self.assertEqual(self.game.hit(self.map.anchors[province]), province)
-        self.press(self.map.anchors[province], button=3)
-        self.assertEqual(self.game.view.inspected, province)
-        self.game.view.debug = True
-        self.draw(hover=destination)
-
-    def test_window_captures_input_and_stays_on_screen_when_dragged(self):
-        province = self.game.view.inspected
-        self.game.inspect(province, self.map.anchors[province])
-        window = self.renderer.province_window
-        self.assertIsNone(self.game.hit(window.rect.center))
-        self.press(window.rect.center, button=3)
-        self.assertEqual(self.game.view.inspected, province)
-        self.press((window.rect.x + 30, window.rect.y + 20))
-        self.send(pygame.MOUSEMOTION, rel=(2000, 2000), pos=(1199, 779))
-        self.assertTrue(pygame.Rect(0, 44, 1200, 698).contains(window.rect))
-        self.send(pygame.MOUSEBUTTONUP, button=1, pos=(1199, 779))
+    def test_right_click_opens_the_province_and_escape_backs_out(self):
+        self.game.select("infantry0")
+        self.press(self.map.anchors["yukon"], button=3)
+        self.assertEqual(self.game.panel.name, "province")
         self.key(pygame.K_ESCAPE)
-        self.assertFalse(window.is_open)
-        self.assertEqual(window.build_buttons, {})
-        for layer, kind in (("naval", "fleet"), ("air", "air")):
-            self.click(self.renderer.controls.view_buttons[layer].center)
-            self.assertEqual(self.state.units[self.game.view.selected].kind, kind)
-            self.draw()
+        self.assertIsNone(self.game.panel)
+        self.assertEqual(self.game.view.selected, "infantry0")
+        self.key(pygame.K_ESCAPE)
+        self.assertIsNone(self.game.view.selected)
+        self.key(pygame.K_ESCAPE)
+        self.assertEqual(self.game.window_name, "menu")
 
-
-class CityPinTests(ScreenTestCase):
-    scenario = DETAILED_SCENARIO
-
-    def test_city_pin_inspects_without_moving_the_selection(self):
-        self.game.view.selected = next(u.id for u in self.state.units.values() if u.owner == "f0")
-        before = {u.id: (u.location, u.remaining) for u in self.state.units.values()}
-        marker = next(m for m in self.map.city_markers if not self.renderer.blocks_map(m.rect.center, "land"))
-        self.assertAlmostEqual(marker.rect.centerx, marker.point[0], delta=1)
-        self.assertAlmostEqual(marker.rect.centery, marker.point[1], delta=1)
-        self.assertEqual(self.renderer.city_at(marker.rect.center, "land"), marker.city)
+    def test_clicking_a_town_opens_its_province(self):
+        self.draw()
+        marker = next(m for m in self.map.city_markers if not self.renderer.blocks_map(m.rect.center))
         self.click(marker.rect.center)
         self.assertEqual(self.game.view.inspected, self.state.cities[marker.city].province)
-        self.assertTrue(self.renderer.province_window.is_open)
-        self.assertEqual(before, {u.id: (u.location, u.remaining) for u in self.state.units.values()})
+        self.assertEqual(self.game.panel.name, "province")
+
+
+class InterfaceTests(ScreenTestCase):
+    def test_the_interface_keeps_clicks_off_the_map(self):
         self.draw()
+        renderer = self.renderer
+        for rect in (
+            renderer.top_bar.rect,
+            renderer.sidebar.rect,
+            renderer.outliner.rect,
+            renderer.controls.bar,
+        ):
+            self.assertIsNone(self.game.hit(rect.center))
 
-
-class FactionPickerTests(ScreenTestCase):
-    faction = None
-
-    def test_picker_captures_input_until_a_faction_is_chosen(self):
-        self.key(pygame.K_SPACE)
-        self.assertIsNone(self.game.campaign.player)
+    def test_the_side_bar_opens_and_closes_panels(self):
         self.draw()
-        self.click(self.renderer.picker.buttons["f2"].center)
-        self.assertEqual(self.game.campaign.player, "f2")
-        self.assertEqual(self.state.active, "f2")
+        button = self.renderer.sidebar.buttons["military"]
+        self.click(button.center)
+        self.assertEqual(self.game.panel.name, "military")
+        self.click(button.center)
+        self.assertIsNone(self.game.panel)
+        self.click(self.renderer.sidebar.buttons["pedia"].center)
+        self.assertEqual(self.game.window_name, "pedia")
 
+    def test_the_outliner_folds_sections_and_selects_units(self):
+        self.draw()
+        outliner = self.renderer.outliner
+        fleets = next(rect for rect, action in outliner.areas if action == "toggle:fleets")
+        self.click(fleets.center)
+        self.assertTrue(outliner.open["fleets"])
+        self.draw()
+        row = next(rect for rect, action in outliner.areas if action == "unit:fleet0")
+        self.click(row.center)
+        self.assertEqual(self.game.view.selected, "fleet0")
 
-class HudTests(ScreenTestCase):
-    def test_menu_captures_clicks(self):
-        menu = self.renderer.menu
-        self.assertFalse(menu.open)
-        self.click(menu.button.center)
-        self.assertTrue(menu.open)
-        save_button = menu.items["save"][0]
-        self.assertTrue(self.renderer.blocks_map(save_button.center, "land"))
-        font = self.context.theme.font_index
-        self.click(menu.items["font"][0].center)
-        self.assertNotEqual(self.context.theme.font_index, font)
-        self.click(save_button.center)
-        self.assertEqual(self.game.dialogs.mode, "save")
-        self.assertFalse(menu.open)
-        self.game.dialogs.close()
-        self.click(menu.button.center)
-        self.key(pygame.K_ESCAPE)
-        self.assertFalse(menu.open)
+    def test_map_modes_and_world_view(self):
+        self.key(pygame.K_3)
+        self.assertEqual(self.game.view.mode, SUPPLY)
+        self.draw()
+        self.click(self.renderer.controls.buttons[POLITICAL].center)
+        self.assertEqual(self.game.view.mode, POLITICAL)
+        self.map.zoom(3, (600, 400))
+        self.click(self.renderer.controls.buttons["home"].center)
+        self.assertAlmostEqual(self.map.camera.zoom_level, 1)
 
-    def test_objectives_collapse_and_menu_display_toggle(self):
-        objectives = self.renderer.objectives
-        self.assertTrue(self.renderer.blocks_map(objectives.rect.center, "land"))
-        self.click(objectives.button.center)
-        self.assertTrue(objectives.collapsed)
-        self.assertFalse(self.renderer.blocks_map(objectives.rect.center, "land"))
-        self.click(self.renderer.menu.pedia_button.center)
-        self.assertEqual(self.game.dialogs.mode, "pedia")
-        self.game.dialogs.active.section = "History"
-        self.click((800, 615))
-        self.assertEqual(self.game.dialogs.mode, "reports")
-        self.game.dialogs.close()
-        self.click(self.renderer.menu.button.center)
-        self.click(self.renderer.menu.items["display"][0].center)
-        self.assertTrue(self.context.display_toggle_requested)
-        self.assertFalse(self.renderer.menu.panel.colliderect(self.renderer.top_bar.date_rect))
+    def test_the_round_button_ends_the_turn(self):
+        self.draw()
+        self.click(self.renderer.controls.end_center)
+        self.assertEqual(self.state.active, "f1")
 
-    def test_f6_cycles_fonts(self):
-        self.assertEqual(self.context.theme.font_index, 1)
-        self.key(pygame.K_F6)
-        self.assertEqual(self.context.theme.font_index, 2)
+    def test_the_date_opens_the_calendar(self):
+        self.draw()
+        self.click(self.renderer.top_bar.date_rect.center)
+        self.assertEqual(self.game.window_name, "timeline")
 
-    def test_hover_forecast_is_cached_until_the_state_changes(self):
+    def test_messages_become_notifications(self):
+        self.game.view.message = "Something happened."
+        self.game.update(0.1)
+        self.assertEqual(self.renderer.toasts.items[-1][0], "Something happened.")
+        self.game.update(10)
+        self.assertEqual(self.renderer.toasts.items, [])
+
+    def test_the_hover_forecast_is_cached_until_the_state_changes(self):
         unit = self.state.units["infantry0"]
         unit.location = "canadian_shield"
-        unit.remaining = 20
-        self.game.view.selected = unit.id
-        target = next(
-            p for p in self.state.land.adj[unit.location] if self.state.provinces[p].controller != "f0"
-        )
-        self.context.pointer = (420, 300)
-        card = self.renderer.forecast
-        self.draw(hover=target)
-        first = card.result
-        self.draw(hover=target)
-        self.assertIs(first, card.result)
-        unit.hp -= 1
-        self.draw(hover=target)
-        self.assertIsNot(first, card.result)
+        self.state.provinces["great_lakes"].controller = "f1"
+        self.state.reindex_units()
+        self.game.select(unit.id)
+        self.context.pointer = self.map.anchors["great_lakes"]
+        self.draw(hover="great_lakes")
+        first = self.renderer.forecast.result
+        self.assertIsNotNone(first)
+        self.draw(hover="great_lakes")
+        self.assertIs(self.renderer.forecast.result, first)
+        unit.hp = 3
+        self.draw(hover="great_lakes")
+        self.assertIsNot(self.renderer.forecast.result, first)
+
+    def test_the_interface_grows_with_the_scale(self):
+        self.draw()
+        height = self.renderer.top_bar.rect.height
+        self.ui.set_scale(2.0)
+        self.draw()
+        self.assertEqual(self.renderer.top_bar.rect.height, height * 2)
+
+
+class WindowSizeTests(unittest.TestCase):
+    def test_every_part_fits_at_small_and_large_sizes(self):
+        for size in ((1024, 700), (1920, 1080), (2560, 1440)):
+            with self.subTest(size=size):
+                case = ScreenTestCase()
+                case.size = size
+                case.setUp()
+                try:
+                    game = case.game
+                    game.select("infantry0")
+                    game.inspect("yukon")
+                    case.draw()
+                    renderer = game.renderer
+                    self.assertFalse(renderer.unit_card.rect.colliderect(renderer.controls.rect))
+                    self.assertFalse(renderer.outliner.rect.colliderect(renderer.controls.rect))
+                    self.assertTrue(case.screen.get_rect().contains(game.panel.rect))
+                    self.assertEqual(case.map.viewport, case.screen.get_rect())
+                finally:
+                    case.tearDown()
+
+
+class PickerTests(ScreenTestCase):
+    faction = None
+
+    def test_the_picker_waits_for_a_nation(self):
+        self.assertEqual(self.game.window_name, "picker")
+        self.draw()
+        self.assertIsNone(self.game.hit((600, 400)))
+        self.key(pygame.K_3)
+        picker = self.game.window
+        self.assertEqual(picker.choice, "f2")
+        self.click_area(picker, "choose:f4")
+        self.assertEqual(picker.choice, "f4")
+        self.click_area(picker, "start")
+        self.assertEqual(self.game.campaign.player, "f4")
+        self.assertIsNone(self.game.window)
+
+
+class ReplayViewTests(ScreenTestCase):
+    scenario = DETAILED_SCENARIO
+
+    def test_the_replay_is_watched_without_touching_the_campaign(self):
+        unit = next(u for u in self.state.units.values() if u.owner == "f0" and u.is_land)
+        destination = next(p for p in reachable(self.state, unit).costs if p != unit.location)
+        self.game.campaign.move(unit.id, destination)
+        before = digest(self.state)
+        viewer = ReplayScreen(self.context, self.game, self.game.campaign.recorder.data())
+        self.game.viewer = viewer
+        viewer.draw()
+        self.assertFalse(viewer.renderer.interactive)
+        viewer.event(pygame.event.Event(pygame.KEYDOWN, key=pygame.K_RIGHT))
+        self.assertEqual(viewer.playback.index, 1)
+        viewer.draw()
+        viewer.event(pygame.event.Event(pygame.MOUSEBUTTONDOWN, button=1, pos=viewer.buttons["exit"].center))
+        self.assertIsNone(self.game.viewer)
+        self.assertEqual(before, digest(self.state))
 
 
 if __name__ == "__main__":
     unittest.main()
-
-
-class FogOfWarTests(ScreenTestCase):
-    def shown(self) -> set[str]:
-        scene = Scene(layer="land", viewer="f0", visible=self.renderer.visible(self.game.view))
-        return {unit.id for unit in self.map.visible_units(scene)}
-
-    def test_distant_enemies_are_hidden_until_debug_reveals_them(self):
-        self.assertIn("infantry0", self.shown())
-        self.assertNotIn("infantry7", self.shown())  # In Pampas, far from the Northern Union.
-        self.game.view.debug = True
-        self.assertIn("infantry7", self.shown())
-
-    def test_replays_are_watched_without_fog(self):
-        viewer = ReplayScreen(self.context, self.game, self.game.campaign.recorder.data())
-        self.assertIsNone(viewer.renderer.visible(viewer.view))

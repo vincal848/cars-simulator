@@ -1,8 +1,7 @@
 """The campaign screen: turns clicks and keys into simulation commands and runs rival turns.
 
-Input is handled by a chain of small handlers in priority order: modal dialogs,
-the tutorial card, top-bar shortcuts, the market, the menu, file shortcuts, the
-faction picker and finally orders on the map.
+Input goes, in order, to an open window, the tutorial card, keyboard shortcuts,
+the docked panel, the interface around the map, and finally to the map itself.
 """
 
 from collections.abc import Iterator
@@ -22,46 +21,52 @@ from cars.sim.journal import BATTLE_KINDS
 from cars.sim.objectives import campaign_stage
 from cars.sim.scenario import DETAILED_SCENARIO, load_scenario
 from cars.sim.turn import end_turn
-from cars.ui.dialogs import Dialogs
 from cars.ui.map.animation import MoveAnimation
+from cars.ui.map.map_view import MAP_MODES
+from cars.ui.panels import PANELS
 from cars.ui.renderer import GameRenderer, ViewState
 from cars.ui.screens.replay import ReplayScreen
 from cars.ui.tutorial import Tutorial
 from cars.ui.typography import FONT_CHOICES
+from cars.ui.windows import WINDOWS
 
 if TYPE_CHECKING:
     from cars.sim.state import GameState
     from cars.ui.context import UiContext
+    from cars.ui.frames import Frame
 
-# Where a focused unit is placed on screen: the middle of the open map, clear of the
-# province window on the left and the objectives on the right.
-FOCUS_POINT = (620, 390)
 DRAG_THRESHOLD = 6
 AI_ACTION_SECONDS = 0.35
 BUILD_EFFECT_SECONDS = 2
 ZOOM_STEP = 1.2
 TUTORIAL_RESOURCES = 80
-LAYER_KEYS = {pygame.K_1: "land", pygame.K_2: "naval", pygame.K_3: "air", pygame.K_4: "supply"}
-DIALOG_KEYS = {
+MODE_KEYS = dict(zip((pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4), MAP_MODES, strict=True))
+PANEL_KEYS = {
+    pygame.K_i: "nation",
+    pygame.K_u: "military",
+    pygame.K_d: "diplomacy",
+    pygame.K_m: "market",
+    pygame.K_j: "chronicle",
+}
+WINDOW_KEYS = {
     pygame.K_F1: "pedia",
     pygame.K_g: "strategy",
     pygame.K_r: "replay",
-    pygame.K_j: "reports",
-    pygame.K_u: "roster",
-    pygame.K_d: "diplomacy",
+    pygame.K_t: "timeline",
+    pygame.K_F5: "save",
+    pygame.K_F9: "load",
     pygame.K_F10: "settings",
 }
-LAYER_UNIT_KIND = {"land": INFANTRY, "supply": INFANTRY, "naval": FLEET, "air": AIR}
 AIR_MODE_HELP = {
     STRIKE: "Click an enemy force within range. One sortie per turn.",
     SUPPORT: "Click a province to grant +25% land attack there.",
     REBASE: "Click another controlled airbase within range.",
 }
-SELECT_HINTS = {
-    "supply": "Select an army to trace its supply route.",
-    "air": "Gold borders show operational range.",
-}
-DEFAULT_SELECT_HINT = "Click a gold-bordered province or sea zone to move."
+
+
+def headline(message: str) -> str:
+    """A battle report without its list of modifiers, which the chronicle keeps."""
+    return message.split(" Terrain ×")[0]
 
 
 class GameScreen:
@@ -76,33 +81,75 @@ class GameScreen:
         self.state = state
         self.campaign = Campaign(state)
         self.renderer = GameRenderer(self.context, state, shapes, seas, self.campaign)
-        self.view = ViewState(
-            message="Click infantry to plan a route. Right-click a province to develop it.",
-            inspected=self._first_army_location(state.active),
-        )
+        self.view = ViewState(message="Choose your nation to begin.")
         self.ai_turn: Iterator[Action] | None = None
         self.ai_delay = 0.0
         self.map_press: pygame.event.Event | None = None
         self.map_dragged = False
         self.panning = False
-        self.dragging_window = False
-        self.dialogs = Dialogs(self)
+        self.panels = {name: cls(self) for name, cls in PANELS.items()}
+        self.windows = {name: cls(self) for name, cls in WINDOWS.items()}
+        self.window: Frame | None = None
         self.tutorial = Tutorial(self)
-        self.renderer.blockers = [self.tutorial.blocks, self.dialogs.blocks]
+        self.renderer.blockers = [self.tutorial.blocks, lambda _point: self.window is not None]
+        self._shown_message = ""
+        if self.campaign.player is None:
+            self.open_window("picker")
 
-    def _first_army_location(self, owner: str) -> str | None:
-        return next((u.location for u in self.state.units.values() if u.owner == owner and u.is_land), None)
+    # Frames ---------------------------------------------------------------------------
+
+    @property
+    def panel(self) -> "Frame | None":
+        return self.renderer.panel
+
+    @property
+    def window_name(self) -> str | None:
+        return getattr(self.window, "name", None)
+
+    def open_panel(self, name: str) -> None:
+        """Open a docked panel, or close it if it is already open."""
+        if self.panel is self.panels[name] and name != "province":
+            self.renderer.panel = None
+            return
+        panel = self.panels[name]
+        panel.on_open()
+        self.renderer.panel = panel
+
+    def open_window(self, name: str) -> None:
+        window = self.windows[name]
+        window.on_open()
+        self.window = window
+        if getattr(window, "text_input", False):
+            pygame.key.start_text_input()
+        else:
+            pygame.key.stop_text_input()
+
+    def open_pedia(self, article: str) -> None:
+        """Open the CARSapedia at ``article``."""
+        self.open_window("pedia")
+        self.windows["pedia"].go(article)
+
+    def close_frame(self, frame: "Frame") -> None:
+        if frame is self.window:
+            self.window = None
+            pygame.key.stop_text_input()
+            if self.campaign.player is None and self.viewer is None:
+                self.open_window("picker")
+        elif frame is self.panel:
+            self.renderer.panel = None
 
     # Campaign lifecycle ---------------------------------------------------------------
 
     def choose_faction(self, faction: str) -> None:
         if not self.campaign.choose(faction):
             return
+        if self.window_name == "picker":
+            self.window = None
         self.view.selected = None
-        self.view.inspected = self._first_army_location(faction)
-        self.view.message = (
-            f"You command {self.state.factions[faction].name}. Other factions act automatically."
-        )
+        army = next((u for u in self.state.units.values() if u.owner == faction and u.is_land), None)
+        if army:
+            self.renderer.map.center_on(army.location)
+        self.view.message = f"You command {self.state.factions[faction].name}. Seven rivals act on their own."
         self.start_recording()
 
     def start_recording(self) -> None:
@@ -117,8 +164,8 @@ class GameScreen:
         self._begin(state, shapes, seas)
         self.choose_faction("f0")
         infantry = next(u for u in state.units.values() if u.owner == "f0" and u.kind == INFANTRY)
-        self.renderer.map.center_on(infantry.location, FOCUS_POINT)
-        self.view.message = "Guided tutorial: ten lessons. Your manual saves are untouched."
+        self.renderer.map.center_on(infantry.location)
+        self.view.message = "Guided tutorial: ten lessons. Your saved campaigns are untouched."
 
     def save(self, path: Path | None = None) -> None:
         if self.view.animation or not self.campaign.human_turn:
@@ -132,7 +179,7 @@ class GameScreen:
                 self.campaign.player,
                 path or self.library.path(0),
             )
-            self.view.message = "Campaign saved. F9 opens the campaign library."
+            self.view.message = "Campaign saved."
         except (OSError, ValueError) as exc:
             self.view.message = f"Could not save: {exc}"
 
@@ -144,8 +191,10 @@ class GameScreen:
         except (OSError, ValueError) as exc:
             self.view.message = f"Could not load campaign: {exc}"
             return False
+        self.campaign.player = player  # Keep the picker from opening while rebinding.
         self._begin(state, shapes, seas)
         self.campaign.player = player
+        self.window = None
         self.start_recording()
         self.view.message = "Campaign restored. Your orders, commander."
         return True
@@ -162,89 +211,77 @@ class GameScreen:
 
     def watch_replay(self, data: dict) -> None:
         self.viewer = ReplayScreen(self.context, self, data)
-        self.dialogs.close()
+        self.window = None
 
     # Selection and camera -------------------------------------------------------------
 
     def hit(self, point) -> str | None:
         return self.renderer.hit(point, self.view.layer)
 
-    def inspect(self, province: str, point) -> None:
+    def inspect(self, province: str, point=None) -> None:
+        """Open the province panel for ``province``."""
         self.view.inspected = province
-        self.renderer.province_window.open()
+        self.open_panel("province")
+
+    def select(self, unit_id: str | None) -> None:
+        unit = self.state.units.get(unit_id)
+        self.view.selected = unit_id if unit else None
+        if unit:
+            self.view.layer = unit.layer
 
     def focus_unit(self, unit_id: str | None) -> None:
-        """Select a unit, switch to its layer and centre the camera on it."""
+        """Select a unit and centre the camera on it."""
         unit = self.state.units.get(unit_id)
         if not unit or unit.owner != self.campaign.player or self.view.animation:
             return
-        self.view.selected = unit_id
-        self.view.layer = unit.layer
-        self.renderer.province_window.close()
-        self.renderer.map.center_on(unit.location, FOCUS_POINT)
-        if unit.location in self.state.provinces:
-            self.view.inspected = unit.location
-        orders = "Ready for orders." if unit.remaining > 0 else "Orders spent this turn."
-        self.view.message = unit.kind.title() + " selected. " + orders
+        self.select(unit_id)
+        self.renderer.map.center_on(unit.location)
+        orders = "ready for orders" if unit.remaining > 0 else "orders spent this turn"
+        self.view.message = f"{unit.kind.title()} selected, {orders}."
 
     def next_ready(self) -> None:
         if self.view.animation or not self.campaign.human_turn:
             return
         ready = [u.id for u in self.state.units.values() if u.owner == self.state.active and u.remaining > 0]
         if not ready:
-            self.view.message = "All units have spent their orders this turn."
+            self.view.message = "Every unit has spent its orders this turn."
             return
         index = ready.index(self.view.selected) if self.view.selected in ready else -1
         self.focus_unit(ready[(index + 1) % len(ready)])
 
-    def _layer_units(self, layer: str) -> list[str]:
-        """The active faction's units commanded from ``layer``."""
-        return [
-            u.id
-            for u in self.state.units.values()
-            if u.owner == self.state.active
-            and (u.is_land if layer in ("land", "supply") else u.kind == LAYER_UNIT_KIND[layer])
-        ]
-
-    def switch_layer(self, layer: str) -> None:
-        self.view.layer = layer
-        self.renderer.province_window.close()
-        units = self._layer_units(layer)
-        self.view.selected = units[0] if units and layer in ("naval", "air", "supply") else None
-        if layer in ("naval", "air"):
-            if not units:
-                self.view.message = "This faction has no groups in this layer."
-            elif layer == "naval":
-                self.view.message = "Fleet selected: click a highlighted sea zone."
-            else:
-                self.view.message = "Choose Strike, Support or Rebase, then click a target in range."
+    def set_mode(self, mode: str) -> None:
+        self.view.mode = mode
 
     def cycle_font(self) -> None:
-        theme = self.context.theme
-        theme.set_font((theme.font_index + 1) % len(FONT_CHOICES))
+        ui = self.context.ui
+        ui.set_font((ui.font_index + 1) % len(FONT_CHOICES))
+        if self.context.audio:
+            self.context.audio.set("font", ui.font_index)
         self.renderer.map.invalidate_labels()
 
     # Turn flow ------------------------------------------------------------------------
 
     def advance(self) -> None:
         """End the player's turn; rival turns then play out in :meth:`update`."""
-        if not self.campaign.human_turn:
+        if not self.campaign.human_turn or self.view.animation:
             return
-        self.renderer.province_window.close()
         self.context.play("turn")
         end_turn(self.state)
         self.view.selected = None
-        self.view.inspected = None
-        self.view.message = "Enemy factions are taking their turns…"
+        self.view.message = "The rival nations are taking their turns…"
 
     def update(self, dt: float) -> None:
         self.tutorial.observe()
-        if self.dialogs.mode:
+        renderer = self.renderer
+        renderer.toasts.update(dt)
+        if self.view.message != self._shown_message:
+            self._shown_message = self.view.message
+            renderer.toasts.push(self.view.message)
+        if self.window is not None:
             return
         if self.campaign.human_turn and self.state.events["pending"] and not self.view.animation:
-            self.dialogs.open("event")
+            self.open_window("event")
             return
-        renderer = self.renderer
         renderer.time += dt
         renderer.build_effects = {
             p: t for p, t in renderer.build_effects.items() if renderer.time - t < BUILD_EFFECT_SECONDS
@@ -274,7 +311,7 @@ class GameScreen:
         if any(entry["kind"] in BATTLE_KINDS for entry in new_entries):
             self.context.play("battle")
         self.renderer.map.invalidate_labels()
-        self.view.message = self.state.factions[self.state.active].name + ": " + message
+        self.view.message = self.state.factions[self.state.active].name + ": " + headline(message)
 
     def _finish_rival_turn(self) -> None:
         end_turn(self.state)
@@ -282,7 +319,7 @@ class GameScreen:
         if not self.campaign.human_turn:
             return
         stage = campaign_stage(self.state)
-        self.view.message = f"{date_label(self.state.clock)} / {stage.name}: {stage.goal}"
+        self.view.message = f"{date_label(self.state.clock)}: {stage.goal}"
         if self.campaign.recorder:
             self.campaign.recorder.append(self.state, "end_turn", [])
         self.autosave()
@@ -291,10 +328,13 @@ class GameScreen:
     # Drawing --------------------------------------------------------------------------
 
     def draw(self, hover: str | None) -> None:
-        self.renderer.draw(self.view, hover, dialog_open=self.dialogs.mode is not None)
+        ui = self.context.ui
+        self.renderer.draw(self.view, hover, window_open=self.window is not None)
         self.tutorial.draw()
-        self.dialogs.draw()
-        self.context.theme.tips.draw(self.context.theme)
+        if self.window is not None:
+            ui.tips.begin()
+            self.window.draw()
+        ui.tips.draw(ui)
 
     # Input ----------------------------------------------------------------------------
 
@@ -302,7 +342,7 @@ class GameScreen:
         """Handle one event; returns False when the player quits."""
         if event.type == pygame.WINDOWFOCUSLOST:
             self.map_press = None
-            self.map_dragged = self.panning = self.dragging_window = False
+            self.map_dragged = self.panning = False
         # A left press on the map is held until release, so a drag can never issue an order.
         if self._is_left_press(event) and self._can_press_map(event.pos):
             self.map_press = event
@@ -320,15 +360,18 @@ class GameScreen:
                 dragged = self.map_dragged or self._travelled(event.pos) > DRAG_THRESHOLD
                 self.map_press = None
                 self.map_dragged = False
-                return True if dragged else self._dispatch(press)
+                if not dragged and not self.view.animation:
+                    self._map_click(press.pos)
+                return True
         return self._dispatch(event)
 
     def _travelled(self, point) -> float:
         return pygame.Vector2(point).distance_to(self.map_press.pos)
 
     def _can_press_map(self, point) -> bool:
-        blocked = self.renderer.blocks_map(point, self.view.layer)
-        return not blocked and self.campaign.human_turn and not self.view.animation
+        return (
+            self.window is None and not self.renderer.blocks_map(point) and self.campaign.player is not None
+        )
 
     @staticmethod
     def _is_left_press(event: pygame.event.Event) -> bool:
@@ -341,240 +384,157 @@ class GameScreen:
     def _dispatch(self, event: pygame.event.Event) -> bool:
         if event.type == pygame.QUIT:
             return False
-        if self.dialogs.mode:
-            return self.dialogs.event(event)
+        if self.window is not None:
+            self.window.handle(event)
+            return True
         if self.tutorial.event(event):
             return True
-        handlers = (
-            self._top_bar_input,
-            self._market_input,
-            self._menu_input,
-            self._file_shortcuts,
-            self._faction_choice,
-        )
-        if any(handler(event) for handler in handlers):
+        if event.type == pygame.KEYDOWN:
+            self._key(event.key)
             return True
-        if self.campaign.human_turn:
-            self._command_input(event)
+        if self.panel is not None and self.panel.handle(event):
+            return True
+        if self._interface_input(event):
+            return True
+        self._map_input(event)
         return True
 
-    def _top_bar_input(self, event) -> bool:
+    def _key(self, key: int) -> None:
+        if key == pygame.K_ESCAPE:
+            if self.panel is not None:
+                self.renderer.panel = None
+            elif self.view.selected:
+                self.view.selected = None
+            else:
+                self.open_window("menu")
+            return
+        if key in WINDOW_KEYS:
+            self.open_window(WINDOW_KEYS[key])
+        elif key in PANEL_KEYS and self.campaign.player:
+            self.open_panel(PANEL_KEYS[key])
+        elif key in MODE_KEYS:
+            self.set_mode(MODE_KEYS[key])
+        elif key == pygame.K_F6:
+            self.cycle_font()
+        elif key == pygame.K_F3:
+            self.view.debug = not self.view.debug
+        elif key == pygame.K_HOME:
+            self.renderer.map.reset_camera()
+        elif not self.campaign.human_turn:
+            return
+        elif key == pygame.K_n:
+            self.next_ready()
+        elif key == pygame.K_f:
+            self.focus_unit(self.view.selected)
+        elif key == pygame.K_TAB:
+            self._cycle_selection()
+        elif key == pygame.K_SPACE:
+            self.advance()
+
+    def _interface_input(self, event: pygame.event.Event) -> bool:
+        """Clicks and scrolling on the interface around the map; True when consumed."""
         renderer = self.renderer
-        if self._is_left_press(event):
-            if renderer.objectives.button.collidepoint(event.pos) and not renderer.menu.open:
-                renderer.objectives.toggle()
-                return True
-            if renderer.menu.pedia_button.collidepoint(event.pos):
-                self.dialogs.open("pedia")
-                return True
-        if event.type == pygame.KEYDOWN and event.key in DIALOG_KEYS:
-            self.dialogs.open(DIALOG_KEYS[event.key])
-            return True
-        on_calendar = self._is_left_press(event) and renderer.top_bar.date_rect.collidepoint(event.pos)
-        if self.campaign.player and (self._is_key(event, pygame.K_t) or on_calendar):
-            self.dialogs.open("timeline")
-            return True
-        return False
-
-    def _market_input(self, event) -> bool:
-        market = self.renderer.market
-        if market.open:
-            if self._is_key(event, pygame.K_ESCAPE, pygame.K_m):
-                market.open = False
-            elif self._is_left_press(event):
-                if market.close_button.collidepoint(event.pos):
-                    market.open = False
-                elif trade := market.trade_at(event.pos):
-                    _, self.view.message = self.campaign.trade(*trade)
-                    market.receipt = self.view.message
-            return True
-        if self._is_key(event, pygame.K_m) and self.campaign.player:
-            market.open = True
-            self.renderer.menu.open = False
-            return True
-        return False
-
-    def _menu_input(self, event) -> bool:
-        menu = self.renderer.menu
-        if self._is_key(event, pygame.K_ESCAPE) and menu.open:
-            menu.open = False
+        point = getattr(event, "pos", None) or self.context.mouse_pos()
+        if event.type == pygame.MOUSEWHEEL and renderer.outliner.contains(point):
+            renderer.outliner.scroll_by(event.y)
             return True
         if not self._is_left_press(event):
-            return False
-        if menu.button.collidepoint(event.pos):
-            menu.open = not menu.open
+            return event.type in (pygame.MOUSEBUTTONDOWN, pygame.MOUSEBUTTONUP) and renderer.blocks_map(point)
+        if renderer.top_bar.date_rect.collidepoint(point) and self.campaign.player:
+            self.open_window("timeline")
             return True
-        if not menu.open:
-            return False
-        item = menu.item_at(event.pos)
-        if item == "font":
-            self.cycle_font()
+        action = renderer.sidebar.action_at(point)
+        if action:
+            if action == "menu":
+                self.open_window("menu")
+            elif action == "pedia":
+                self.open_window("pedia")
+            elif self.campaign.player:
+                self.open_panel(action)
             return True
-        if item in self.dialogs.dialogs:
-            self.dialogs.open(item)
-        elif item == "market" and self.campaign.player:
-            self.renderer.market.open = True
-        elif item == "display":
-            self.context.request_display_toggle()
-        # Any click while the menu is open closes it.
-        menu.open = False
-        return True
+        action = renderer.outliner.action_at(point)
+        if action:
+            renderer.outliner.handle_action(action, self)
+            return True
+        action = renderer.controls.action_at(point)
+        if action:
+            self._control(action)
+            return True
+        action = renderer.unit_card.action_at(point)
+        if action:
+            if action == "deselect":
+                self.view.selected = None
+            elif action.startswith("mission:"):
+                self.view.air_mode = action.removeprefix("mission:")
+                self.view.message = AIR_MODE_HELP[self.view.air_mode]
+            return True
+        return renderer.blocks_map(point)
 
-    def _file_shortcuts(self, event) -> bool:
-        if self._is_key(event, pygame.K_F6):
-            self.cycle_font()
-        elif self._is_key(event, pygame.K_F9):
-            self.dialogs.open("load")
-        elif self._is_key(event, pygame.K_F5):
-            self.dialogs.open("save")
-        else:
-            return False
-        return True
-
-    def _faction_choice(self, event) -> bool:
-        """Before a faction is chosen, the picker captures all input."""
-        if self.campaign.player is not None:
-            return False
-        if self._is_left_press(event):
-            faction = self.renderer.picker.faction_at(event.pos)
-            if faction:
-                self.choose_faction(faction)
-        if event.type == pygame.KEYDOWN and pygame.K_1 <= event.key <= pygame.K_8:
-            self.choose_faction(list(self.state.factions)[event.key - pygame.K_1])
-        return True
-
-    def _command_input(self, event) -> None:
-        view, renderer = self.view, self.renderer
-        if self._is_key(event, pygame.K_n):
+    def _control(self, action: str) -> None:
+        if action in MAP_MODES:
+            self.set_mode(action)
+        elif action == "home":
+            self.renderer.map.reset_camera()
+        elif action == "ready":
             self.next_ready()
-            return
-        if self._is_key(event, pygame.K_f):
-            self.focus_unit(view.selected)
-            return
-        if self._is_key(event, pygame.K_TAB):
-            self._cycle_selection()
-            return
-        if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
-            self.dragging_window = False
-        if event.type == pygame.MOUSEMOTION and self.dragging_window and renderer.province_window.is_open:
-            renderer.province_window.drag(event.rel)
-            return
-        self._camera_input(event)
-        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
-            province = self.hit(event.pos)
-            if province in self.state.provinces:
-                self.inspect(province, event.pos)
-        if event.type == pygame.KEYDOWN:
-            self._key_command(event.key)
-        if self._is_left_press(event) and not view.animation:
-            self._left_click(event.pos)
+        elif action == "end":
+            self.advance()
 
-    def _cycle_selection(self) -> None:
-        units = self._layer_units(self.view.layer)
-        if units:
-            index = units.index(self.view.selected) if self.view.selected in units else -1
-            self.view.selected = units[(index + 1) % len(units)]
-            self.renderer.province_window.close()
-
-    def _camera_input(self, event) -> None:
-        """Middle-drag pans and the wheel zooms, unless a move is animating."""
+    def _map_input(self, event: pygame.event.Event) -> None:
+        """Camera movement, and right-clicks that open a province."""
         map_view = self.renderer.map
         if event.type == pygame.MOUSEBUTTONUP and event.button == 2:
             self.panning = False
-        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 2 and not self._blocked(event.pos):
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 2:
             self.panning = True
-        if event.type == pygame.MOUSEMOTION and self.panning and not self.view.animation:
+        if event.type == pygame.MOUSEMOTION and self.panning:
             map_view.pan(*event.rel, dragging=True)
-        if event.type == pygame.MOUSEWHEEL and not self.view.animation:
-            point = self.context.mouse_pos()
-            if not self._blocked(point):
-                map_view.zoom(ZOOM_STEP**event.y, point)
+        if event.type == pygame.MOUSEWHEEL:
+            map_view.zoom(ZOOM_STEP**event.y, self.context.mouse_pos())
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 3 and self.campaign.player:
+            province = self.renderer.map.node_at(event.pos, "land")
+            if province in self.state.provinces:
+                self.inspect(province)
 
-    def _blocked(self, point) -> bool:
-        return self.renderer.blocks_map(point, self.view.layer)
-
-    def _key_command(self, key: int) -> None:
-        if key == pygame.K_F3:
-            self.view.debug = not self.view.debug
-        if key == pygame.K_ESCAPE:
-            self.view.selected = None
-            self.renderer.province_window.close()
-            self.dragging_window = False
-        if key in LAYER_KEYS:
-            self.switch_layer(LAYER_KEYS[key])
-        if key == pygame.K_SPACE and not self.view.animation:
-            self.advance()
-
-    def _left_click(self, point) -> None:
-        renderer, view = self.renderer, self.view
-        if renderer.province_window.contains(point):
-            self._province_window_click(point)
+    def _cycle_selection(self) -> None:
+        unit = self.state.units.get(self.view.selected)
+        if unit is None:
             return
-        if renderer.controls.ready_button.collidepoint(point):
-            self.next_ready()
-            return
-        if view.layer == "air" and self._air_click(point):
-            return
-        city = renderer.city_at(point, view.layer) if view.layer in ("land", "supply") else None
-        if city:
-            self.inspect(self.state.cities[city].province, point)
-            return
-        action = renderer.controls.action_at(point)
-        if action == "home":
-            renderer.map.reset_camera()
-        elif action in LAYER_UNIT_KIND:
-            self.switch_layer(action)
-        elif action == "end":
-            self.advance()
-        else:
-            self._map_click(point)
-
-    def _air_click(self, point) -> bool:
-        view = self.view
-        mode = self.renderer.selection.air_mode_at(point)
-        if mode:
-            view.air_mode = mode
-            view.message = AIR_MODE_HELP[mode]
-            return True
-        target = self.hit(point)
-        unit = self.state.units.get(view.selected)
-        if not (unit and target and target != unit.location):
-            return False
-        ok, view.message = self.campaign.air_mission(unit.id, target, view.air_mode)
-        if ok:
-            self.context.play("battle" if view.air_mode == STRIKE else "move")
-        if view.selected not in self.state.units:
-            view.selected = None
-        return True
+        here = [
+            u.id
+            for u in self.state.units.values()
+            if u.owner == unit.owner and u.location == unit.location and u.layer == unit.layer
+        ]
+        self.select(here[(here.index(unit.id) + 1) % len(here)])
 
     def _map_click(self, point) -> None:
-        """Move the selected unit there, select a unit standing there, or inspect the province."""
+        """Order the selected unit there, select a stack, or open a province."""
         state, view = self.state, self.view
-        destination = self.hit(point)
-        here = [
-            u
-            for u in state.units.values()
-            if u.location == destination
-            and u.owner == state.active
-            and (u.is_land if view.layer in ("land", "supply") else u.kind == LAYER_UNIT_KIND[view.layer])
-        ]
+        if not self.campaign.human_turn:
+            return
         selected = state.units.get(view.selected)
-        if (
-            selected
-            and destination
-            and view.layer != "supply"
-            and self._is_move_target(selected, destination)
-        ):
+        if selected and selected.kind == AIR and self._air_order(selected, point):
+            return
+        stack = [u for u in self.renderer.map.stack_at(point) if state.units[u].owner == state.active]
+        destination = self.renderer.map.node_at(point, selected.layer if selected else "land")
+        if selected and not stack and destination and self._is_move_target(selected, destination):
             self._move(selected.id, destination)
-        elif here:
-            self.renderer.province_window.close()
-            index = next((i for i, u in enumerate(here) if u.id == view.selected), -1)
-            view.selected = here[(index + 1) % len(here)].id
-            if destination in state.provinces:
-                view.inspected = destination
-            view.message = SELECT_HINTS.get(view.layer, DEFAULT_SELECT_HINT)
+        elif stack:
+            index = stack.index(view.selected) if view.selected in stack else -1
+            self.select(stack[(index + 1) % len(stack)])
         elif destination in state.provinces:
-            self.inspect(destination, point)
+            self.inspect(destination)
+
+    def _air_order(self, unit, point) -> bool:
+        target = self.renderer.map.node_at(point, "air")
+        if not target or target == unit.location:
+            return False
+        ok, self.view.message = self.campaign.air_mission(unit.id, target, self.view.air_mode)
+        if ok:
+            self.context.play("battle" if self.view.air_mode == STRIKE else "move")
+        if self.view.selected not in self.state.units:
+            self.view.selected = None
+        return True
 
     def _is_move_target(self, unit, destination: str) -> bool:
         """Any other node is a move order; a fleet's own sea is one only if an enemy fleet is there."""
@@ -587,7 +547,8 @@ class GameScreen:
 
     def _move(self, unit_id: str, destination: str) -> None:
         view = self.view
-        route, view.message = self.campaign.move(unit_id, destination)
+        route, message = self.campaign.move(unit_id, destination)
+        view.message = headline(message)
         self.renderer.map.invalidate_labels()
         if route:
             self.context.play("move" if "Movement completed" in view.message else "battle")
@@ -596,29 +557,17 @@ class GameScreen:
         if view.selected not in self.state.units:
             view.selected = None
 
-    def _province_window_click(self, point) -> None:
-        window, view = self.renderer.province_window, self.view
-        hit = window.action_at(point)
-        if hit is None:
-            return
-        action, name = hit
-        if action == "close":
-            window.close()
-        elif action == "drag":
-            self.dragging_window = True
-        elif action == "tab":
-            window.select_tab(name)
-        elif action == "page":
-            window.select_recruit_page(name)
-        elif action == "recruit":
-            unit_id, view.message = self.campaign.recruit(view.inspected, name)
-            if unit_id:
-                self.context.play("build")
-                view.selected = unit_id
-                view.layer = {FLEET: "naval", AIR: "air"}.get(name, "land")
-                self.renderer.map.invalidate_labels()
-        elif action == "build":
-            built, view.message = self.campaign.construct(view.inspected, name)
-            if built:
-                self.context.play("build")
-                self.renderer.build_effects[view.inspected] = self.renderer.time
+    # Commands from panels -------------------------------------------------------------
+
+    def recruit(self, province: str, kind: str) -> None:
+        unit_id, self.view.message = self.campaign.recruit(province, kind)
+        if unit_id:
+            self.context.play("build")
+            self.select(unit_id)
+            self.renderer.map.invalidate_labels()
+
+    def construct(self, province: str, kind: str) -> None:
+        built, self.view.message = self.campaign.construct(province, kind)
+        if built:
+            self.context.play("build")
+            self.renderer.build_effects[province] = self.renderer.time

@@ -2,22 +2,17 @@
 
 ## Art direction
 
-The goal is the look of a grand-strategy atlas in the manner of Europa Universalis,
-Victoria and Civilization V, reached in sprints that each land as their own commits:
+The goal is the look of a grand-strategy game in the manner of Victoria,
+Europa Universalis and Civilization V. Done so far: the painted political map
+with nation names and map modes, army plates and travel arrows; a native-resolution,
+scalable interface with a Victoria-style shell of top bar, icon bar, docked
+panels and outliner; and a complete CARSapedia. Still to come:
 
-1. **The map** (done): relief under translucent nation colours, frontier glow,
-   two border weights, a dark sea with depths and shallows, cached tiles.
-2. **The interface layout** (done): a full-width top bar for date, treasury and
-   stockpiles; a large End Turn button and unit controls bottom right; the
-   province window docked to the left edge; objectives as a collapsible tab;
-   less ornament, textured panels and stronger text contrast.
-3. **Army markers** (done): one marker per stack with the nation's colour and emblem, a
-   regiment count and a strength bar, simplified when zoomed out.
-4. **Names on the map** (done): each nation's name lettered across its territory,
-   sea names in a light italic.
-5. **Painted artwork** (specified; paintings still to be made): specifications for event illustrations and leader
-   portraits, to be produced with an image generator or taken from public-domain
-   sources. The game already shows any painting placed where `docs/ART.md` says.
+- **Painted artwork:** event illustrations, leader portraits and a title
+  backdrop, specified in `docs/ART.md`; the game already shows any painting
+  placed where that document says.
+- **Map polish:** animated rivers and sea, seasonal tints, and army counters
+  that show the strength of each arm in a stack.
 
 ## Next
 

@@ -9,24 +9,32 @@ from cars.ui.context import UiContext
 from cars.ui.screens.game import GameScreen
 from tests.support import SCREEN_SIZE
 
+OFF_SCREEN = (-100, -100)
+
 
 class ScreenTestCase(unittest.TestCase):
-    """A campaign screen on a hidden display, with the player's faction already chosen."""
+    """A campaign screen on a hidden display, with the player's nation already chosen."""
 
     scenario = COMPACT_SCENARIO
     faction: str | None = "f0"
+    size = SCREEN_SIZE
 
     def setUp(self) -> None:
         pygame.init()
-        self.screen = pygame.display.set_mode(SCREEN_SIZE)
+        self.screen = pygame.display.set_mode(self.size)
         self.state, self.shapes, self.seas = load_scenario(self.scenario)
         self.context = UiContext(self.screen)
+        self.context.pointer = OFF_SCREEN
         self.game = GameScreen(self.context, self.state, self.shapes, self.seas)
         if self.faction:
             self.game.choose_faction(self.faction)
 
     def tearDown(self) -> None:
         pygame.quit()
+
+    @property
+    def ui(self):
+        return self.context.ui
 
     @property
     def renderer(self):
@@ -47,8 +55,15 @@ class ScreenTestCase(unittest.TestCase):
         self.press(point, button)
         self.send(pygame.MOUSEBUTTONUP, button=button, pos=tuple(point))
 
-    def key(self, key: int) -> None:
-        self.send(pygame.KEYDOWN, key=key)
+    def click_area(self, frame, action: str) -> None:
+        """Click where ``frame`` last drew ``action``."""
+        self.draw()
+        area = frame.area_of(action)
+        self.assertIsNotNone(area, f"{action} was not drawn")
+        self.click(area.center)
+
+    def key(self, key: int, **data) -> None:
+        self.send(pygame.KEYDOWN, key=key, mod=data.get("mod", 0))
 
     def draw(self, hover=None) -> None:
         self.game.draw(hover)

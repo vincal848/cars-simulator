@@ -23,10 +23,11 @@ class App:
         self.args = args
         self.display = Display(args.fullscreen_windowed)
         pygame.display.set_caption(CAPTION)
-        self.context = UiContext(self.display.canvas)
+        audio = Audio()
+        self.context = UiContext(self.display.surface, audio)
+        self.context.ui.set_font(audio.settings["font"])
         state, shapes, seas = load_scenario(args.scenario or DETAILED_SCENARIO)
         self.game = GameScreen(self.context, state, shapes, seas)
-        self.context.audio = Audio()
         if args.tutorial:
             self.game.start_tutorial()
         elif args.faction:
@@ -41,13 +42,14 @@ class App:
                 self.title.message = "Could not open replay: " + str(exc)
 
     def _sync_display(self) -> None:
-        self.context.pointer = self.display.point(pygame.mouse.get_pos())
         self.context.borderless = self.display.borderless
+        if self.context.ui.surface is not self.display.surface:
+            self.context.set_surface(self.display.surface)
 
     def _handle(self, event: pygame.event.Event) -> bool:
         """Route one event; returns False to quit."""
         if event.type in (pygame.VIDEORESIZE, pygame.WINDOWSIZECHANGED):
-            self.display.resize()
+            self.context.set_surface(self.display.surface)
             return True
         alt_enter = (
             event.type == pygame.KEYDOWN
@@ -57,7 +59,6 @@ class App:
         if (event.type == pygame.KEYDOWN and event.key == pygame.K_F11) or alt_enter:
             self.context.request_display_toggle()
             return True
-        event = self.display.event(event)
         if self.game.viewer:
             return self.game.viewer.event(event)
         if self.title.active:
@@ -85,7 +86,7 @@ class App:
             if self.args.smoke and frames == SMOKE_FRAMES:
                 running = False
         if self.args.screenshot:
-            pygame.image.save(self.display.canvas, str(self.args.screenshot))
+            pygame.image.save(self.display.surface, str(self.args.screenshot))
 
     def _draw(self, dt: float) -> None:
         game = self.game
@@ -96,7 +97,6 @@ class App:
             game.viewer.draw()
         elif self.title.active:
             self.title.draw()
-            game.dialogs.draw()
         else:
             game.update(dt)
             game.draw(game.hit(self.context.mouse_pos()))

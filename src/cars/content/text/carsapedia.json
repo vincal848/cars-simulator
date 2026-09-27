@@ -1,122 +1,431 @@
 [
   {
-    "id": "first-orders",
-    "title": "First orders",
-    "category": "Basics",
-    "body": "Choose a faction. Click a regiment, then hover a gold-bordered province. The route arrow and order forecast explain its cost and likely outcome. Click the destination to issue the order. Each stack shows as one plate in its nation's colour: the symbol of its leading arm (a cross for infantry, a slash for cavalry, a dot for artillery), the number of units and a strength bar; a red mark means it is out of supply. Esc clears selection; Tab cycles stacks. N finds the next unit with orders; F centers it. Right-click a province to inspect it."
+    "id": "welcome",
+    "title": "Welcome to C.A.R.S.",
+    "category": "Getting started",
+    "summary": "What the game is, and how to win it.",
+    "body": [
+      "C.A.R.S. (Combat Arms Region Simulator) is a turn-based strategy game set in an imagined Americas of 1800. Eight nations, each with its own history and [[traits|national traits]], contest a continent divided into provinces. You lead one of them; the other seven are played by the computer.",
+      "You win by [[victory|holding enough cities for long enough]]. To get there you will march and fight with armies, fleets and air groups, build up your provinces, keep your armies fed and supplied, and decide whom to fight and with whom to make [[war-and-peace|peace]].",
+      "New to the game? Read [[first-turn|Your first turn]], then [[interface|The interface]]. Every rule has its own article in this library, and the numbers in it are read from the game itself, so they are always current."
+    ],
+    "see_also": ["first-turn", "interface", "victory", "nations"]
   },
   {
-    "id": "turns",
-    "title": "Seasons and campaign stages",
-    "category": "Basics",
-    "body": "One date covers your orders, resource settlement and all seven rivals. End Turn collects production. The next date refreshes movement and sorties. T opens the calendar. Foothold requires a city; Expansion reaches the city target; Consolidation holds it for consecutive full rounds; Dominion is victory. Losing control below the target resets the streak. There is no real-time deadline."
+    "id": "first-turn",
+    "title": "Your first turn",
+    "category": "Getting started",
+    "summary": "A walk through the first few orders of a campaign.",
+    "body": [
+      "1. Choose a nation. Each has its own [[nations|history, territory and traits]]; the Northern Union starts with a fleet and an air group, the others with armies.",
+      "2. Click one of your army plates on the map. Provinces it can reach this turn are outlined in gold. Hover one to see the route arrow; hover an enemy province to see an [[forecast|order forecast]] of the battle.",
+      "3. Click a destination to march. Moving into an enemy province attacks it. See [[movement]] and [[combat|land battles]].",
+      "4. Right-click one of your cities to open its province. Build a farm or a road, or raise a new regiment from the recruitment table. See [[construction]] and [[recruitment]].",
+      "5. Check the top bar: your stockpiles and their change per turn. Armies need food; see [[upkeep]].",
+      "6. Press End Turn (Space). The seven rivals then act in turn, and your next turn begins with a new season."
+    ],
+    "see_also": ["interface", "stacks", "movement", "end-turn"]
+  },
+  {
+    "id": "interface",
+    "title": "The interface",
+    "category": "Getting started",
+    "summary": "What each part of the screen is for.",
+    "body": [
+      "The top bar shows your nation, your treasury and your three stockpiles with their change each turn, and the date. Hover any figure for its breakdown; click the date for the [[calendar|campaign calendar]].",
+      "The icon bar on the left opens the Nation, Military, Diplomacy, Merchant Exchange and Chronicle panels, and this library. The menu at its foot holds saving, loading and settings. Panels open beside the icon bar; opening a province does the same.",
+      "The outliner on the right tracks your [[victory|objective]] and lists every army, fleet, air group and city. A gold dot marks a unit that still has orders; click it to select it. Click a section heading to fold it away.",
+      "The bar in the bottom right switches [[map-modes|map modes]], returns to the world view and finds the next unit with orders; the round button beside it ends your turn. The selected unit's card appears at the bottom of the map.",
+      "The interface grows with your window. Settings (F10) sets its size, from 100% to 200%, and the typeface."
+    ],
+    "see_also": ["map-modes", "stacks", "keyboard"]
+  },
+  {
+    "id": "keyboard",
+    "title": "Keyboard and mouse",
+    "category": "Getting started",
+    "summary": "Every shortcut in one place.",
+    "body": [
+      "Left click selects an army, orders a move or attack, or opens a province. Right click opens a province. Drag with the left or middle button to pan; the wheel zooms. Home returns to the world view, and 1 to 4 switch [[map-modes|map modes]].",
+      "N selects the next unit with orders, Tab the next unit in the same place, and F centres the map on the selected unit. Space ends the turn. Esc closes the open panel, then clears the selection, then opens the menu.",
+      "I, U, D, M and J open the Nation, Military, Diplomacy, Merchant Exchange and Chronicle panels. F1 opens this library, T the calendar, G the [[strategy-atlas|strategic atlas]] and R the [[replays|replay studio]]. F5 saves, F9 loads, F6 changes the typeface, F10 opens settings and F11 switches fullscreen. H hides the tutorial card."
+    ],
+    "see_also": ["interface"]
+  },
+  {
+    "id": "map-modes",
+    "title": "Map modes",
+    "category": "Getting started",
+    "summary": "Four ways to colour the map.",
+    "body": [
+      "Political (1) colours every province by the nation that holds it and letters each nation's name across its territory when zoomed out. Zoom in and province names take over.",
+      "Terrain (2) shows the land itself: the relief, forests and mountains that shape [[movement]] and [[combat|defence]]. See [[terrain-plains]], [[terrain-forest]] and [[terrain-mountains]].",
+      "Supply (3) colours your provinces green where they connect to a supply hub and red where they are cut off. Select an army in this mode to trace its line of [[supply]].",
+      "Diplomatic (4) colours the map by relation: your own land blue, nations at war with you red and those at peace green. See [[war-and-peace]]."
+    ],
+    "see_also": ["fog", "supply"]
+  },
+  {
+    "id": "victory",
+    "title": "Winning and losing",
+    "category": "Getting started",
+    "summary": "The dominion objective and the four stages of a campaign.",
+    "body": [
+      "You win by holding at least three cities for five consecutive full rounds. The count goes up when your turn begins and resets whenever you hold fewer cities than the target.",
+      "A campaign passes through four stages. Foothold: hold a city. Expansion: reach the city target. Consolidation: keep holding it. Dominion: the target has been held long enough, and the campaign is won. The outliner and the [[calendar]] show where you stand.",
+      "You lose when you hold no city and have no army left.",
+      "Cities are also the [[victory-points|victory points]] shown on the war screen, and taking many of them draws a [[coalitions|coalition]] against you."
+    ],
+    "see_also": ["calendar", "victory-points", "coalitions"]
+  },
+  {
+    "id": "calendar",
+    "title": "Turns and the calendar",
+    "category": "Getting started",
+    "summary": "How a round unfolds and how time passes.",
+    "body": [
+      "A round is one date. On it you give all your orders, then press End Turn: your production is collected, your [[upkeep]] paid, and the seven rival nations take their turns one after another. Your next turn begins on the next date, with movement and sorties restored.",
+      "The calendar runs by season from Spring 1800. Time passes only when you end your turn; there is never a deadline. Press T or click the date for the calendar and the path to [[victory|dominion]]."
+    ],
+    "see_also": ["victory", "end-turn"]
+  },
+  {
+    "id": "end-turn",
+    "title": "Ending a turn",
+    "category": "Getting started",
+    "summary": "What happens between your turns.",
+    "body": [
+      "When you end your turn, your nation collects its [[production]], pays [[upkeep]] (units short of supplies lose strength) and, if autosave is on, the campaign is saved. Each rival then moves, fights, recruits and builds under the same rules as you. The notifications under the top bar report what they do; the Chronicle panel (J) keeps the battles.",
+      "When your turn comes round, your units' movement is restored, damaged units [[recovery|recover]] and a new [[events|event]] may ask for a decision."
+    ],
+    "see_also": ["calendar", "upkeep", "recovery"]
   },
   {
     "id": "fog",
     "title": "Fog of war",
-    "category": "Basics",
-    "body": "You see your own provinces and their neighbours, the ground around each of your units and the sea zones beside your ports and fleets. Enemy forces elsewhere are hidden and shaded provinces mark what you cannot see; the map itself is always known. Order forecasts only cover targets you can see, and only enemies in sight exert a zone of control. Rivals play under the same fog. Scouts are the cheapest way to watch a frontier."
+    "category": "Warfare",
+    "summary": "What you can and cannot see.",
+    "body": [
+      "You see your own provinces and their neighbours, the provinces around each of your units, and the sea zones beside your ports and fleets. Enemy forces anywhere else are hidden, and provinces you cannot see are shaded. The map itself is always known.",
+      "Forecasts only cover targets you can see, and only enemies in sight exert a [[zones-of-control|zone of control]]. The rival nations play under the same fog. Scouts are the cheapest way to watch a frontier.",
+      "Replays and the debug view (F3) show everything."
+    ],
+    "see_also": ["zones-of-control", "unit-scout"]
   },
   {
-    "id": "diplomacy",
-    "title": "Diplomacy",
-    "category": "Basics",
-    "body": "Every nation starts at war with every other. Press D to offer peace: a rival accepts only if it is no stronger than you. At peace, neither side may enter the other's provinces, strike its forces or fight its fleets. A truce lasts six rounds; after that either side may declare war, and a rival much stronger than you will. Rivals fight one another too, until one nation holds a quarter of the continent's cities: then the others form a coalition. They make peace among themselves, welcome peace from anyone but the leader, refuse the leader outright and turn every war against it. Peace grants no military access, so a coalition member can only reach the leader across its own or enemy ground."
+    "id": "stacks",
+    "title": "Armies and stacks",
+    "category": "Warfare",
+    "summary": "Reading the plates on the map.",
+    "body": [
+      "Every group of units in one place is drawn as a single plate in its nation's colour. The symbol on the plate shows the leading unit's arm: a cross for infantry, one slash for cavalry, a slash and a bar for scouts, a dot for artillery, a hull for a fleet and propeller blades for an air group. The number is how many units are in the stack, and the bar beneath it their combined strength.",
+      "A red mark on the plate means the stack is out of [[supply]]; a gold diamond marks a [[charters|regional formation]]. Zoomed in, the leading unit's figure stands on its plate.",
+      "Click a plate to select its leading unit; click again, or press Tab, to step through the rest of the stack. Air groups stand beside the armies at their airbase; fleets sit in their sea zone."
+    ],
+    "see_also": ["movement", "unit-infantry"]
   },
   {
     "id": "movement",
-    "title": "Movement and roads",
-    "category": "Land",
-    "body": "Bounded Dijkstra finds all provinces within remaining movement. Costs combine destination terrain, unit role, roads, passes, river crossings, supply and hostile zones of control. Roads discount the terrain portion by 5% per level, up to 15%; river and ZOC penalties remain. Hostile provinces are endpoints, never transit points. Topology and drawn polygon geometry are separate."
+    "title": "Movement",
+    "category": "Warfare",
+    "summary": "How far a unit can go, and what each step costs.",
+    "body": [
+      "Each land unit has a movement allowance per turn (see the [[units]]). Every step into a province costs movement, and the unit can go anywhere it can pay for this turn. Provinces in reach are outlined when the unit is selected; the route arrow shows the cheapest path.",
+      "A step's cost starts from the destination's terrain: ×{movement.terrain_cost.plains} on [[terrain-plains|plains]], ×{movement.terrain_cost.forest} in [[terrain-forest|forest]] and ×{movement.terrain_cost.mountains} in [[terrain-mountains|mountains]]. Each arm then has its own factor: cavalry is quick on plains and slow elsewhere, scouts are quick in rough country and artillery is slow everywhere. Mountain passes cut the cost of mountains to ×{movement.mountain_pass_factor}, and each level of [[building-roads|roads]] takes {movement.road_discount_per_level:%} off, up to {movement.max_road_levels} levels.",
+      "Crossing a river adds {movement.river_crossing_cost} movement, and entering a province next to an enemy army in sight adds {movement.zone_of_control_cost} (a [[zones-of-control|zone of control]]). An army out of [[supply]] pays {movement.unsupplied_cost_factor:more%} more for everything.",
+      "A unit may enter an enemy province but not march through it: entering one is an attack and ends the move. Nations at [[war-and-peace|peace]] grant no military access, so their provinces cannot be entered at all."
+    ],
+    "see_also": ["zones-of-control", "combat", "supply"]
+  },
+  {
+    "id": "zones-of-control",
+    "title": "Zones of control",
+    "category": "Warfare",
+    "summary": "Why marching past an enemy army is slow.",
+    "body": [
+      "Every province next to an enemy land army costs {movement.zone_of_control_cost} extra movement to enter. Only armies you can see exert this pull, so the route costs you are shown never give away a hidden force (see [[fog]]).",
+      "Zones of control also threaten supply lines: the supply map mode marks provinces on a supply route that an enemy army stands beside."
+    ],
+    "see_also": ["movement", "supply", "fog"]
   },
   {
     "id": "combat",
-    "title": "Land combat and forecasts",
-    "category": "Land",
-    "body": "Combat is deterministic attrition. Terrain strengthens defenders; river crossings reduce attacking strength. Supply, high-ground origins, artillery and close air support compose into the result. Hover a reachable enemy province for an exact forecast under current conditions. An attack spends remaining movement. Surviving defenders prevent capture. Control can change without changing legal ownership. J opens detailed battle reports."
+    "title": "Land battles",
+    "category": "Warfare",
+    "summary": "How an attack is decided, step by step.",
+    "body": [
+      "A battle happens when a land unit moves into a province held by a nation at war with it. Battles are not random: the same attack under the same conditions always ends the same way, which is why the [[forecast|order forecast]] can predict it exactly.",
+      "The attacker's strength is its attack rating scaled by its current strength. It is multiplied by ×{combat.river_attack_factor} when crossing a river, ×{combat.mountain_origin_bonus} when attacking down from mountains, ×{combat.unsupplied_factor} when out of [[supply]], by up to +{combat.artillery_bonus_cap:%} for artillery in the province it attacks from (+{combat.artillery_bonus_per_gun:%} per gun, and the first {combat.artillery_guns_committed} guns spend their movement), and by +{air.support_bonus:%} under [[air|close air support]]. [[traits|National traits]] can add to it.",
+      "The defence is the sum of every defending unit's defence, scaled by strength and supply, and never less than {combat.minimum_defense}. It is multiplied by the terrain: ×{combat.terrain_defense.plains} on plains, ×{combat.terrain_defense.forest} in forest and ×{combat.terrain_defense.mountains} in mountains.",
+      "Both sides always lose strength. The attacker loses {combat.attacker_loss_ratio:%} of the defence (at least {combat.attacker_minimum_loss}); the defence is spread across the defenders, each losing {combat.defender_loss_ratio:%} of the attacking strength divided among them (at least {combat.defender_minimum_loss}). If every defender is destroyed and the attacker survives, the province is captured. Its owner does not change: it becomes occupied, yields half its [[production]] to the occupier, and can be retaken.",
+      "An attack spends the attacker's remaining movement, whether it succeeds or not."
+    ],
+    "see_also": ["forecast", "unit-artillery", "terrain-mountains", "recovery"]
+  },
+  {
+    "id": "forecast",
+    "title": "Order forecasts",
+    "category": "Warfare",
+    "summary": "Seeing a battle's result before you fight it.",
+    "body": [
+      "Hover an enemy province (or, with an air group selected, a target in range) and the forecast card shows what the order would do: whether the province falls, both sides' losses and how many units would be destroyed. It runs the real rules on a copy of the campaign, so it is exact for current conditions.",
+      "Conditions can change before you act: moving artillery up, calling in [[air|air support]] or letting the enemy reinforce all change the result. Forecasts are only shown for targets you can see (see [[fog]])."
+    ],
+    "see_also": ["combat", "air"]
   },
   {
     "id": "supply",
-    "title": "Supply and encirclement",
-    "category": "Land",
-    "body": "Supply is connectivity from a controlled city hub through controlled provinces on its own network. A disconnected army pays 50% more movement cost and fights at reduced strength. The Supply view traces a selected army to its hub. Strategic inspection colors supplied nodes green and unreachable nodes red. A graph cut point is only a potential choke point: multiple hubs may still keep both sides supplied."
+    "title": "Supply",
+    "category": "Warfare",
+    "summary": "Why armies need a road home.",
+    "body": [
+      "An army is supplied when a chain of provinces you control links it to one of your cities that serves as a supply hub. Cut that chain and the army is out of supply: it pays {movement.unsupplied_cost_factor:more%} more for [[movement]], attacks and defends at ×{combat.unsupplied_factor}, and does not [[recovery|recover]].",
+      "Use the supply [[map-modes|map mode]] to see which of your provinces are connected. With an army selected it draws the army's route home and rings any enemy standing beside it. The [[strategy-atlas|strategic atlas]] shows where a single lost province would cut the network in two."
+    ],
+    "see_also": ["recovery", "strategy-atlas", "zones-of-control"]
   },
   {
     "id": "recovery",
-    "title": "Recovery",
-    "category": "Land",
-    "body": "Damaged units regain strength when their faction's turn begins. A supplied land unit inside your own territory recovers 1 strength per turn, or 2 in a city. Fleets recover beside one of your ports and air groups at a controlled airbase. Cut-off armies and units on enemy ground do not recover. The unit card shows the current rate."
+    "title": "Recovery and attrition",
+    "category": "Warfare",
+    "summary": "How units regain strength, and how they lose it outside battle.",
+    "body": [
+      "Damaged units regain strength when their nation's turn begins. A supplied land unit in your own territory recovers {recovery.per_turn} strength a turn, or {recovery.per_turn} + {recovery.city_bonus} in a city. Fleets recover beside one of your ports and air groups at an airbase you control. Units that are cut off, or standing on enemy ground, do not recover.",
+      "Units also lose strength when their nation cannot pay their [[upkeep]]: each unit that needed the missing resource loses {upkeep.shortfall_attrition} strength, and a unit reduced to nothing disbands."
+    ],
+    "see_also": ["upkeep", "supply"]
   },
   {
-    "id": "units",
-    "title": "Land unit roles",
-    "category": "Land",
-    "body": "Infantry is the general-purpose force. Scouts traverse rough terrain more cheaply. Cavalry favors plains but struggles in forests and mountains. Artillery is slow; up to two supplied guns at the attack origin can support another attacker, consuming their movement. U opens the military overview, including ready and cut-off filters. Click a row to focus its unit."
+    "id": "naval",
+    "title": "Fleets and naval battles",
+    "category": "Warfare",
+    "summary": "Fighting for the sea lanes.",
+    "body": [
+      "Fleets move between sea zones on their own network. Select a fleet and the zones it can reach are outlined; sea zone names mark them on the map. Entering a zone with an enemy fleet starts a battle and ends the move. Click the fleet's own zone to attack enemies sharing it.",
+      "Naval battles are fought by attrition: the attacker loses {naval.attacker_loss_ratio:%} of the defenders' strength and the defenders {naval.defender_loss_ratio:%} of the attacker's, each at least {naval.minimum_loss}. If the defenders are destroyed and the attacker survives, it takes the zone.",
+      "Fleets are raised in port cities with a [[building-shipyard|shipyard]]. Seas never change which nation holds a province; carrying armies by sea is not yet possible."
+    ],
+    "see_also": ["unit-fleet", "building-shipyard"]
   },
   {
-    "id": "economy",
-    "title": "Resources and development",
+    "id": "air",
+    "title": "Air groups",
+    "category": "Warfare",
+    "summary": "Strikes, support and rebasing.",
+    "body": [
+      "Each air group has one sortie a turn, flown from its airbase to anywhere within range. The unit card offers three missions. Strike attacks an enemy army or fleet: it hits for ×{air.strike_factor} its attack (at least {air.minimum_strike}), takes {air.return_fire_ratio:%} return fire, and enemy air groups in range intercept. Support gives your land attacks into one province +{air.support_bonus:%} until your next turn. Rebase moves the group to another airbase you control.",
+      "Air groups are raised in cities with an [[building-airfield|airfield]]. An air group caught at a base that is captured is destroyed. An air service in 1800 is one of this game's deliberate mixes of periods."
+    ],
+    "see_also": ["unit-air", "building-airfield", "forecast"]
+  },
+  {
+    "id": "resources",
+    "title": "Resources and gold",
     "category": "Economy",
-    "body": "Wood, food and iron fund construction and recruitment. Regional base output is shared by controlled province count. Local resource sites and buildings add income. Estates contains farms, lumber mills and iron mines; each level adds two of its resource per turn. Improvements complete immediately in this prototype and persist after capture. Occupied provinces (held but owned by another nation) yield half. Each resource is stored up to 100 plus 25 per city you hold; production beyond that spoils. Population and industry counters describe the whole administrative region."
+    "summary": "Wood, food, iron and gold, and what each is for.",
+    "body": [
+      "Wood, food and iron pay for [[construction]] and [[recruitment]], and units consume them as [[upkeep]]: armies eat food, artillery also uses iron, fleets need wood and air groups iron.",
+      "Gold comes from the cities you hold and pays for contracts at the [[market|Merchant Exchange]], where you can buy the resources you lack or sell a surplus.",
+      "The top bar shows each stockpile and its change per turn; the Nation panel breaks it down into income, upkeep and net."
+    ],
+    "see_also": ["production", "storage", "upkeep", "market"]
+  },
+  {
+    "id": "production",
+    "title": "Production and occupation",
+    "category": "Economy",
+    "summary": "Where income comes from.",
+    "body": [
+      "Every region produces some wood, food and iron each turn, shared among the nations that hold its provinces in proportion to how many they hold. On top of that, provinces with resource sites add their own output, and farms, lumber mills and iron mines add {buildings.farm.output} of their resource per level.",
+      "An occupied province, one you hold but another nation owns, yields only {economy.occupied_yield:%} of its output to you. Taking land from an enemy therefore pays less than developing your own. [[traits|National traits]] can raise a nation's production of one resource.",
+      "The province panel shows each province's contribution, and the Nation panel your whole income."
+    ],
+    "see_also": ["resources", "storage", "construction"]
+  },
+  {
+    "id": "storage",
+    "title": "Storage",
+    "category": "Economy",
+    "summary": "How much you can keep, and what happens to the rest.",
+    "body": [
+      "Each stockpile holds up to {economy.storage_base} plus {economy.storage_per_city} for every city you hold. Production beyond that is lost, and the top bar marks a full stockpile. Spend it, or trade it at the [[market]]."
+    ],
+    "see_also": ["resources", "market"]
   },
   {
     "id": "upkeep",
     "title": "Upkeep",
     "category": "Economy",
-    "body": "Every unit consumes resources at the end of your turn, after production: land regiments eat food (cavalry more, artillery also some iron), fleets need wood and air groups iron. The top bar shows each resource's net change per turn in green or red. If a stockpile cannot cover the bill it is emptied and every unit that needed it loses 1 strength; units reduced to nothing disband. Hover a regiment in Muster to see its upkeep."
+    "summary": "The cost of keeping an army.",
+    "body": [
+      "At the end of your turn, after production, every unit consumes resources. The table in each unit's article gives its upkeep. The top bar shows your net change per turn in green or red.",
+      "If a stockpile cannot cover the bill, it is emptied and every unit that needed that resource loses {upkeep.shortfall_attrition} strength; units reduced to nothing disband. Rival nations only recruit what their income can feed."
+    ],
+    "see_also": ["resources", "recovery"]
+  },
+  {
+    "id": "construction",
+    "title": "Construction",
+    "category": "Economy",
+    "summary": "Improving your provinces.",
+    "body": [
+      "Open a province you hold to see its buildings table. Each building has up to three levels, and each level costs more than the last. Construction is finished at once, and a building stays with the province if it changes hands.",
+      "Farms, lumber mills and iron mines raise production. Roads make movement cheaper. A shipyard lets a port city raise fleets and an airfield lets a city raise air groups (and serves as an airbase). See the [[buildings]] for each one."
+    ],
+    "see_also": ["buildings", "production", "recruitment"]
+  },
+  {
+    "id": "recruitment",
+    "title": "Recruitment",
+    "category": "Economy",
+    "summary": "Raising new units.",
+    "body": [
+      "Any city you hold can raise one unit a turn from the recruitment table in its province panel. New units appear at once but cannot move until your next turn. Fleets need a [[building-shipyard|shipyard]] and a port, and are launched into the city's sea zone; air groups need an [[building-airfield|airfield]].",
+      "Some regions can also raise a [[charters|regional charter]]: a named formation of a standard arm that moves faster in its home terrain, costing {recruitment.regional_surcharge} more of each resource.",
+      "Before recruiting, check the unit's [[upkeep]]: an army your income cannot feed will waste away."
+    ],
+    "see_also": ["units", "charters", "upkeep"]
   },
   {
     "id": "market",
-    "title": "Merchant contracts",
+    "title": "The Merchant Exchange",
     "category": "Economy",
-    "body": "M opens the Merchant Exchange. Buy or sell fixed lots of ten resources using gold. Quotes show the full contract price. Stocks are finite, trades shift prices, and stock replenishes each global round. Transactions are manual; enemy AI does not trade. Controlled cities provide treasury income."
+    "summary": "Buying and selling resources for gold.",
+    "body": [
+      "The Merchant Exchange (M) buys and sells lots of {market.lot_size} wood, food or iron for gold. Buying draws down the merchants' stock and raises the price; selling refills it at a lower price, so buying and selling back never makes a profit. Merchant stock grows by {market.replenishment} of each resource every round, up to {market.capacity}.",
+      "Only you trade here; the rival nations do not."
+    ],
+    "see_also": ["resources", "storage"]
   },
   {
-    "id": "recruit",
-    "title": "Recruitment and facilities",
-    "category": "Economy",
-    "body": "Open a controlled city province and choose Muster. Each city recruits at most one unit per turn. Newly formed units act next turn. Shipyards require an existing port connection and unlock fleets. Airfields unlock air groups. Fleets deploy into the connected sea zone; aircraft form at the city. Works contains these facilities and roads."
+    "id": "war-and-peace",
+    "title": "War and peace",
+    "category": "Diplomacy",
+    "summary": "Making peace, and breaking it.",
+    "body": [
+      "Every nation begins at war with every other. The Diplomacy panel (D) lists each rival, its strength and its relation to you.",
+      "You can offer peace to a rival no stronger than you. Peace closes both borders: neither side may enter the other's provinces, attack its armies or fleets, or strike them from the air. A truce follows for {diplomacy.truce_rounds} rounds, after which either side may declare war again, and a rival more than ×{diplomacy.war_strength_ratio} your strength will.",
+      "Rivals also fight each other, until one grows too large: see [[coalitions]]."
+    ],
+    "see_also": ["coalitions", "victory-points"]
   },
   {
-    "id": "naval",
-    "title": "Naval operations",
-    "category": "Services",
-    "body": "Select Naval or press 2. Fleets use their own sea-zone graph. Entering an enemy fleet zone triggers simultaneous attrition; the route stops there. If defenders survive, the attacker remains in the previous zone. If they are destroyed, a surviving attacker enters. Click the current sea zone to fight enemies sharing it. Seas do not change provincial ownership. Amphibious transport is not implemented."
+    "id": "coalitions",
+    "title": "Coalitions",
+    "category": "Diplomacy",
+    "summary": "How the continent turns on a nation that grows too strong.",
+    "body": [
+      "Once any nation holds {diplomacy.coalition_share:%} of the continent's cities, the others form a coalition against it. The rival nations make peace among themselves, accept peace from anyone except the leader, refuse the leader outright and turn every war against it. If you are the leader, expect the continent to come for you.",
+      "Peace grants no military access, so a coalition member can only reach the leader across its own ground or enemy ground. The coalition lasts while the leader holds its share of the cities."
+    ],
+    "see_also": ["war-and-peace", "victory"]
   },
   {
-    "id": "air",
-    "title": "Air missions",
-    "category": "Services",
-    "body": "Select Air or press 3. Each group has one action per faction turn. Strike attacks armies or fleets in range, with return fire and automatic interception. Support grants +25% land attack against one province until your next turn; it does not stack. Rebase transfers to a controlled airbase within range. Aircraft do not walk province paths. The range graph includes abstract sea links. Losing the base destroys parked aircraft."
+    "id": "victory-points",
+    "title": "Victory points and the war screen",
+    "category": "Diplomacy",
+    "summary": "Who is winning a war.",
+    "body": [
+      "Every city is worth one victory point. Select a rival you are at war with in the Diplomacy panel to see the war screen: every city either side claims or holds, marked with a star in the colour of the nation that holds it, the occupation on both sides, and who is ahead.",
+      "Victory points are how the war stands, not how it ends: the campaign itself is won by [[victory|holding cities long enough]]."
+    ],
+    "see_also": ["war-and-peace", "victory"]
   },
   {
-    "id": "strategy",
-    "title": "Reading the strategy graph",
-    "category": "Algorithms",
-    "body": "G opens a separate inspector. Land shows province adjacency; Supply shows only your controlled network; Naval shows sea links; Air shows coverage links. Amber nodes are articulation points: removing one splits its component. Gold links are bridges. These are topological properties, not guaranteed military advantages. Click a node for degree, component and selected-unit reachability. Normal gameplay remains a geographic map."
+    "id": "world",
+    "title": "The Americas in 1800",
+    "category": "The world",
+    "summary": "The setting of the campaign.",
+    "body": [
+      "This is not the history you know. In this world no single revolution united the colonies of the Americas. Instead, over the last three decades of the eighteenth century, eight nations formed from trading companies, settler councils, city leagues, highland revolts and a pirate navy, and by 1800 they had divided the continent between them.",
+      "Read about each of them under [[nations]]. Their borders follow no historical frontier: the provinces are drawn from real geography, but the nations, their rulers and their regiments are inventions. The game also mixes periods on purpose: an air service exists alongside musket regiments."
+    ],
+    "see_also": ["nations", "charters"]
   },
   {
-    "id": "replay",
-    "title": "Recording and replay",
-    "category": "Reference",
-    "body": "Commands are recorded from faction selection or the most recent load. R opens replay controls. Watch a separate read-only copy, step commands, or export JSON. End Turn replays the complete deterministic rival cycle as one step. Every step verifies a state digest and stops on divergence. Files require the matching ruleset. Saving a campaign does not save recording history; export before closing. Exported files can be dragged onto CARS.exe."
+    "id": "traits",
+    "title": "National traits",
+    "category": "The world",
+    "summary": "What makes each nation play differently.",
+    "body": [
+      "Each nation has two traits drawn from its history, with real effects on the rules: cheaper fleets for a maritime republic, better defence in the mountains for a highland pact, more food for a river federation. The table below lists them all; each nation's article explains where they come from.",
+      "Traits are data, so a mod can change them (see [[mods]])."
+    ],
+    "see_also": ["nations"]
+  },
+  {
+    "id": "events",
+    "title": "Events",
+    "category": "The world",
+    "summary": "Decisions that arrive with the seasons.",
+    "body": [
+      "From time to time your turn begins with an event: a harvest, a fever in the camps, envoys at court. Each offers a choice, and each happens at most once per campaign. The event must be answered before play continues.",
+      "The events and what triggers them are listed below. Mods can add more."
+    ],
+    "see_also": ["mods"]
+  },
+  {
+    "id": "charters",
+    "title": "Regional charters",
+    "category": "The world",
+    "summary": "Named local formations.",
+    "body": [
+      "Many regions can raise their own formation: scouts of the Yukon trails, riders of the pampas, river companies of the Amazon. Each is a standard arm with {recruitment.regional_surcharge} extra of each resource in its cost and a discount on movement in its home terrain. They wear their region's uniform and carry a gold diamond on their plate. Recruit one from the recruitment table of a city in its region.",
+      "All the charters are listed below. Like the nations, they are inventions of this game."
+    ],
+    "see_also": ["recruitment", "units"]
+  },
+  {
+    "id": "strategy-atlas",
+    "title": "The strategic atlas",
+    "category": "Tools",
+    "summary": "Seeing the map as the simulation sees it.",
+    "body": [
+      "Behind the painted map, the game plays on four networks: land adjacency, your supply network, sea lanes and air coverage. The strategic atlas (G) draws them as diagrams.",
+      "Ringed nodes are cut points: lose one and its network splits in two. Gold links are bridges, whose loss does the same. On the supply network, green nodes are connected to a hub and red nodes are cut off. With a unit selected, the atlas draws its route. These are properties of the network, not bonuses; a cut point is only a potential choke point."
+    ],
+    "see_also": ["supply", "design"]
+  },
+  {
+    "id": "replays",
+    "title": "Replays",
+    "category": "Tools",
+    "summary": "Recording and replaying a campaign.",
+    "body": [
+      "Every order you give is recorded, starting when you choose a nation or load a save. The replay studio (R) plays the recording back on a separate, read-only copy of the campaign, checking each command's result against the original and stopping at any difference. An End Turn includes all seven rival turns.",
+      "Export a recording to keep it; replay files can also be dropped onto CARS.exe. A replay only verifies with the same version of the rules and the same mods."
+    ],
+    "see_also": ["saves", "mods"]
   },
   {
     "id": "saves",
-    "title": "Saves and shortcuts",
-    "category": "Reference",
-    "body": "F5 opens three manual save slots. F9 opens the load library. A separate optional autosave runs when rivals finish. F10 controls audio and autosave; F11 toggles borderless fullscreen. J opens the chronicle. T opens the calendar. U opens the roster. F1 opens this library. H shows or hides the tutorial guide. Saves and exports live in your user-data folder, outside the installation."
+    "title": "Saving and loading",
+    "category": "Tools",
+    "summary": "Campaign slots and the autosave.",
+    "body": [
+      "F5 opens three campaign slots; F9 loads one. An autosave is written at the end of every turn unless you turn it off in settings. Saves live in your user-data folder, outside the game's own folder, and older saves are upgraded automatically."
+    ],
+    "see_also": ["replays"]
   },
   {
-    "id": "project",
-    "title": "The graph-driven design",
-    "category": "Algorithms",
-    "body": "The user plays on a map; the simulation plays on graphs. Stable province IDs connect visuals to simulation. Dijkstra governs weighted movement, neighborhoods create ZOC, connectivity governs supply, and independent graphs model sea and air systems. Rivers are edge metadata. Geography is a fictional province subdivision of Natural Earth data. Max-flow supply, diplomacy and amphibious transport remain future work."
+    "id": "mods",
+    "title": "Mods",
+    "category": "Tools",
+    "summary": "Changing the rules without changing the game.",
+    "body": [
+      "Almost everything that sets the balance lives in data files: combat and movement numbers, units, buildings, nations and their traits, events and this library. A mod is a folder in the user-data mods folder that overrides any of it, and can add events and paintings. See docs/MODDING.md in the project for the details."
+    ],
+    "see_also": ["traits", "events"]
   },
   {
-    "id": "history",
-    "title": "An atlas of ambition",
-    "category": "History",
-    "body": "Scenario history: eight fictional realms compete across the Americas. The calendar starts in 1800, but the units and cultures are deliberately stylized across eras. Regional charters are original fictional formations. Province boundaries are generated subdivisions, not historical borders. Open Campaign Chronicle below for the actual battles, construction, seasonal milestones and orders in your current campaign."
+    "id": "design",
+    "title": "How the simulation works",
+    "category": "Tools",
+    "summary": "Graphs under the painted map.",
+    "body": [
+      "You play on a map; the simulation plays on graphs. Each province has a stable identity that links its drawing to its place in four networks. Movement is a shortest-path search over the land network weighted by terrain, roads, rivers and zones of control; supply is connectivity from your hubs through provinces you control; fleets and aircraft use networks of their own. Rivers and passes are properties of the links between provinces.",
+      "The rules are deterministic, so the same orders always produce the same campaign. That is what makes exact forecasts and verified replays possible."
+    ],
+    "see_also": ["strategy-atlas", "replays"]
   }
 ]

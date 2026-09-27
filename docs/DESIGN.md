@@ -107,32 +107,59 @@ never leaves a half-written save.
 
 ```
 ui/app.py          window, active screen, frame loop
+ui/context.py      services shared by every screen: the toolkit, audio, pointer, UI scale
+ui/kit/            the toolkit: palette and type scale, text, panels, buttons, icons,
+                   sortable tables, static grids and tooltips, all drawn at native size
+ui/frames.py       Frame, DockedPanel and Window: framed, scrolling content with click areas
 ui/screens/        TitleScreen, GameScreen (input and turn flow), ReplayScreen
-ui/renderer.py     GameRenderer: map plus HUD for a GameState; drawing and hit testing only
+ui/renderer.py     GameRenderer: map plus the shell for a GameState; layout and hit testing
+ui/hud/            the shell: top bar, side bar, outliner, map-mode bar and End Turn,
+                   unit card, notifications, forecast card
+ui/panels/         docked panels: province, nation, military, diplomacy, market, chronicle
+ui/windows/        modal windows: menu, save and load, settings, music, keyboard, calendar,
+                   strategic atlas, replay studio, event, nation picker
+ui/pedia/          the CARSapedia: its generated library and the window that reads it
 ui/map/            MapView (camera, hit testing, overlays), Atlas (the painted base map),
-                   border geometry, labels, relief, march animation
-ui/hud/            top bar, turn controls, province window, objectives, menu, market,
-                   forecast card, faction picker
-ui/dialogs/        modal dialogs sharing one frame: library, roster, chronicle, settings, music,
-                   calendar, CARSapedia, strategy atlas, replay studio
-ui/art/            procedural sprites, insignia, cities, buildings and ornament
+                   border geometry, labels, nation names, markers, arrows, animation
+ui/art/            procedural sprites, icons, cities, buildings, landscapes and paintings
 ```
 
-`GameScreen` handles input as a chain of handlers in priority order: an open
-dialog, the tutorial card, top-bar shortcuts, the market, the menu, file
-shortcuts, the faction picker and finally orders on the map. Each HUD panel owns
-its own rectangles, drawing and hit testing. `GameRenderer` draws both live play
-and read-only replays; the replay screen simply gives it a different state.
+The game draws straight onto the window at its native resolution. Every size in
+the interface is a logical size that the toolkit multiplies by the UI scale,
+which defaults from the window height (100% below 1075 pixels, 125% at 1080p,
+150% at 1440p, 200% at 2160p) and can be set in Settings. The renderer lays the
+shell out afresh each frame from the window size, so resizing needs no special
+handling; the camera keeps the same part of the map in view at the same relative
+zoom.
 
-A left press on the map is held until release, so dragging to pan can never issue
-an order. Moves resolve immediately; the march animation only replays the result.
+Panels and windows are drawn immediately each frame. While drawing, a frame
+registers the areas that respond to clicks (``Frame.clickable``), and input is
+routed by looking those up, so drawing and hit testing never disagree. Content
+taller than its frame scrolls. Tables (``kit/table.py``) sort by any column and
+scroll themselves; small fixed tables use ``kit/grid.py``.
+
+`GameScreen` routes input in priority order: an open window, the tutorial card,
+keyboard shortcuts, the docked panel, the shell, and finally the map. A left
+press on the map is held until release, so dragging to pan can never issue an
+order. Moves resolve immediately; the march animation only replays the result.
+`GameRenderer` draws both live play and read-only replays; the replay screen gives
+it a different state and turns off the command interface.
+
+The CARSapedia (``ui/pedia``) builds its library at start-up from the authored
+articles in ``content/text/carsapedia.json`` and generated articles for every
+nation, unit, charter, building, terrain and event. Authored text writes rule
+values as placeholders such as ``{combat.river_attack_factor}``, filled from the
+defines, and links as ``[[article-id]]``; a link to a missing article stops the
+game at start-up rather than showing a dead link.
 
 ### The map
 
 The base map is painted in world space, where one degree is `scale` pixels, by an
 `Atlas` for each zoom level. It paints 256-pixel tiles on first use and keeps
-them, so panning only blits cached tiles; the three most recent zoom levels are
-kept. When a province changes hands, only the tiles it touches are repainted.
+them, so panning only blits cached tiles; the four most recent zoom levels and
+map modes are kept. A map mode is a colouring: each province's colour comes from
+its controller (political), from nothing (terrain), from its supply (supply) or
+from its relation to the player (diplomatic). When a province changes hands, only the tiles it touches are repainted.
 
 Each tile is painted in layers: the Natural Earth relief, graded into a dark sea
 wash; lighter shallows along the coasts; each nation's land as relief dyed and
@@ -142,7 +169,10 @@ coastline. Borders come from `geometry.borders`, which classifies every outline
 segment by the provinces on either side of it. Fog of war is a separate tile
 layer, cached per set of hidden provinces. Pins, units, routes and labels are
 drawn over the atlas in screen space every frame. Each stack is one plate
-(`map/markers.py`); zoomed out, plates and city pins replace figures and towns.
+(`map/markers.py`); zoomed in, the leading unit's figure stands on it. Cities are
+drawn as their towns, with names once zoomed in; victory points appear only on
+the diplomacy panel's war screen. Routes are smooth, tapering arrows through a
+Catmull-Rom spline of the province anchors (`map/arrows.py`).
 
 Zoomed out, nation names replace province names (`map/nation_labels.py`). Each
 nation's land is rasterised at two pixels per degree and split into connected

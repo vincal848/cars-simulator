@@ -13,6 +13,7 @@ class TitleTests(ScreenTestCase):
     def setUp(self):
         super().setUp()
         self.title = TitleScreen(self.context, self.game)
+        self.title.draw()
 
     def click_title(self, name: str) -> bool:
         event = pygame.event.Event(pygame.MOUSEBUTTONDOWN, button=1, pos=self.title.buttons[name].center)
@@ -21,34 +22,30 @@ class TitleTests(ScreenTestCase):
     def key_title(self, key: int) -> bool:
         return self.title.event(pygame.event.Event(pygame.KEYDOWN, key=key))
 
-    def test_new_campaign_and_display_toggle(self):
-        self.click_title("display")
-        self.assertTrue(self.context.display_toggle_requested)
-        self.assertTrue(self.title.active)
+    def test_new_campaign_then_the_nation_picker(self):
         self.click_title("new")
         self.assertFalse(self.title.active)
+        self.assertEqual(self.game.window_name, "picker")
 
-    def test_help_and_quit(self):
-        self.click_title("help")
-        self.assertTrue(self.title.help)
-        self.title.draw()
-        self.key_title(pygame.K_ESCAPE)
-        self.assertFalse(self.title.help)
+    def test_quit(self):
         self.assertFalse(self.click_title("quit"))
 
-    def test_library_needs_an_existing_save(self):
+    def test_loading_needs_an_existing_save(self):
         with patch.object(self.title.library, "has_save", return_value=False):
-            self.click_title("load")
-            self.assertIsNone(self.game.dialogs.mode)
+            self.title.draw()
+            self.assertNotIn("load", self.title.buttons)
         with patch.object(self.title.library, "has_save", return_value=True):
+            self.title.draw()
             self.click_title("load")
-            self.assertEqual(self.game.dialogs.mode, "load")
+            self.assertEqual(self.game.window_name, "load")
         self.assertTrue(self.title.active)
 
-    def test_enter_starts_and_f1_opens_the_library(self):
+    def test_windows_over_the_title_take_the_input(self):
         self.key_title(pygame.K_F1)
-        self.assertEqual(self.game.dialogs.mode, "pedia")
-        self.game.dialogs.close()
+        self.assertEqual(self.game.window_name, "pedia")
+        self.title.draw()
+        self.key_title(pygame.K_ESCAPE)
+        self.assertEqual(self.game.window_name, "picker")  # Back to waiting for a nation.
         self.key_title(pygame.K_RETURN)
         self.assertFalse(self.title.active)
 

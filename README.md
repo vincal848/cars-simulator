@@ -2,9 +2,9 @@
 
 **You play on a map. The simulation plays on graphs.**
 
-C.A.R.S. is a turn-based grand-strategy prototype set in the Americas. Eight
-fictional nations compete over 186 provinces drawn on real Natural Earth
-geography. You command one; seven AI rivals take their turns. Armies, fleets,
+C.A.R.S. is a turn-based grand-strategy prototype set in an imagined Americas of
+1800. Eight nations, each with its own history and national traits, compete over
+186 provinces drawn on real Natural Earth geography. You command one; seven AI rivals take their turns. Armies, fleets,
 air groups and supply lines each move on their own graph, and every rule works
 on those graphs. The map you see is only a way to click on them.
 
@@ -12,6 +12,12 @@ on those graphs. The map you see is only a way to click on them.
 
 ## Features
 
+- **Eight nations with a history**: rulers, capitals, forms of government and two
+  national traits each, such as cheaper fleets or stronger mountain defence.
+- **A grand-strategy interface** in the manner of Victoria and Europa Universalis:
+  a painted political map with nation names, map modes, an outliner, docked
+  panels with sortable tables, and an interface that scales from a laptop to a
+  4K screen.
 - **Land warfare** on a road-, river- and terrain-weighted province graph, with
   zones of control, supply cut-offs, fog of war and deterministic attrition combat.
 - **Four unit roles plus navy and air**: infantry, scouts, cavalry and field
@@ -28,8 +34,11 @@ on those graphs. The map you see is only a way to click on them.
   preview always matches the outcome.
 - **Verified replays**: every command is recorded with a hash of the resulting
   state; playback re-simulates the campaign and stops at any divergence.
-- **Guided tutorial, searchable CARSapedia and a strategy inspector** that shows
-  the graphs themselves: components, choke points and bridges.
+- **A complete CARSapedia**: nearly a hundred linked articles covering every rule,
+  nation, unit, charter, building, terrain and event, with numbers read from the
+  game itself so they never go out of date.
+- **Guided tutorial and a strategic atlas** that shows the graphs themselves:
+  components, choke points and bridges.
 - Original procedural artwork, a classical music collection and fully offline play.
 
 <p>
@@ -73,16 +82,19 @@ do each thing. To win a campaign, hold three cities for five consecutive rounds.
 
 | Input | Action |
 | --- | --- |
-| Left-click a unit, then a highlighted province | Move or attack (hover first for the route and forecast) |
-| Right-click a province | Province window: build, develop infrastructure, recruit |
-| Left-drag / wheel | Pan / zoom |
-| `1` `2` `3` `4` | Land, naval, air and supply layers |
-| `Space` | End turn; the rivals then act one order at a time |
-| `N` / `F` / `Tab` | Next ready unit / centre selection / cycle a stack |
-| `M` / `U` / `J` / `T` / `D` | Market / military overview / chronicle / calendar / diplomacy |
-| `F1` / `G` / `R` | CARSapedia / strategy graph / replay studio |
-| `F5` / `F9` | Save / load (three slots plus an end-of-turn autosave) |
-| `F10` / `F11` | Sound and music / fullscreen windowed |
+| Left-click an army plate, then a highlighted province | Move or attack (hover first for the route and forecast) |
+| Right-click a province, or click a town | Province panel: facts, production, buildings, recruitment |
+| Left-drag / wheel / `Home` | Pan / zoom / world view |
+| `1` `2` `3` `4` | Political, terrain, supply and diplomatic map modes |
+| `Space` or the round button | End turn; the rivals then act one order at a time |
+| `N` / `F` / `Tab` | Next unit with orders / centre selection / next unit in a stack |
+| `I` / `U` / `D` / `M` / `J` | Nation / military / diplomacy / market / chronicle panels |
+| `F1` / `T` / `G` / `R` | CARSapedia / calendar / strategic atlas / replay studio |
+| `F5` / `F9` / `F10` / `F11` | Save / load / settings / fullscreen |
+| `Esc` | Close the panel, clear the selection, then open the menu |
+
+The interface size follows your screen (125% at 1080p, 150% at 1440p); change it,
+or the typeface, in Settings.
 
 Saves, replays and settings live in your user profile
 (`%LOCALAPPDATA%\CARS` on Windows, `~/Library/Application Support/CARS` on macOS,
@@ -94,9 +106,9 @@ Saves, replays and settings live in your user profile
 src/cars/
   sim/        game rules: graphs, movement, combat, supply, economy, AI, turns (no pygame)
   persist/    save files and verified replays
-  ui/         pygame front end: map view, HUD panels, dialogs, screens, procedural art
+  ui/         pygame front end: interface toolkit, map, shell, panels, windows, CARSapedia
   content/    game data, loosely modelled on Paradox's folder layout
-    common/     units, buildings, recruitment, market, factions and defines.json
+    common/     units, buildings, recruitment, market, factions, nations and defines.json
     gfx/        uniform styles
     map/        shaded relief and source hashes
     scenarios/  scenario JSON and province GeoJSON

@@ -11,168 +11,340 @@
  },
  "screens": [
   [
-   "title",
-   "58833aff3a946c8b11550b42a40be1c390eebc251c5f7306ac04b485fd1a702e"
+   "1200x780 title",
+   "f5421aed75c5cf283495e9ca17b96275785289d92cd7016aa9b5f6452943c7f7"
   ],
   [
-   "title help",
-   "a771d30ddefdf8891116c2e634edbf156c0f83ec08bd84098730d686efc219e0"
+   "1200x780 nation picker",
+   "a04ac2e62eeeb4d2e879498883f830ec3a72b1a53bde34eeb4678213466eff0f"
   ],
   [
-   "faction picker",
-   "88e23073775612ce9cefa22373125b08cfddf3e0267b48d630a8a65268661cba"
+   "1200x780 campaign map",
+   "1d318ec75aba6676d8b7d123d7f2e52b5784c433e7ea1c26935db9d0db7a3d69"
   ],
   [
-   "campaign map",
-   "cc84ec6382c17eedcde6eca013c99c7f25898d88d5dd2821be9f3ab44fcc7fd5"
+   "1200x780 route and forecast",
+   "5dcfeff6cf56ee2a3a65e754bdf9b8f15696e18b532c339578774830b007c047"
   ],
   [
-   "objectives collapsed",
-   "7ea9de4b90ae11be20e9e790e4ad25dfa425818c8cfe4b2140bff6d2bad6535d"
+   "1200x780 debug graph",
+   "25555cf3440f9bf72b6a031ef81d8d19a37d010a34603fcaa37c0f6995e7bf88"
   ],
   [
-   "route and forecast",
-   "8e78c4bc4168cd00eac77591fb78ce5f2f22153fdf6d3aee8f76b29b792d69bf"
+   "1200x780 map mode terrain",
+   "b328a5cb0a127b9578ed9406f7910d32ea2d42ecc32fb145b83e6e462c4ec424"
   ],
   [
-   "debug graph",
-   "db9ac93f5f91f827550b8918bd6dd581fc9427971150bec988af8f72f7c38054"
+   "1200x780 map mode supply",
+   "a3b5174bdf33d5002d2cfca20b992cb7d591f6612d20b4df6ec0877793b9d81a"
   ],
   [
-   "province build",
-   "4096ac388d7559e99246bf11b107fa0a461c91e45197f530e983a5fab863bec7"
+   "1200x780 map mode diplomatic",
+   "ffc350e054a6393bee3361b5c36baddb77ac4b3d018884aded81fbe483198493"
   ],
   [
-   "province infrastructure",
-   "4c065ebb2ac9e5ffdf31dc496d5105829bf95756151faad21795b12516b5f46f"
+   "1200x780 province",
+   "80da9a3a48030eacd96bad818fed92dff5b39f9369b87e71ffb0677f7644c423"
   ],
   [
-   "province recruit",
-   "4c61d5d23c13ea33f6426be02bb7481d307ec4ad47217c8ff9e9566bb3553c52"
+   "1200x780 province recruitment",
+   "5f1947dd8bed6399a9c0c80d29542b49bd8d2fff68d09e778385d0154913bde8"
   ],
   [
-   "recruit sea_air",
-   "7342a87002ef26cb0c2cc08468746deb547d36677b8b11e703b53f42b2de91d0"
+   "1200x780 panel nation",
+   "a979d43b64dc870ad77f632b980b9984076a2169a63f1d128734ad985d6b2be7"
   ],
   [
-   "recruit regional",
-   "aa84e0e0d544808c79905d0254f76ba391bad3589298649234afbc8ba2707523"
+   "1200x780 panel military",
+   "3cee19de33aca5e021d1f22a87ce3556583b88f020ae429317887ba3c83c4260"
   ],
   [
-   "layer naval",
-   "5944686415c907802d113bedd94ad1b0387c664f22f8bd57fbf368c5521a29d7"
+   "1200x780 panel diplomacy",
+   "9288152ba339ab5a878434d55dbbeb43ec96111e99f1cfc12af9431ac793ce25"
   ],
   [
-   "layer air",
-   "210ccfe8509436ebb5878cf8e0f1ee91e05db65db2190e6b91a1e3234218073f"
+   "1200x780 panel market",
+   "0eff2da8aeccb398c5713c6cf284305377cd4ff6da7c4352a2802419ef1a064c"
   ],
   [
-   "layer supply",
-   "59f011f2912057de3179ae0ebce8116b340f76f8caa7df33ef2582f74fde2f55"
+   "1200x780 panel chronicle",
+   "c814e4a6a45345b5961870720f6f4d997eb95d3f3adc17e792880d26a5f75ffc"
   ],
   [
-   "menu",
-   "e905de9f6d3c43a3b43803ceac5e34d482673912da397a0b62b220ed1ef19b03"
+   "1200x780 window menu",
+   "b0534e21720b84ac42c1743446ee6028ee59217f75b6eafcf6d2fd07068059e2"
   ],
   [
-   "market",
-   "761351d194c9803a760a6b8447c038815decb4936c63a6f4c1d3d5e8ef7e7dc8"
+   "1200x780 window settings",
+   "a5a122139dd72390887099efc384e364c5fb1de6da108fe8044cbdabcb260453"
   ],
   [
-   "dialog pedia",
-   "231a7269489e8abbe4147942f317130ac5be5e27f776b02889016c9dacff5aa8"
+   "1200x780 window music",
+   "4f0b12c6114ff884d9e079bc731617993d16d47c0b5007a3267dfb5790ebce08"
   ],
   [
-   "dialog strategy",
-   "78cd2b784561d79cabe4e9891ed423b9dbc71bcd12f06a9f8e5c75fe5e08914c"
+   "1200x780 window keyboard",
+   "e84d414497fc505093fed9e9a8d9b585a86d2cbf805b65ed5f10f006fef7a87a"
   ],
   [
-   "dialog replay",
-   "7c5458b907f0966932c1f860481b55692b4334f5c3da0ec2b2086a4688494ed5"
+   "1200x780 window timeline",
+   "ae821d764250d4cb698e9006f93c23413ceb5c1022112c987c411b635fe9cfe4"
   ],
   [
-   "dialog reports",
-   "3ed95ca79d75b06fde802cc3c7c07daf8cd2272a90dacb21a1de3d0fed45f67e"
+   "1200x780 window strategy",
+   "ee862f046c4bb950023b7b50d5b64f4eac89e5f53879071c70c23f8fc7a47bae"
   ],
   [
-   "dialog roster",
-   "559dbe96f0796692619be99f9258225f0c1ca44501e126c159d3ee8de56b3179"
+   "1200x780 window replay",
+   "7c44783e9437eadc5039dedef4d9bbc6611fb55c1a284948b339457b4dcab63a"
   ],
   [
-   "dialog diplomacy",
-   "c56f77fde8e01600631f39380597f5f7d79b5762aecc33f53f2f6011f14bea77"
+   "1200x780 window save",
+   "9f6eb3eb0f363630a6081f7916556a66aa2590ab37e4fb11c4399a0bb62d4fed"
   ],
   [
-   "dialog settings",
-   "e358e94796225b8b64793684d5311777f1acca9f07d430e0adcaa3d2a4964497"
+   "1200x780 window load",
+   "5887d34f0cfae53176d89eed2b6947bfd2d6d95f93440251607893b72c9af680"
   ],
   [
-   "dialog music",
-   "062d855d5c5a5a7b67b00da52b38f2601cefbd9bc0816f604180b5b80e0da394"
+   "1200x780 window event",
+   "603bde4a64606b1ddff447b15f8b3558d4b4c0026078ffc89a23c481b50ae3a2"
   ],
   [
-   "dialog timeline",
-   "06e0cfec73797e8ea20a4538fddd1d82cae7017a31bb3486692a0f16fc6049f9"
+   "1200x780 pedia welcome",
+   "faa9b11d0093c03d35fe705f63a9ba4f94befbc2faddea2da8f62a5e778792d5"
   ],
   [
-   "dialog save",
-   "04e11558dfe88493d00ecffea6e8f66ca45c7d6a5f764b839ea04eb4f46e8535"
+   "1200x780 pedia combat",
+   "11adf66c0d9e62e557af7b8f89dc70fee1cbee2868a0d3d8d54c0dfcef8897f0"
   ],
   [
-   "dialog load",
-   "d4a617e1a49abc1bdc93cec52c04c891e62ab7d3b5ec939bdc0cab8966a22e7f"
+   "1200x780 pedia unit-cavalry",
+   "5c50bed83a0b3942f1e5241280b6ebda5f866393481161261b1ec44b787573c2"
   ],
   [
-   "dialog event",
-   "7c806ab6fb68228b3417df17c920c137871f320d9a8aee7298f64bd1c9fa1460"
+   "1200x780 pedia nation-f3",
+   "f5ecae4fd992772c369fedc3433802717498f5b7afd5a8daa43f57aa526f994d"
   ],
   [
-   "pedia units",
-   "414dcb31569a3ed74c159164d1d425990fd01a63b5b20367299f4cb452b71dc3"
+   "1200x780 pedia traits",
+   "189c3e811050d06218832644dc807e62dfc0bb69220560d690715db815aa1855"
   ],
   [
-   "pedia history",
-   "feae563bba272ed1edc37d8ba958cf4d8e40d4a9ef1e3d6892721952b6adc13b"
+   "1200x780 pedia search",
+   "449bce307fc203637eff1c03b71f8711b88f901d23d27fb8a88af2819f3df928"
   ],
   [
-   "strategy supply",
-   "428487882defc2608280244ef0504cc56466147e38643fb398bdf9463c46120e"
+   "1200x780 strategy supply",
+   "afe769e98949a62aa5dcd94691e39f2ee498267a8135d2be890fdb3504c45baf"
   ],
   [
-   "zoomed",
-   "dcb0b488cc24b00672e4d949435ddbe4cbdec28427a5eea0d22fcde5bea2ce6d"
+   "1200x780 zoomed",
+   "b88648ed79bbdd19a66d78c61af956c17ccb3aaed2ba940c61089e94cf75bc4b"
   ],
   [
-   "zoomed max",
-   "fb8fd905447ab3fcf08ed2c8a803b57767d286059842f8bf6ad474733e78e3d3"
+   "1200x780 zoomed max",
+   "90093be1c6c2f2f9b58b9cbb1491f4842fc03ce1ffcaae8c6f5b7984fd7ab6f4"
   ],
   [
-   "after rival turns",
-   "aace6342035ec02ea76e53cdd336e8da620a2f34f558e4d493f705fbe2aa8d84"
+   "1200x780 after rival turns",
+   "e5ae8d5fc5e7c9183cbfb9e419b018f5e108ab0473be4f30477ca97072f20d94"
   ],
   [
-   "chronicle battles",
-   "7d96b2b501c56be9a76c2089e4d3dc99f009c427786ecb2249953f9b23395e1e"
+   "1200x780 chronicle after rival turns",
+   "ee5259b2d4be1f69caade1c2aff29555f923afc2645756609d1209c4dc7f209f"
   ],
   [
-   "chronicle all",
-   "89beec7fef210995ff088f2f17ad217ab7ae419c4102e45f3608f147daf8c095"
+   "1200x780 military after rival turns",
+   "19f72187b327014ecbf57f7ac2e7fe5a6687b55bc5f8c7c475819197b2d87356"
   ],
   [
-   "roster after rival turns",
-   "30070adebdf107fac3cdb8af1773a2bb1724c730567ae94f268a4855e73ec354"
+   "1200x780 diplomacy after rival turns",
+   "cb53944a916936fc633cb6dfd34db38e4c15081eb0b12c5c2e551f8817fdee6d"
   ],
   [
-   "tutorial",
-   "90dd6c455548abb18bf788339b3f848a8d2ba641b6ed7e057edcf5fdfc8ccae2"
+   "1200x780 chronicle everything",
+   "4c4319ecfa4322642db5d0b7a062afe2bf3616a307d3bcfabc8ce991cf43eeac"
   ],
   [
-   "replay start",
-   "baed59dd09c6547082b9d19e4dc464ca7d3db1ce4b815ce506a75b1c91b1585a"
+   "1200x780 tutorial",
+   "50d5875fff25ea56c0182499f21d2790a3f7122dc5e11340123db51f81b25ff6"
   ],
   [
-   "replay stepped",
-   "ee0bb956bcaa6ac03b87d40793a6d81cdd8628742c3d64260846f199387c6177"
+   "1200x780 replay start",
+   "7d5e2a4d6a35895d3010b059e2c37e30c9aa6b518c765fa73e89b5be41d52ab8"
+  ],
+  [
+   "1200x780 replay stepped",
+   "34efb2362d726403b868555799c37eb85afd4ca5ffabdcfbce2246c0ed87958e"
+  ],
+  [
+   "1920x1080 title",
+   "13c769ee496838f64497c6546aa0256768b59175b9516eec496d801a608cbbb1"
+  ],
+  [
+   "1920x1080 nation picker",
+   "23c3db1930989e02480fecb9bf6cd1ed489a25056d8dfcb765c48dc4a2f2952c"
+  ],
+  [
+   "1920x1080 campaign map",
+   "cb80b64b9e13e7e9fbc91d5bf80338c85dbfa235cb2712d64fa4a90d51e4b366"
+  ],
+  [
+   "1920x1080 route and forecast",
+   "939503735b9da324898348ceec61e4de958bf2dafd05e93898ee0df3ff9abab2"
+  ],
+  [
+   "1920x1080 debug graph",
+   "a2578a81a750717bb3078453db77ecca5c29a7e0073fcd9b0a1a34d3674d5f5d"
+  ],
+  [
+   "1920x1080 map mode terrain",
+   "be4f9a5f0cce05d94e6e15ef0ff055155ad37f9d0061ba2740035fe2759670ab"
+  ],
+  [
+   "1920x1080 map mode supply",
+   "8cdc40b2af253c2d62c7c4096a0921371109d37013759bfff688f2c86ac3a580"
+  ],
+  [
+   "1920x1080 map mode diplomatic",
+   "4dcf0331df316e8202eb71d3de64d1bdac3957c246f47ba660c65849c3e9ccfb"
+  ],
+  [
+   "1920x1080 province",
+   "dd47731d2044fc488fe67e98a3ee7a33f2f57fdd7d20a747a6ec4c39bc00f4de"
+  ],
+  [
+   "1920x1080 province recruitment",
+   "3d91db33b695a1ef4192112ee10994bbf514ed20773ee2e4c0a6d0a4f77e4769"
+  ],
+  [
+   "1920x1080 panel nation",
+   "38f9af981d15d9e5bb7c393a630d08ae22fc1dac943f7bd2f105181f616f34b9"
+  ],
+  [
+   "1920x1080 panel military",
+   "4d6c262cd71a5cf04f5d9d1515799699342a2400894f455b5d74e7549837e257"
+  ],
+  [
+   "1920x1080 panel diplomacy",
+   "0f6d2c01762d4166b9d53539c53d349cd9fce92bad1bfe642b9e5ac75d4c0f7f"
+  ],
+  [
+   "1920x1080 panel market",
+   "ed520f274f090614697cf7e421184cd819cd80744a0679adac1361725ca5a1f4"
+  ],
+  [
+   "1920x1080 panel chronicle",
+   "9d06ccb6b30f18a1432f32a6f083f00805a3a74c88f0d13e3fd6b69356b15eb6"
+  ],
+  [
+   "1920x1080 window menu",
+   "c43f66d44f024ecd346a8a4a4aa1a2edb46f06c6baeeacff5a124eb528f6a531"
+  ],
+  [
+   "1920x1080 window settings",
+   "3f0e469b36aff2325c277b75438ea2ea751f60bcbd652b04ad5d56431a9ed3cf"
+  ],
+  [
+   "1920x1080 window music",
+   "35ea194092c0cb5e5568d48bb8797c6d2c0d5493f8a4080d2382036e63fefde5"
+  ],
+  [
+   "1920x1080 window keyboard",
+   "b72a373b1ab4cfdcc7700dfe2db7d084369672dbc12ef938e7cb730eed605583"
+  ],
+  [
+   "1920x1080 window timeline",
+   "5a529f6ed28f64cca0e4d10eca957c88202e530b1c181da15181f46d5909a3e3"
+  ],
+  [
+   "1920x1080 window strategy",
+   "5b05ae7274c640637ffcb11daf05b9539a7f0cd0ea9e19c818aa28a16ffacc24"
+  ],
+  [
+   "1920x1080 window replay",
+   "4d76880cb887df9a9581f6f8cfd44ee2fe87eea7cf16b3b13a0c3188a698c472"
+  ],
+  [
+   "1920x1080 window save",
+   "f3d305df5ef160a9b10e32d50381873b4a682aa57c342f2f59230a2d93c3e5a4"
+  ],
+  [
+   "1920x1080 window load",
+   "75f4f9d8ee3398a64f9168db8563c434f62a006ce0d667386a3d4ccb6cd0acb7"
+  ],
+  [
+   "1920x1080 window event",
+   "a902dd513695840e618087b3dcc1ae3a94ca8099523f840b78be3812ad7b5444"
+  ],
+  [
+   "1920x1080 pedia welcome",
+   "6e58a82bbf48b947029757c2c1cc6ad2147936db203b872566da7c52121e768a"
+  ],
+  [
+   "1920x1080 pedia combat",
+   "fbbaca86bf864b6570f0149698615c0833946d96d335e6fc8cf39cd147075c8b"
+  ],
+  [
+   "1920x1080 pedia unit-cavalry",
+   "ed344fceaf6d8e3ac10bb50d2f706b80824288a523122ec9ce912956528be02b"
+  ],
+  [
+   "1920x1080 pedia nation-f3",
+   "504d5997831239a800588dc0e25ae3cec5e1c3352c2532d757a4e9176235d277"
+  ],
+  [
+   "1920x1080 pedia traits",
+   "d010cf5195ed1ed5b93c3370085dd93e49503db8a24ddf36d8281f916339499a"
+  ],
+  [
+   "1920x1080 pedia search",
+   "24fdbdc3ef8e198abbf14c4e78446a33174f075389eb47ec6db75deaaa047a9b"
+  ],
+  [
+   "1920x1080 strategy supply",
+   "0a34843cfe9246f1acf6247a9ac304e9f9a8d9545c1594a86c5c7f98f258e258"
+  ],
+  [
+   "1920x1080 zoomed",
+   "81d3aa5baf871c325c5d73260ae7cbfed2a4daa9a673bbd9c82fd7696f0ddd69"
+  ],
+  [
+   "1920x1080 zoomed max",
+   "3858845efa667db2556de73051d1d9de11e7b768412ca3ec34698a38ef111539"
+  ],
+  [
+   "1920x1080 after rival turns",
+   "ffc01f875b35115fec7e2802ff153629a7dc4964e66854485a2fdea85f51bb19"
+  ],
+  [
+   "1920x1080 chronicle after rival turns",
+   "36f49a2452e728b0bf0161eed8997544ed916e8cafe784fe7c4610fa31a39af0"
+  ],
+  [
+   "1920x1080 military after rival turns",
+   "9d5fe16516a5af018a500db397cd3958b6d5bc86c1e4b48df8cb05b17e519021"
+  ],
+  [
+   "1920x1080 diplomacy after rival turns",
+   "42c41214a6a4aabe7fb8453b24d94305ff06a30ef91d3df23ea4f3816a2d4f61"
+  ],
+  [
+   "1920x1080 chronicle everything",
+   "c26f71b4df8a40d18d67f46ee40f1eabc69aad6386bbd2288cab58391a9863b7"
+  ],
+  [
+   "1920x1080 tutorial",
+   "b78795e8e5dccda71d2bf4515c7745e08da337c60da3e1b0b4e550b6403605a5"
+  ],
+  [
+   "1920x1080 replay start",
+   "8287a0509baf4aa0665611436f4e5343adbd5b8a5d3dabe76c6fde11026a0c83"
+  ],
+  [
+   "1920x1080 replay stepped",
+   "d1956e8d46c682eeae48f9c009f95a3825edfdeda74f1009921f5b6b416b92b3"
   ]
  ]
 }

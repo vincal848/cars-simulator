@@ -18,8 +18,9 @@ python -m cars --smoke --faction f0 --screenshot frame.png
 
 ### Golden tests
 
-`tests/golden` replays 50 rounds of AI campaigns, a recorded player campaign and 39
-screens, and compares hashes of every step with `tests/golden/reference/`. Any
+`tests/golden` replays 50 rounds of AI campaigns, a recorded player campaign and
+every screen at two window sizes (1200×780 at 100% and 1920×1080 at 125%), and
+compares hashes of every step with `tests/golden/reference/`. Any
 change in behaviour or rendering, however small, fails them. After an intentional
 change, regenerate and commit the references in the same commit:
 
@@ -34,8 +35,9 @@ itself on machines unlike the one that recorded them (including CI).
 
 Tests run headless (`tests/support.py` selects SDL's dummy drivers) and keep
 saves in a temporary folder, never in your real profile. `ScreenTestCase` gives
-you a campaign screen with a faction already chosen, plus helpers to click and
-press keys.
+you a campaign screen with a nation already chosen, plus helpers to click and
+press keys; `click_area(frame, action)` clicks wherever a panel or window last
+drew a control, so tests never hard-code coordinates.
 
 Some rules for changes:
 

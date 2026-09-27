@@ -6,6 +6,7 @@ import pygame
 
 from cars.persist.replay import Playback
 from cars.sim.campaign import Campaign
+from cars.ui.kit import style
 from cars.ui.renderer import GameRenderer, ViewState
 
 if TYPE_CHECKING:
@@ -13,11 +14,9 @@ if TYPE_CHECKING:
     from cars.ui.screens.game import GameScreen
 
 STEP_SECONDS = 0.8
-BUTTONS = {
-    name: pygame.Rect(22 + i * 143, 632, 134, 34)
-    for i, name in enumerate(("play", "step", "restart", "exit"))
-}
+ACTIONS = ("play", "step", "restart", "exit")
 KEYS = {pygame.K_ESCAPE: "exit", pygame.K_SPACE: "play", pygame.K_RIGHT: "step", pygame.K_HOME: "restart"}
+SIZE = (560, 150)
 
 
 class ReplayScreen:
@@ -25,9 +24,10 @@ class ReplayScreen:
         self.context = context
         self.game = game
         self.playback = Playback(data)
-        self.view = ViewState(message="Paused / verified command replay")
+        self.view = ViewState(message="Paused. This replay is read-only.")
         self.playing = False
         self.timer = 0.0
+        self.buttons: dict[str, pygame.Rect] = {}
         self._bind()
 
     def _bind(self) -> None:
@@ -36,6 +36,7 @@ class ReplayScreen:
         campaign.player = playback.player
         self.renderer = GameRenderer(self.context, playback.state, playback.shapes, playback.seas, campaign)
         self.renderer.fog = False  # Replays are watched as an observer.
+        self.renderer.interactive = False
 
     def step(self) -> None:
         if self.playback.failed:
@@ -51,22 +52,17 @@ class ReplayScreen:
             self.playing = False
             self.view.message = "Replay complete. Every command matched."
             return
-        state = self.playback.state
-        self.renderer.set_state(state)
-        # Show the layer of the unit the command moved, if any.
-        command = self.playback.commands[self.playback.index - 1]
-        unit = state.units.get(command["args"][0]) if command["args"] else None
-        self.view.layer = unit.layer if unit else "land"
+        self.renderer.set_state(self.playback.state)
         self.view.message = self.playback.message
 
     def restart(self) -> None:
         self.playback.reset()
         self._bind()
-        self.view.layer = "land"
         self.playing = False
         self.view.message = "Replay restarted."
 
     def update(self, dt: float) -> None:
+        self.renderer.toasts.update(dt)
         if not self.playing:
             return
         self.timer += dt
@@ -81,7 +77,11 @@ class ReplayScreen:
         if event.type == pygame.KEYDOWN:
             action = KEYS.get(event.key)
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            action = next((name for name, rect in BUTTONS.items() if rect.collidepoint(event.pos)), None)
+            action = next((name for name, rect in self.buttons.items() if rect.collidepoint(event.pos)), None)
+        elif event.type == pygame.MOUSEWHEEL:
+            self.renderer.map.zoom(1.2**event.y, self.context.mouse_pos())
+        elif event.type == pygame.MOUSEMOTION and event.buttons[0]:
+            self.renderer.map.pan(*event.rel, dragging=True)
         if action == "exit":
             self.game.viewer = None
         elif action == "play":
@@ -94,13 +94,27 @@ class ReplayScreen:
         return True
 
     def draw(self) -> None:
-        t = self.context.theme
+        ui = self.context.ui
         self.renderer.draw(self.view, None)
-        t.tips.draw(t)
-        t.panel((16, 547, 584, 127), True)
-        t.text("CAMPAIGN REPLAY / READ ONLY", 30, 559, t.heading)
-        t.text(f"Command {self.playback.index} of {len(self.playback.commands)}", 30, 587, t.body)
-        t.text("Space: play/pause / Right: step / Home: restart / Esc: return", 30, 610, t.small)
-        for name, rect in BUTTONS.items():
-            label = ("Pause" if self.playing else "Play") if name == "play" else name.title()
-            t.button(rect, label)
+        rect = pygame.Rect(ui.px(16), 0, ui.px(SIZE[0]), ui.px(SIZE[1]))
+        rect.bottom = ui.screen.bottom - ui.px(16)
+        inner = ui.panel(rect, "Campaign replay · read-only", "end")
+        playback = self.playback
+        ui.text(
+            f"Command {playback.index} of {len(playback.commands)}",
+            (inner.x, inner.y),
+            style.HEADING,
+            style.SLATE,
+            bold=True,
+        )
+        ui.text(
+            self.view.message, (inner.x, inner.y + ui.px(24)), style.BODY, style.INK_MUTED, width=inner.width
+        )
+        width = (inner.width - ui.px(18)) // len(ACTIONS)
+        self.buttons = {}
+        for i, action in enumerate(ACTIONS):
+            button = pygame.Rect(inner.x + i * (width + ui.px(6)), inner.bottom - ui.px(34), width, ui.px(34))
+            label = ("Pause" if self.playing else "Play") if action == "play" else action.title()
+            ui.button(button, label, kind="primary" if action == "play" else "secondary")
+            self.buttons[action] = button
+        ui.tips.draw(ui)

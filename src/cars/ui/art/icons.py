@@ -2,7 +2,7 @@
 
 import pygame
 
-from cars.ui.palette import GOLD
+GOLD = (219, 179, 91)
 
 DESIGN_SIZE = 28
 

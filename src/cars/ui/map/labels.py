@@ -5,21 +5,20 @@ never spill over borders, coastlines or holes, and never overlap each other,
 units or city pins.
 """
 
-from collections.abc import Callable
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 import pygame
 
 from cars.ui.camera import point_in_polygon
-from cars.ui.palette import MAP_AREA
 
 if TYPE_CHECKING:
+    from cars.ui.kit.ui import Ui
     from cars.ui.map.map_view import MapView
 
 LABEL_INK = (39, 36, 31)
-MIN_LABEL_SCALE = 8
-SMALLEST, LARGEST = 13, 18
+LABEL_ZOOM = 1.45  # Province names appear from this zoom level (nation names below it).
+SMALLEST, LARGEST = 12, 17  # Logical font sizes.
 # Candidate anchor points, as fractions of the polygon's bounding box, best first.
 ANCHOR_FRACTIONS = [(fx, fy) for fy in (0.5, 0.65, 0.35) for fx in (0.5, 0.35, 0.65)]
 
@@ -40,36 +39,34 @@ def line_variants(name: str) -> list[list[str]]:
     return variants
 
 
-def layout_labels(
-    view: "MapView", font: Callable[[int], pygame.font.Font], reserved: list[pygame.Rect]
-) -> list[Label]:
+def layout_labels(view: "MapView", ui: "Ui", reserved: list[pygame.Rect]) -> list[Label]:
     """Place one label per visible polygon copy where one fits."""
-    if view.camera.scale < MIN_LABEL_SCALE:
+    if view.camera.zoom_level < LABEL_ZOOM:
         return []
     occupied = list(reserved)
     occupied += [
-        pygame.Rect(x - 20, y - 25, 40, 49)
+        pygame.Rect(x - ui.px(22), y - ui.px(26), ui.px(44), ui.px(50))
         for unit in view.state.units.values()
         for x, y in view.camera.copies(view.anchors[unit.location])
     ]
-    occupied += [marker.rect.inflate(48, 24) for marker in view.city_markers]
-    fonts = {size: font(size) for size in range(SMALLEST, LARGEST + 1)}
-    largest = min(LARGEST, max(14, int(view.camera.scale)))
+    occupied += [marker.rect.inflate(ui.px(12), ui.px(8)) for marker in view.city_markers]
+    fonts = {size: ui.font(size) for size in range(SMALLEST, LARGEST + 1)}
+    largest = min(LARGEST, max(13, round(view.camera.zoom_level * 3.2)))
     labels = []
     for province in view.state.provinces.values():
         for rings in view.parts[province.id]:
-            label = _fit(province.id, province.name, rings, fonts, largest, occupied)
+            label = _fit(province.id, province.name, rings, fonts, largest, occupied, view.viewport)
             if label:
                 labels.append(label)
                 occupied.append(label.rect.inflate(4, 3))
     return labels
 
 
-def _fit(province_id, name, rings, fonts, largest, occupied) -> Label | None:
+def _fit(province_id, name, rings, fonts, largest, occupied, area: pygame.Rect) -> Label | None:
     outer, holes = rings[0], rings[1:]
     xs = [x for x, _ in outer]
     ys = [y for _, y in outer]
-    box = pygame.Rect(min(xs), min(ys), max(xs) - min(xs) + 1, max(ys) - min(ys) + 1).clip(MAP_AREA)
+    box = pygame.Rect(min(xs), min(ys), max(xs) - min(xs) + 1, max(ys) - min(ys) + 1).clip(area)
     if box.width < 28 or box.height < 20:
         return None
     surface = pygame.Surface(box.size, pygame.SRCALPHA)

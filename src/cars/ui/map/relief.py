@@ -14,7 +14,6 @@ from cars.paths import content_path
 RASTER_WEST, RASTER_NORTH = -180, 80
 RASTER_WIDTH_DEGREES, RASTER_HEIGHT_DEGREES = 150, 140
 GRAIN_TILE = 256
-DETAIL_SCALE = 8  # Zoom level at which forest and mountain symbols appear.
 
 
 @lru_cache(maxsize=1)

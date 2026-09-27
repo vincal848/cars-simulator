@@ -1,75 +1,80 @@
 """The map layer: the painted atlas, hit testing and everything drawn over it.
 
-The base map is painted in world space by an Atlas per zoom level, so panning
-only moves cached tiles. Pins, units, routes and labels are drawn in screen
-space each frame.
+The base map is painted in world space by an Atlas per zoom level and map mode,
+so panning only moves cached tiles. Towns, army plates, routes and labels are
+drawn in screen space each frame, sized by the UI scale.
 """
 
 from collections import OrderedDict
+from collections.abc import Callable
 from dataclasses import dataclass, field
-from itertools import pairwise
 from typing import TYPE_CHECKING
 
 import pygame
 
 from cars.sim.air import STRIKE_TARGET_KINDS, is_airbase
-from cars.sim.entities import AIR, FLEET, FULL_STRENGTH
+from cars.sim.entities import AIR, FULL_STRENGTH
 from cars.sim.regional import CHARTERS
-from cars.sim.supply import supply_route, threatened_route
+from cars.sim.supply import supplied_provinces, supply_route, threatened_route
 from cars.sim.visibility import can_see
 from cars.ui.art.buildings import celebration, draw_building
-from cars.ui.art.cities import city_sprite, draw_pin
+from cars.ui.art.cities import city_sprite
 from cars.ui.art.lighting import contact_shadow
 from cars.ui.art.regiments import UnitSprites
 from cars.ui.camera import Camera, point_in_polygon
 from cars.ui.map.animation import MoveAnimation
+from cars.ui.map.arrows import draw_route
 from cars.ui.map.atlas import OPEN_SEA, Atlas
 from cars.ui.map.geometry import Rings, borders, centroid, province_polygons
-from cars.ui.map.labels import Label, draw_labels, layout_labels
-from cars.ui.map.markers import PLATE_SIZE, draw_army
+from cars.ui.map.labels import LABEL_ZOOM, Label, draw_labels, layout_labels
+from cars.ui.map.markers import PLATE_SIZE, draw_army, plate_rect
 from cars.ui.map.nation_labels import NationNames
 from cars.ui.map.relief import RASTER_NORTH, RASTER_WEST
-from cars.ui.palette import (
-    HOSTILE,
-    MAP_AREA,
-    MAP_MUTED,
-    MAP_TEXT,
-    ROUTE_GOLD,
-    SUPPLY_GREEN,
-    TARGET_RED,
-)
 
 if TYPE_CHECKING:
     from cars.sim.entities import Unit
     from cars.sim.graph import Paths
     from cars.sim.state import GameState
-    from cars.ui.theme import Theme
+    from cars.ui.kit.ui import Ui
 
-SEA_LABEL = (150, 184, 192)
-SEA_LABEL_ALPHA = 190
+# Map modes.
+POLITICAL, TERRAIN, SUPPLY, DIPLOMATIC = "political", "terrain", "supply", "diplomatic"
+MAP_MODES = (POLITICAL, TERRAIN, SUPPLY, DIPLOMATIC)
+
+ROUTE = (245, 207, 115)
+ATTACK = (232, 104, 80)
+SUPPLY_ROUTE = (114, 219, 161)
+REACH = (245, 207, 115)
+HOVER = (250, 244, 228)
+TARGET = (247, 139, 104)
+SEA_LABEL = (160, 192, 200)
+SEA_LABEL_ALPHA = 200
 DEBUG_EDGE = (80, 111, 120)
-CITY_LABEL = (247, 228, 187)
-CITY_LABEL_BACK = (43, 35, 32)
-CITY_PIN_RADIUS = 11
+TOWN_LABEL = (250, 240, 218)
+TOWN_LABEL_BACK = (28, 30, 32, 175)
+SEA_RING = (149, 171, 181)
+# Relation colours for the diplomatic map mode, and supply colours for the supply mode.
+OWN, AT_WAR, AT_PEACE = (78, 138, 201), (196, 78, 64), (104, 164, 98)
+SUPPLIED, CUT_OFF = (104, 180, 110), (205, 96, 76)
 SEA_HIT_RADIUS = 28
-CLOSE_SCALE = 8  # Larger sprites and buildings from this zoom level.
-UNIT_CLOSE_SCALE = 6
-CITY_NAMES_SCALE = 10
-ATLAS_CACHE = 3  # Zoom levels whose painted tiles are kept.
+ATLAS_CACHE = 4  # Zoom levels and modes whose painted tiles are kept.
+DETAIL_ZOOM = 1.8  # Terrain symbols, big towns and building icons.
+FIGURES_ZOOM = 1.3  # Unit figures, and towns with their names.
 
 
 @dataclass
 class CityMarker:
     city: str
     point: tuple[float, float]
-    rect: pygame.Rect
+    rect: pygame.Rect  # the town and its name, for clicking
 
 
 @dataclass
 class Scene:
     """What the map shows this frame."""
 
-    layer: str
+    layer: str = "land"
+    mode: str = POLITICAL
     unit: "Unit | None" = None
     hover: str | None = None
     inspected: str | None = None
@@ -90,15 +95,15 @@ class Scene:
 
 
 class MapView:
-    def __init__(self, state: "GameState", shapes: dict, seas: list[dict], theme: "Theme") -> None:
+    def __init__(self, state: "GameState", shapes: dict, seas: list[dict], ui: "Ui") -> None:
         self.state = state
         self.shapes = shapes
         self.sea_zones = seas
-        self.theme = theme
-        self.camera = Camera()
+        self.ui = ui
+        self.camera = Camera(ui.screen)
         self.sprites = UnitSprites()
-        self.sea_font = pygame.font.SysFont("georgia", 13, italic=True)
-        self._sea_labels: dict[tuple, pygame.Surface] = {}
+        self.mode = POLITICAL
+        self.viewer: str | None = None
         self.geometry: dict[str, list[Rings]] = {}
         self.world_anchors: dict[str, tuple[float, float]] = {}
         for province in state.provinces.values():
@@ -110,9 +115,13 @@ class MapView:
         self.names = NationNames(state, self.geometry)
         self.seas = {sea["id"]: sea for sea in seas}
         self.world_anchors.update({sea["id"]: sea["anchor"] for sea in seas})
-        self._atlases: OrderedDict[float, Atlas] = OrderedDict()
-        self._controllers = {p.id: p.controller for p in state.provinces.values()}
+        self._atlases: OrderedDict[tuple, Atlas] = OrderedDict()
+        self._fills: dict[str, dict] = {}
+        self._pixel = ui.scale
+        self._sea_labels: dict[tuple, pygame.Surface] = {}
         self.labels: list[Label] | None = None
+        # Army plates drawn this frame: (rect, units in the stack).
+        self.plates: list[tuple[pygame.Rect, list[str]]] = []
         # Labels slide with the map while it is dragged and are laid out again once it stops.
         self._panned = self._labels_moved = False
         self.reproject()
@@ -120,15 +129,68 @@ class MapView:
     # Projection -----------------------------------------------------------------------
 
     @property
+    def viewport(self) -> pygame.Rect:
+        return self.camera.viewport
+
+    def resize(self, viewport: pygame.Rect) -> None:
+        """Follow a resized window."""
+        self.camera.resize(viewport)
+        self.reproject()
+        self.labels = None
+
+    def fill(self, mode: str) -> Callable[[str], tuple | None]:
+        """Each province's colour in a map mode (None leaves the bare relief)."""
+        state = self.state
+        viewer = self.viewer or state.active
+        if mode == TERRAIN:
+            return lambda province: None
+        if mode == SUPPLY:
+            supplied = supplied_provinces(state, viewer)
+
+            def supply(province: str) -> tuple | None:
+                if state.provinces[province].controller != viewer:
+                    return None
+                return SUPPLIED if province in supplied else CUT_OFF
+
+            return supply
+        if mode == DIPLOMATIC:
+
+            def relation(province: str) -> tuple:
+                controller = state.provinces[province].controller
+                if controller == viewer:
+                    return OWN
+                return AT_WAR if state.at_war(viewer, controller) else AT_PEACE
+
+            return relation
+        return lambda province: tuple(state.factions[state.provinces[province].controller].color)
+
+    @property
     def atlas(self) -> Atlas:
-        """The painted map at the current zoom level."""
-        scale = self.camera.scale
-        if scale not in self._atlases:
-            self._atlases[scale] = Atlas(self.state, self.geometry, self.borders, scale, self.names)
+        """The painted map at the current zoom level and map mode."""
+        if self._pixel != self.ui.scale:
+            self._pixel = self.ui.scale
+            self._atlases.clear()
+        key = (self.mode, self.camera.scale)
+        if key not in self._atlases:
+            if self.mode not in self._fills:
+                # Remember the colours the new tiles are painted in, to notice when they change.
+                fill = self.fill(self.mode)
+                self._fills = {self.mode: {p: fill(p) for p in self.state.provinces}}
+            zoom = self.camera.zoom_level
+            self._atlases[key] = Atlas(
+                self.state,
+                self.geometry,
+                self.borders,
+                self.camera.scale,
+                names=self.names if self.mode == POLITICAL and zoom < LABEL_ZOOM else None,
+                detail=zoom >= DETAIL_ZOOM,
+                pixel=self.ui.scale,
+                fill=self.fill(self.mode),
+            )
             while len(self._atlases) > ATLAS_CACHE:
                 self._atlases.popitem(last=False)
-        self._atlases.move_to_end(scale)
-        return self._atlases[scale]
+        self._atlases.move_to_end(key)
+        return self._atlases[key]
 
     @property
     def origin(self) -> tuple[int, int]:
@@ -136,17 +198,19 @@ class MapView:
         return self.camera.project((RASTER_WEST, RASTER_NORTH))
 
     def reproject(self) -> None:
-        """Recompute screen positions of anchors and city pins after the camera moves."""
+        """Recompute screen positions of anchors and towns after the camera moves."""
         camera = self.camera
         self._screen_polygons: dict[str, list[Rings]] = {}
         self.anchors = {node: camera.nearest(camera.project(c)) for node, c in self.world_anchors.items()}
         self.city_markers = []
+        size = self._town_size()
         for city in self.state.cities.values():
             coordinate = city.coordinates or self.world_anchors[city.province]
             anchor = camera.nearest(camera.project(coordinate))
             for point in camera.copies(anchor):
-                if MAP_AREA.collidepoint(point):
-                    rect = pygame.Rect(point[0] - CITY_PIN_RADIUS, point[1] - CITY_PIN_RADIUS, 22, 22)
+                if self.viewport.collidepoint(point):
+                    rect = pygame.Rect(0, 0, *size)
+                    rect.midbottom = (round(point[0]), round(point[1] + size[1] * 0.4))
                     self.city_markers.append(CityMarker(city.id, point, rect))
 
     def polygons_on_screen(self, province: str) -> list[Rings]:
@@ -156,7 +220,7 @@ class MapView:
             projected = []
             for shift in range(-2, 3):
                 left = x0 + round(shift * self.camera.period)
-                if not atlas.bounds[province].move(left, y0).colliderect(MAP_AREA):
+                if not atlas.bounds[province].move(left, y0).colliderect(self.viewport):
                     continue
                 for rings in atlas.polygons[province]:
                     projected.append([[(x + left, y + y0) for x, y in ring] for ring in rings])
@@ -190,37 +254,54 @@ class MapView:
         self.labels = None
 
     def reset_camera(self) -> None:
-        self.camera = Camera()
+        self.camera.home()
         self.reproject()
         self.labels = None
 
-    def center_on(self, node: str, screen_point: tuple[int, int]) -> None:
-        """Pan so that ``node`` appears at ``screen_point``."""
+    def center_on(self, node: str, screen_point: tuple[int, int] | None = None) -> None:
+        """Pan so that ``node`` appears at ``screen_point`` (the middle of the view by default)."""
+        target = screen_point or self.viewport.center
         point = self.camera.nearest(self.camera.project(self.world_anchors[node]))
-        self.pan(screen_point[0] - point[0], screen_point[1] - point[1])
+        self.pan(target[0] - point[0], target[1] - point[1])
 
     def invalidate_labels(self) -> None:
         self.labels = None
 
     def _repaint_changed_provinces(self) -> None:
+        """Repaint the tiles of provinces whose colour in the current mode has changed."""
         state = self.state
-        changed = {p.id for p in state.provinces.values() if self._controllers[p.id] != p.controller}
+        fill = self.fill(self.mode)
+        current = {p: fill(p) for p in state.provinces}
+        previous = self._fills.get(self.mode)
+        self._fills = {self.mode: current}
+        # Other modes are repainted from scratch when next shown.
+        for key in [key for key in self._atlases if key[0] != self.mode]:
+            del self._atlases[key]
+        if previous is None:
+            return
+        changed = {p for p, color in current.items() if previous.get(p) != color}
         if not changed:
             return
         # The borders of neighbouring provinces change weight too.
         touched = changed | {n for p in changed for n, _ in state.land.neighbors(p)}
         for atlas in self._atlases.values():
+            atlas.fill = fill
             atlas.invalidate(touched)
-        self._controllers.update({p: state.provinces[p].controller for p in changed})
 
     # Hit testing ----------------------------------------------------------------------
 
     def city_at(self, point: tuple[int, int]) -> str | None:
         for marker in reversed(self.city_markers):
-            dx, dy = point[0] - marker.point[0], point[1] - marker.point[1]
-            if dx * dx + dy * dy <= CITY_PIN_RADIUS**2:
+            if marker.rect.collidepoint(point):
                 return marker.city
         return None
+
+    def stack_at(self, point: tuple[int, int]) -> list[str]:
+        """The units of the army plate under ``point``, top plate first."""
+        for rect, units in reversed(self.plates):
+            if rect.collidepoint(point):
+                return units
+        return []
 
     def node_at(self, point: tuple[int, int], layer: str) -> str | None:
         """The province (or, on the naval and air layers, sea zone) under ``point``."""
@@ -228,9 +309,10 @@ class MapView:
         if city:
             return self.state.cities[city].province
         if layer in ("naval", "air"):
+            radius = self.ui.px(SEA_HIT_RADIUS)
             for sea in self.seas:
                 for x, y in self.camera.copies(self.anchors[sea]):
-                    if (point[0] - x) ** 2 + (point[1] - y) ** 2 < SEA_HIT_RADIUS**2:
+                    if (point[0] - x) ** 2 + (point[1] - y) ** 2 < radius**2:
                         return sea
         atlas, (x0, y0) = self.atlas, self.origin
         world = ((point[0] - x0) % self.camera.period, point[1] - y0)
@@ -246,42 +328,40 @@ class MapView:
 
     # Drawing --------------------------------------------------------------------------
 
-    def draw(self, screen: pygame.Surface, scene: Scene, message: str, reserved, covered) -> str:
-        """Draw the map; returns the status-bar message, which hovered map features may replace.
+    def draw(self, screen: pygame.Surface, scene: Scene, reserved: list, covered: list) -> str | None:
+        """Draw the map. Returns a line describing the hovered map feature, if any.
 
         ``reserved`` panels are kept free of labels; labels under ``covered`` panels are hidden.
         """
+        if self.camera.viewport != screen.get_rect():
+            self.resize(screen.get_rect())
+        self.mode, self.viewer = scene.mode, scene.viewer
         screen.fill(OPEN_SEA)
-        screen.set_clip(MAP_AREA)
         self._repaint_changed_provinces()
         atlas, origin, period = self.atlas, self.origin, self.camera.period
-        atlas.draw(screen, origin, period, MAP_AREA)
+        atlas.draw(screen, origin, period, self.viewport)
         if scene.visible is not None:
-            atlas.draw_fog(screen, origin, period, MAP_AREA, set(self.state.provinces) - scene.visible)
-        atlas.draw_names(screen, origin, period, MAP_AREA)
+            atlas.draw_fog(screen, origin, period, self.viewport, set(self.state.provinces) - scene.visible)
+        atlas.draw_names(screen, origin, period, self.viewport)
         self._draw_province_marks(screen, scene)
         self._draw_sea_zones(screen, scene)
         if scene.debug:
             self._draw_graph(screen, scene.layer)
+        description = None
+        if scene.mode == SUPPLY and scene.unit and scene.unit.is_land:
+            description = self._draw_supply_line(screen, scene.unit)
         self._draw_routes(screen, scene)
-        if scene.layer == "supply" and scene.unit and scene.unit.is_land:
-            message = self._draw_supply_line(screen, scene.unit)
         if scene.animation:
-            self._draw_march(screen, scene.animation)
-        self._draw_cities(screen)
+            self.route_arrow(screen, scene.animation.route[scene.animation.segment :], ROUTE)
+        self._draw_towns(screen, scene.city_hover)
         self._draw_units(screen, scene)
         if scene.layer == "air" and scene.unit:
-            message = self._draw_air_targets(screen, scene) or message
-        message = self._draw_city_pins(screen, scene.city_hover) or message
+            description = self._draw_air_targets(screen, scene) or description
         if self.labels is None or (self._labels_moved and not self._panned):
-            self.labels = layout_labels(self, self.theme.font, reserved)
+            self.labels = layout_labels(self, self.ui, reserved)
         self._labels_moved, self._panned = self._panned, False
         draw_labels(screen, self.labels, covered)
-        screen.set_clip(None)
-        return message
-
-    def _plain_text(self, screen, text, position, color, font) -> None:
-        screen.blit(font.render(str(text), True, color), position)
+        return description
 
     def route_arrow(self, screen: pygame.Surface, path: list[str], color) -> None:
         """Arrow through ``path``, unwrapped so it never jumps across the map seam."""
@@ -293,52 +373,62 @@ class MapView:
             x, y = self.anchors[node]
             x += round((points[-1][0] - x) / period) * period
             points.append((x, y))
+        area = self.viewport.inflate(200, 200)
         for offset in (-period, 0, period):
-            _arrow(screen, [(x + offset, y) for x, y in points], color)
+            shifted = [(x + offset, y) for x, y in points]
+            if any(area.collidepoint(p) for p in shifted):
+                draw_route(screen, shifted, color, self.ui.scale)
 
     def _draw_province_marks(self, screen, scene: Scene) -> None:
-        """Highlights, buildings and occupation marks over the painted provinces."""
+        """Reach, hover and selection outlines, buildings and occupation marks."""
         state = self.state
-        close = self.camera.scale >= CLOSE_SCALE
-        detailed = self.camera.scale >= UNIT_CLOSE_SCALE
-        highlight = SUPPLY_GREEN if scene.layer == "supply" else ROUTE_GOLD
+        ui = self.ui
+        detailed = self.camera.zoom_level >= DETAIL_ZOOM
+        width = max(2, ui.px(2))
         for province in state.provinces.values():
             outlines = []
             if province.id in scene.highlights:
-                outlines.append(highlight)
+                outlines.append(SUPPLY_ROUTE if scene.layer == "supply" else REACH)
             if province.id in (scene.inspected, scene.hover):
-                outlines.append(MAP_TEXT)
+                outlines.append(HOVER)
             for color in outlines:
                 for rings in self.polygons_on_screen(province.id):
-                    pygame.draw.lines(screen, color, True, rings[0], 2)
+                    pygame.draw.lines(screen, color, True, rings[0], width)
             for x, y in self.camera.copies(self.anchors[province.id]):
-                # Zoomed out, construction is left to the province window.
+                # Zoomed out, construction is left to the province panel.
                 for i, kind in enumerate(province.buildings if detailed else ()):
-                    draw_building(screen, kind, (x + 18 + i * 17, y + 8), 34 if close else 24, scene.time)
+                    spot = (x + ui.px(20) + i * ui.px(18), y + ui.px(10))
+                    draw_building(screen, kind, spot, ui.px(26), scene.time)
                 if province.id in scene.build_effects:
                     celebration(screen, (x, y), scene.time - scene.build_effects[province.id])
                 if province.owner != province.controller:
                     # A small dot in the rightful owner's colour marks occupied land.
-                    pygame.draw.circle(screen, state.factions[province.owner].color, (x + 12, y - 8), 3)
+                    spot = (round(x + ui.px(14)), round(y - ui.px(10)))
+                    pygame.draw.circle(screen, (20, 20, 20), spot, ui.px(4))
+                    pygame.draw.circle(screen, state.factions[province.owner].color, spot, ui.px(3))
 
     def _draw_sea_zones(self, screen, scene: Scene) -> None:
         # Waterways come from the relief artwork; province borders are never drawn as rivers.
+        naval = scene.layer in ("naval", "air")
         for sea, data in self.seas.items():
             lit = sea in scene.highlights
             for x, y in self.camera.copies(self.anchors[sea]):
-                label = self._sea_label(data["name"], ROUTE_GOLD if lit else SEA_LABEL)
-                screen.blit(label, label.get_rect(midtop=(x, y + 22)))
-                if scene.layer in ("naval", "air"):
-                    pygame.draw.ellipse(screen, ROUTE_GOLD if lit else MAP_MUTED, (x - 24, y - 16, 48, 32), 1)
+                label = self._sea_label(data["name"], REACH if lit else SEA_LABEL)
+                screen.blit(label, label.get_rect(midtop=(x, y + self.ui.px(22))))
+                if naval:
+                    rect = pygame.Rect(0, 0, self.ui.px(48), self.ui.px(32))
+                    rect.center = (round(x), round(y))
+                    pygame.draw.ellipse(screen, REACH if lit else SEA_RING, rect, max(1, self.ui.px(1)))
 
     def _sea_label(self, name: str, color) -> pygame.Surface:
         """A sea's name in spaced italic capitals, as engraved on period charts."""
-        key = (name, color)
+        key = (name, color, self.ui.scale, self.ui.font_index)
         if key not in self._sea_labels:
-            letters = [self.sea_font.render(letter, True, color) for letter in name.upper()]
-            spacing = 3
+            font = self.ui.font(13, italic=True)
+            letters = [font.render(letter, True, color) for letter in name.upper()]
+            spacing = self.ui.px(3)
             width = sum(letter.get_width() for letter in letters) + spacing * (len(letters) - 1)
-            label = pygame.Surface((width, self.sea_font.get_height()), pygame.SRCALPHA)
+            label = pygame.Surface((width, font.get_height()), pygame.SRCALPHA)
             x = 0
             for letter in letters:
                 label.blit(letter, (x, 0))
@@ -355,113 +445,129 @@ class MapView:
     def _draw_routes(self, screen, scene: Scene) -> None:
         unit, hover = scene.unit, scene.hover
         if unit and unit.kind == AIR and hover in scene.highlights and hover != unit.location:
-            self.route_arrow(screen, [unit.location, hover], ROUTE_GOLD)
+            self.route_arrow(screen, [unit.location, hover], ROUTE)
         if scene.paths and hover in scene.paths.costs and scene.layer != "supply":
             hostile = (
                 hover in self.state.provinces and self.state.provinces[hover].controller != self.state.active
             )
-            self.route_arrow(screen, scene.paths.path(hover), HOSTILE if hostile else ROUTE_GOLD)
+            self.route_arrow(screen, scene.paths.path(hover), ATTACK if hostile else ROUTE)
 
     def _draw_supply_line(self, screen, unit: "Unit") -> str:
         state = self.state
         route = supply_route(state, unit.owner, unit.location)
-        self.route_arrow(screen, route, SUPPLY_GREEN)
+        self.route_arrow(screen, route, SUPPLY_ROUTE)
         threats = threatened_route(state, unit.owner, route)
         for province in threats:
             for center in self.camera.copies(self.anchors[province]):
-                pygame.draw.circle(screen, HOSTILE, center, 13, 2)
+                pygame.draw.circle(screen, ATTACK, center, self.ui.px(13), max(2, self.ui.px(2)))
         if not route:
-            return (
-                "CUT OFF: no controlled supply path to a friendly hub. "
-                "Recapture a connecting province or hub."
-            )
+            return "Cut off: no controlled supply path to a friendly hub."
         hub = next(c.name for c in state.cities.values() if c.province == route[0] and c.supply_hub)
-        return (
-            f"Supply: {hub} → army / {len(route) - 1} links / {len(threats)} threatened "
-            "(adjacent enemy infantry)."
-        )
+        return f"Supplied from {hub} over {len(route) - 1} links; {len(threats)} threatened."
 
-    def _draw_march(self, screen, animation: MoveAnimation) -> None:
-        self.route_arrow(screen, animation.route[animation.segment :], ROUTE_GOLD)
-        if animation.segment == len(animation.route) - 1:
-            for center in self.camera.copies(self.anchors[animation.route[-1]]):
-                pygame.draw.circle(screen, ROUTE_GOLD, center, animation.arrival_radius, 1)
+    def _town_size(self) -> tuple[int, int]:
+        zoom = self.camera.zoom_level
+        if zoom >= DETAIL_ZOOM:
+            return self.ui.px(52), self.ui.px(44)
+        if zoom >= FIGURES_ZOOM:
+            return self.ui.px(40), self.ui.px(34)
+        return self.ui.px(28), self.ui.px(24)
 
-    def _draw_cities(self, screen) -> None:
-        """Town sprites, only when zoomed in; zoomed out the pins alone mark the cities."""
-        if self.camera.scale < UNIT_CLOSE_SCALE:
-            return
-        size = (38, 32) if self.camera.scale < CLOSE_SCALE else (52, 44)
+    def _draw_towns(self, screen, hovered: str | None) -> None:
+        """Each city as its town and, once zoomed in or hovered, its name."""
+        ui = self.ui
+        size = self._town_size()
+        named = self.camera.zoom_level >= FIGURES_ZOOM
+        font = ui.font(13, bold=True)
+        placed: list[pygame.Rect] = []
         for marker in self.city_markers:
             city = self.state.cities[marker.city]
             style = city.style or self.state.factions[self.state.provinces[city.province].owner].style
             x, y = marker.point
-            contact_shadow(screen, (x + 7, y + 6), (32, 12))
-            icon = pygame.transform.smoothscale(city_sprite(style), size)
-            screen.blit(icon, (x - size[0] / 2, y - size[1] * 0.58))
+            contact_shadow(screen, (x + ui.px(7), y + ui.px(6)), (size[0] * 2 // 3, size[1] // 3))
+            town = pygame.transform.smoothscale(city_sprite(style), size)
+            screen.blit(town, (x - size[0] / 2, y - size[1] * 0.6))
+            if not (named or marker.city == hovered):
+                continue
+            label = font.render(city.name, True, TOWN_LABEL)
+            box = label.get_rect(midtop=(round(x), round(y + size[1] * 0.42))).inflate(ui.px(8), ui.px(2))
+            if any(box.colliderect(other) for other in placed) and marker.city != hovered:
+                continue
+            chip = pygame.Surface(box.size, pygame.SRCALPHA)
+            pygame.draw.rect(chip, TOWN_LABEL_BACK, chip.get_rect(), border_radius=ui.px(3))
+            screen.blit(chip, box)
+            screen.blit(label, label.get_rect(center=box.center))
+            placed.append(box)
+            marker.rect = marker.rect.union(box)
 
     def visible_units(self, scene: Scene) -> list["Unit"]:
-        """Units drawn on this layer that the viewer can see through the fog."""
-        land_view = scene.layer in ("land", "supply")
-        layer_kind = FLEET if scene.layer == "naval" else AIR
-        return [
-            unit
-            for unit in self.state.units.values()
-            if (unit.is_land if land_view else unit.kind == layer_kind) and scene.shows(unit)
-        ]
+        """Units the viewer can see through the fog."""
+        return [unit for unit in self.state.units.values() if scene.shows(unit)]
 
     def _draw_units(self, screen, scene: Scene) -> None:
-        """One marker per stack; a marching unit is drawn on its own along its route."""
+        """One plate per stack of each arm; a marching unit is drawn on its own along its route."""
         selected = scene.unit.id if scene.unit else None
         marching = scene.animation.unit if scene.animation else None
-        stacks: dict[str, list[Unit]] = {}
+        stacks: dict[tuple[str, str], list[Unit]] = {}
         for unit in self.visible_units(scene):
             if unit.id != marching:
-                stacks.setdefault(unit.location, []).append(unit)
+                arm = "land" if unit.is_land else unit.kind
+                stacks.setdefault((unit.location, arm), []).append(unit)
+        self.plates = []
         # The selected stack is drawn last, on top of any neighbour it overlaps.
-        for stack in sorted(stacks.values(), key=lambda stack: any(u.id == selected for u in stack)):
+        ordered = sorted(stacks.items(), key=lambda item: any(u.id == selected for u in item[1]))
+        figures = self.camera.zoom_level >= FIGURES_ZOOM
+        for (location, arm), stack in ordered:
             lead = next((u for u in stack if u.id == selected), stack[0])
-            self._draw_stack(screen, stack, lead, self.anchors[lead.location], lead.id == selected)
+            x, y = self.anchors[location]
+            # Plates stand beside a town rather than on it...
+            x += self._clear_of_towns(x, y + self.ui.px(14) if figures else y)
+            if arm == AIR:
+                # ...and air groups beside the armies at their base.
+                x += self.ui.px(PLATE_SIZE[0] + 6)
+            self._draw_stack(screen, stack, lead, (x, y), lead.id == selected)
         unit = self.state.units.get(marching)
         if unit and scene.shows(unit):
             x, y = scene.animation.position
             self._draw_stack(screen, [unit], unit, (x, y + scene.animation.bob()), unit.id == selected)
 
     def _draw_stack(self, screen, stack: list["Unit"], lead: "Unit", position, selected: bool) -> None:
+        ui = self.ui
         faction = self.state.factions[lead.owner]
-        close = self.camera.scale >= UNIT_CLOSE_SCALE
+        figures = self.camera.zoom_level >= FIGURES_ZOOM
         strength = sum(u.hp for u in stack) / (len(stack) * FULL_STRENGTH)
         for x, y in self.camera.copies(position):
-            if not MAP_AREA.collidepoint((x, y)):
+            if not self.viewport.collidepoint((x, y)):
                 continue
-            plate_y = y + 14 if close else y
-            x += self._clear_of_pins(x, plate_y)
-            if close:
+            plate_y = y + ui.px(14) if figures else y
+            if figures:
                 # Zoomed in, the leading unit's figure stands on the plate.
                 style = CHARTERS[lead.regional].style if lead.regional else faction.style
                 sprite = self.sprites.sprite(lead.kind, faction.color, style)
-                size = (46, 46) if lead.is_land else (36, 40)
-                contact_shadow(screen, (x + 2, y + 8), (40, 16))
-                screen.blit(pygame.transform.smoothscale(sprite, size), (x - size[0] // 2, y + 8 - size[1]))
-            draw_army(
+                size = (ui.px(44), ui.px(44)) if lead.is_land else (ui.px(34), ui.px(38))
+                contact_shadow(screen, (x + ui.px(2), y + ui.px(8)), (ui.px(38), ui.px(15)))
+                figure = pygame.transform.smoothscale(sprite, size)
+                screen.blit(figure, (x - size[0] // 2, y + ui.px(8) - size[1]))
+            rect = draw_army(
                 screen,
                 (x, plate_y),
                 faction.color,
                 lead.kind,
                 len(stack),
                 strength,
-                self.theme.small,
+                ui.font(13, bold=True),
                 selected=selected,
                 supplied=all(u.supplied for u in stack),
                 regional=bool(lead.regional),
+                scale=ui.scale,
             )
+            self.plates.append((rect.inflate(ui.px(4), ui.px(8)), [u.id for u in stack]))
 
-    def _clear_of_pins(self, x: float, y: float) -> float:
-        """How far right a marker at (x, y) must step to stand beside a city pin rather than on it."""
-        plate = pygame.Rect(0, 0, PLATE_SIZE[0] + 4, PLATE_SIZE[1] + 8)
-        plate.center = (x, y)
-        pins = [m.rect.inflate(4, 4) for m in self.city_markers if plate.colliderect(m.rect.inflate(4, 4))]
-        return max((pin.right - plate.left for pin in pins), default=0)
+    def _clear_of_towns(self, x: float, y: float) -> float:
+        """How far right a plate at (x, y) must step to stand beside a town rather than on it."""
+        plate = plate_rect((x, y), self.ui.scale)
+        towns = [m.rect for m in self.city_markers if plate.colliderect(m.rect)]
+        return max((town.right - plate.left + self.ui.px(4) for town in towns), default=0)
 
     def _draw_air_targets(self, screen, scene: Scene) -> str | None:
         unit, hover, in_range = scene.unit, scene.hover, scene.highlights
@@ -473,60 +579,17 @@ class MapView:
             and other.location in in_range
             and scene.shows(other)
         }
+        radius, reach, width = self.ui.px(15), self.ui.px(21), max(2, self.ui.px(2))
         for target in targets:
             for cx, cy in self.camera.copies(self.anchors[target]):
-                pygame.draw.circle(screen, TARGET_RED, (cx, cy), 15, 2)
-                for dx, dy in ((-21, 0), (21, 0), (0, -21), (0, 21)):
-                    pygame.draw.line(
-                        screen, TARGET_RED, (cx + dx, cy + dy), (cx + dx * 0.72, cy + dy * 0.72), 2
-                    )
+                pygame.draw.circle(screen, TARGET, (cx, cy), radius, width)
+                for dx, dy in ((-reach, 0), (reach, 0), (0, -reach), (0, reach)):
+                    tip = (cx + dx * 0.72, cy + dy * 0.72)
+                    pygame.draw.line(screen, TARGET, (cx + dx, cy + dy), tip, width)
         if hover in targets:
-            return "Enemy force in range / Strike consumes one sortie / Return fire is possible."
+            return "Enemy force in range: a strike uses the sortie, and return fire is possible."
         if hover in in_range and scene.air_mode == "rebase":
             if is_airbase(self.state, unit.owner, hover):
                 return "Controlled airbase: click to rebase."
-            return "Rebase requires a controlled city airbase or constructed airfield."
+            return "Rebasing needs a controlled city airbase or an airfield."
         return None
-
-    def _draw_city_pins(self, screen, city_hover: str | None) -> str | None:
-        state = self.state
-        placed: list[pygame.Rect] = []
-        for marker in self.city_markers:
-            city = state.cities[marker.city]
-            controller = state.provinces[city.province].controller
-            draw_pin(screen, marker.point, state.factions[controller].color, marker.city == city_hover)
-            if self.camera.scale >= CITY_NAMES_SCALE or marker.city == city_hover:
-                label = self.theme.small.render(city.name, True, CITY_LABEL)
-                box = label.get_rect(midbottom=(marker.rect.centerx, marker.rect.top - 3)).inflate(8, 4)
-                if MAP_AREA.contains(box) and not any(box.colliderect(other) for other in placed):
-                    pygame.draw.rect(screen, CITY_LABEL_BACK, box, border_radius=3)
-                    screen.blit(label, (box.x + 4, box.y + 2))
-                    placed.append(box)
-        if not city_hover:
-            return None
-        city = state.cities[city_hover]
-        features = ["1 victory point"]
-        if city.supply_hub:
-            features.append("Supply hub")
-        if city.port:
-            features.append("Port connection")
-        return city.name + " / " + " / ".join(features) + " / Click pin to inspect"
-
-
-def _arrow(screen: pygame.Surface, points, color) -> None:
-    if len(points) < 2:
-        return
-    pygame.draw.lines(screen, (12, 24, 32), False, points, 7)
-    pygame.draw.lines(screen, color, False, points, 3)
-    for a, b in pairwise(points):
-        direction = pygame.Vector2(b) - pygame.Vector2(a)
-        if direction.length() < 1:
-            continue
-        direction = direction.normalize()
-        head = pygame.Vector2(a).lerp(pygame.Vector2(b), 0.72)
-        side = pygame.Vector2(-direction.y, direction.x)
-        pygame.draw.polygon(
-            screen,
-            color,
-            [head + direction * 8, head - direction * 5 + side * 5, head - direction * 5 - side * 5],
-        )

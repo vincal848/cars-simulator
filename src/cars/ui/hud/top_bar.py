@@ -7,80 +7,133 @@ import pygame
 from cars.sim.calendar import date_label, turn_phase
 from cars.sim.economy import forecast, storage
 from cars.sim.entities import RESOURCES
+from cars.sim.market import treasury_income
 from cars.sim.upkeep import upkeep
 from cars.ui.art.icons import draw_resource_icon
-from cars.ui.palette import DIM, GOLD, GREEN, HOSTILE
+from cars.ui.kit import style
 
 if TYPE_CHECKING:
     from cars.sim.state import GameState
-    from cars.ui.theme import Theme
+    from cars.ui.kit.ui import Ui
 
-TREASURY_X = 238
-STOCKPILE_X = 318
-STOCKPILE_WIDTH = 122
+GOOD_ON_SLATE = (150, 210, 150)
+BAD_ON_SLATE = (236, 140, 120)
 
 
 class TopBar:
-    rect = pygame.Rect(0, 0, 1200, 44)
-    date_rect = pygame.Rect(690, 0, 196, 44)
+    def __init__(self, ui: "Ui") -> None:
+        self.ui = ui
+        self.rect = pygame.Rect(0, 0, 0, 0)
+        self.date_rect = pygame.Rect(0, 0, 0, 0)
 
-    def __init__(self, theme: "Theme") -> None:
-        self.theme = theme
+    def layout(self, screen: pygame.Rect) -> None:
+        self.rect = pygame.Rect(0, 0, screen.width, self.ui.px(style.BAR_HEIGHT))
+        width = self.ui.px(230)
+        self.date_rect = pygame.Rect(screen.right - width, 0, width, self.rect.height)
 
     def draw(self, state: "GameState", player: str) -> None:
-        t = self.theme
+        ui = self.ui
         faction = state.factions[player]
-        t.bar(self.rect)
-        t.shield(12, 5, faction.color, scale=0.7)
-        t.text(faction.name, 52, 12, t.heading, GOLD, width=176)
-        t.seal("gold", (TREASURY_X + 10, 22), 22)
-        t.text(f"{faction.gold:g}", TREASURY_X + 25, 12, t.body)
-        t.hint(
-            (TREASURY_X, 4, 72, 36),
-            "Treasury",
-            f"{faction.gold:g} gold. Use the Merchant Exchange (M) to trade fixed lots of wood, food "
-            "and iron.",
+        ui.bar(self.rect)
+        middle = self.rect.centery
+        ui.swatch((ui.px(24), middle), faction.color, 10)
+        ui.text(
+            faction.name,
+            (ui.px(42), middle - ui.font(style.HEADING, True).get_height() // 2),
+            style.HEADING,
+            style.ON_SLATE,
+            width=ui.px(210),
+            bold=True,
         )
-        self._draw_stockpiles(state, player)
+        x = ui.px(270)
+        x = self._treasury(state, player, x)
+        for resource in RESOURCES:
+            x = self._stockpile(state, player, resource, x)
         if state.player:
-            self._draw_date(state)
+            self._date(state)
 
-    def _draw_stockpiles(self, state: "GameState", player: str) -> None:
-        t = self.theme
+    def _figure(self, x: int, value: str, change: str, change_color, icon_draw) -> int:
+        """An icon, a value and its change per turn; returns the x after it."""
+        ui = self.ui
+        icon_draw(x)
+        top = self.rect.centery - ui.px(15)
+        value_rect = ui.text(value, (x + ui.px(28), top), style.NUMBER, style.ON_SLATE, bold=True)
+        change_rect = ui.text(change, (x + ui.px(28), top + ui.px(18)), style.SMALL, change_color)
+        return max(value_rect.right, change_rect.right) + ui.px(26)
+
+    def _treasury(self, state: "GameState", player: str, x: int) -> int:
+        ui = self.ui
+        faction = state.factions[player]
+        income = treasury_income(state, player)
+        start = x
+        x = self._figure(
+            x,
+            f"{faction.gold:,.0f}",
+            f"+{income} / turn",
+            GOOD_ON_SLATE,
+            lambda left: ui.icon("gold", (left + ui.px(11), self.rect.centery), 22, style.BRASS_LIGHT),
+        )
+        ui.hint(
+            pygame.Rect(start, 0, x - start, self.rect.height),
+            "Treasury",
+            f"{faction.gold:g} gold, +{income} each turn from the cities you hold. Spend it at the "
+            "Merchant Exchange (M) on lots of wood, food and iron.",
+        )
+        return x
+
+    def _stockpile(self, state: "GameState", player: str, resource: str, x: int) -> int:
+        ui = self.ui
         stock = state.factions[player].resources
         gains = forecast(state, player)
         costs = upkeep(state, player)
         limit = storage(state, player)
-        for i, resource in enumerate(RESOURCES):
-            left = STOCKPILE_X + i * STOCKPILE_WIDTH
-            net = gains[resource] - costs[resource]
-            full = stock[resource] >= limit
-            draw_resource_icon(t.screen, resource, left, 11, 22)
-            t.text(f"{stock[resource]:,.0f}", left + 27, 3, t.body)
-            label = "Storage full" if full else f"{net:+.1f} / turn"
-            t.text(label, left + 27, 23, t.small, HOSTILE if full or net < 0 else GREEN)
-            t.hint(
-                (left - 4, 4, STOCKPILE_WIDTH - 8, 36),
-                resource.title(),
-                f"Stock: {stock[resource]:g} of {limit} storage. Production {gains[resource]:.1f}, "
-                f"upkeep {costs[resource]:.1f}: net {net:+.1f} on your faction turn. Production depends on "
-                "controlled provinces, regional output and local improvements; occupied provinces yield "
-                "half. Each city you hold adds storage and anything beyond it spoils. If upkeep cannot be "
-                "paid, the units that need it lose strength.",
-            )
+        net = gains[resource] - costs[resource]
+        full = stock[resource] >= limit
+        change = "storage full" if full else f"{net:+.1f} / turn"
+        start = x
+        icon_size = ui.px(20)
+        x = self._figure(
+            x,
+            f"{stock[resource]:,.0f}",
+            change,
+            BAD_ON_SLATE if full or net < 0 else GOOD_ON_SLATE,
+            lambda left: draw_resource_icon(
+                ui.surface, resource, left, self.rect.centery - icon_size // 2, icon_size
+            ),
+        )
+        ui.hint(
+            pygame.Rect(start, 0, x - start, self.rect.height),
+            resource.title(),
+            f"{stock[resource]:g} in store of {limit} capacity.\n"
+            f"Production {gains[resource]:+.1f}, upkeep {-costs[resource]:+.1f}: {net:+.1f} each turn.\n"
+            "Production comes from the provinces you hold, their resource sites and buildings; "
+            "occupied provinces yield half. Each city adds storage and anything beyond it spoils. "
+            "If upkeep cannot be paid, the units that need it lose strength.",
+        )
+        return x
 
-    def _draw_date(self, state: "GameState") -> None:
-        t = self.theme
-        x = self.date_rect.x
-        pygame.draw.line(t.screen, (103, 77, 57), (x, 8), (x, 36))
-        t.seal("end", (x + 20, 22), 24)
-        t.text(date_label(state.clock), x + 38, 3, t.heading, GOLD, width=150)
+    def _date(self, state: "GameState") -> None:
+        ui = self.ui
+        rect = self.date_rect
+        if ui.hovered(rect):
+            pygame.draw.rect(ui.surface, style.SLATE_LIGHT, rect)
+        pygame.draw.line(
+            ui.surface, style.SLATE_LIGHT, rect.topleft, (rect.x, rect.bottom - ui.px(3)), max(1, ui.px(1))
+        )
+        ui.icon("end", (rect.x + ui.px(22), rect.centery), 22, style.BRASS_LIGHT)
+        top = rect.centery - ui.px(16)
+        ui.text(date_label(state.clock), (rect.x + ui.px(42), top), style.HEADING, style.ON_SLATE, bold=True)
         _actor, completed = turn_phase(state)
-        status = "Orders open" if state.active == state.player else f"Rivals {completed} / 7"
-        t.text(f"Turn {state.clock['elapsed'] + 1}  /  {status}", x + 38, 25, t.small, DIM, width=150)
-        t.hint(
-            self.date_rect,
-            "Campaign time",
-            "One date spans your orders, resource settlement and seven rival turns. The calendar advances "
-            "when control returns to you. There is no real-time deadline. Click for campaign stages.",
+        status = "Your orders" if state.active == state.player else f"Rivals moving, {completed} of 7"
+        ui.text(
+            f"Turn {state.clock['elapsed'] + 1}  ·  {status}",
+            (rect.x + ui.px(42), top + ui.px(19)),
+            style.SMALL,
+            style.ON_SLATE_MUTED,
+        )
+        ui.hint(
+            rect,
+            "Campaign calendar",
+            "Each date covers your orders, then the seven rival nations' turns. Click to open the "
+            "calendar and the path to dominion (T).",
         )

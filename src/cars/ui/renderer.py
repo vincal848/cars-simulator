@@ -1,30 +1,30 @@
-"""A campaign on screen: the map plus every HUD panel. Drawing and hit testing only.
+"""A campaign on screen: the map and the interface around it. Drawing and hit testing only.
 
 The same view renders live play and read-only replays; input belongs to the screens.
+Everything is laid out afresh each frame from the window size and the UI scale.
 """
 
 from collections.abc import Callable
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
+import pygame
+
 from cars.sim.air import STRIKE, coverage
 from cars.sim.entities import FLEET
 from cars.sim.movement import reachable
 from cars.sim.naval import reachable_seas
-from cars.sim.supply import supplied_provinces
 from cars.sim.visibility import visible_nodes
-from cars.ui.hud.bottom_bar import SelectionCard, draw_status_bar
-from cars.ui.hud.faction_picker import FactionPicker
+from cars.ui.hud.controls import Controls
 from cars.ui.hud.forecast_card import ForecastCard
-from cars.ui.hud.market import MarketPanel
-from cars.ui.hud.menu import GameMenu
-from cars.ui.hud.objectives import ObjectivesPanel
-from cars.ui.hud.province_window import ProvinceWindow
+from cars.ui.hud.outliner import Outliner
+from cars.ui.hud.sidebar import Sidebar
+from cars.ui.hud.toasts import Toasts
 from cars.ui.hud.top_bar import TopBar
-from cars.ui.hud.turn_controls import TurnControls
+from cars.ui.hud.unit_card import UnitCard
+from cars.ui.kit import style
 from cars.ui.map.animation import MoveAnimation
-from cars.ui.map.map_view import MapView, Scene
-from cars.ui.palette import MAP_AREA
+from cars.ui.map.map_view import POLITICAL, SUPPLY, MapView, Scene
 
 if TYPE_CHECKING:
     from cars.sim.campaign import Campaign
@@ -32,6 +32,7 @@ if TYPE_CHECKING:
     from cars.sim.graph import Paths
     from cars.sim.state import GameState
     from cars.ui.context import UiContext
+    from cars.ui.frames import Frame
 
 Point = tuple[int, int]
 
@@ -41,6 +42,7 @@ class ViewState:
     """The player's current selection and what the map is showing."""
 
     layer: str = "land"
+    mode: str = POLITICAL
     selected: str | None = None
     inspected: str | None = None
     message: str = ""
@@ -54,71 +56,106 @@ class GameRenderer:
         self, context: "UiContext", state: "GameState", shapes: dict, seas: list[dict], campaign: "Campaign"
     ) -> None:
         self.context = context
-        self.theme = context.theme
+        self.ui = context.ui
         self.state = state
         self.shapes = shapes
         self.seas = seas
         self.campaign = campaign
-        self.map = MapView(state, shapes, seas, self.theme)
-        self.top_bar = TopBar(self.theme)
-        self.controls = TurnControls(self.theme)
-        self.selection = SelectionCard(self.theme)
-        self.province_window = ProvinceWindow(self.theme, self.map.sprites)
-        self.objectives = ObjectivesPanel(self.theme)
-        self.forecast = ForecastCard(self.theme)
-        self.picker = FactionPicker(self.theme, list(state.factions))
-        self.menu = GameMenu(context)
-        self.market = MarketPanel(self.theme)
+        self.map = MapView(state, shapes, seas, self.ui)
+        self.top_bar = TopBar(self.ui)
+        self.sidebar = Sidebar(self.ui)
+        self.outliner = Outliner(self.ui)
+        self.controls = Controls(self.ui)
+        self.unit_card = UnitCard(self.ui)
+        self.toasts = Toasts(self.ui)
+        self.forecast = ForecastCard(self.ui)
         self.time = 0.0
         self.build_effects: dict[str, float] = {}
         # Hide enemy forces the player cannot see. Replays show everything.
         self.fog = True
-        # Overlays owned by the screen (dialogs, tutorial) that also capture the pointer.
+        # Read-only replays show the map and top bar but none of the command interface.
+        self.interactive = True
+        self.panel: Frame | None = None
+        # Overlays owned by the screen (windows, tutorial) that also capture the pointer.
         self.blockers: list[Callable[[Point], bool]] = []
+        self.layout()
 
     def set_state(self, state: "GameState") -> None:
         """Show a different state of the same campaign (replay playback)."""
         self.state = state
         self.map.state = state
+        self.map.names.state = state
         self.campaign.state = state
         self.map.invalidate_labels()
 
     @property
     def player(self) -> str:
-        """The faction the HUD reports on: the human, or whoever is active before one is chosen."""
+        """The faction the interface reports on: the human, or whoever is active before one is chosen."""
         return self.campaign.player or self.state.active
+
+    def place_name(self, node: str) -> str:
+        if node in self.state.provinces:
+            return self.state.provinces[node].name
+        return self.map.seas.get(node, {}).get("name", node)
+
+    # Layout ---------------------------------------------------------------------------
+
+    def layout(self) -> None:
+        screen = self.ui.screen
+        self.top_bar.layout(screen)
+        top = self.top_bar.rect.bottom
+        self.sidebar.layout(screen, top)
+        self.controls.layout(screen)
+        self.outliner.layout(screen, top, self.controls.rect.top - self.ui.px(4))
+        left = self.panel.place(screen).right if self.panel is not None else self.sidebar.rect.right
+        self.unit_card.layout(screen, left)
+        card = self.unit_card.rect
+        if card.colliderect(self.controls.rect):
+            # On narrow windows the card sits above the map-mode bar instead of beside it.
+            card.bottom = self.controls.rect.top - self.ui.px(10)
+            if card.right > self.controls.rect.right:
+                card.right = self.controls.rect.right
+
+    def interface_rects(self) -> list[pygame.Rect]:
+        """Everything drawn over the map, for keeping labels clear of it."""
+        rects = [self.top_bar.rect]
+        if self.interactive:
+            rects += [self.sidebar.rect, self.outliner.rect, self.controls.rect]
+            if self.unit_card.areas:
+                rects.append(self.unit_card.rect)
+            if self.panel is not None and self.panel.rect is not None:
+                rects.append(self.panel.rect)
+        return rects
 
     # Hit testing ----------------------------------------------------------------------
 
-    def blocks_map(self, point: Point, layer: str) -> bool:
-        """True when a panel, rather than the map, is under ``point``."""
+    def blocks_map(self, point: Point, layer: str = "land") -> bool:
+        """True when the interface, rather than the map, is under ``point``."""
+        if any(blocker(point) for blocker in self.blockers) or self.top_bar.rect.collidepoint(point):
+            return True
+        if not self.interactive:
+            return False
         return bool(
-            any(blocker(point) for blocker in self.blockers)
-            or (layer == "air" and self.selection.air_mode_at(point))
-            or self.market.open
-            or self.top_bar.rect.collidepoint(point)
-            or self.menu.blocks(point)
-            or self.objectives.blocks(point)
-            or not MAP_AREA.collidepoint(point)
-            or self.controls.rect.collidepoint(point)
-            or self.province_window.contains(point)
+            self.sidebar.rect.collidepoint(point)
+            or self.outliner.contains(point)
+            or self.controls.contains(point)
+            or self.unit_card.contains(point)
+            or (self.panel is not None and self.panel.contains(point))
         )
 
     def hit(self, point: Point, layer: str) -> str | None:
-        """The map node under ``point``, or None if a panel covers it."""
+        """The map node under ``point``, or None if the interface covers it."""
         if self.campaign.player is None or self.blocks_map(point, layer):
             return None
         return self.map.node_at(point, layer)
 
-    def city_at(self, point: Point, layer: str) -> str | None:
-        if self.blocks_map(point, layer) or self.campaign.player is None:
+    def city_at(self, point: Point) -> str | None:
+        if self.blocks_map(point) or self.campaign.player is None:
             return None
         return self.map.city_at(point)
 
-    def reach(self, unit: "Unit | None", layer: str) -> tuple["Paths | None", set[str]]:
+    def reach(self, unit: "Unit | None") -> tuple["Paths | None", set[str]]:
         """Routes available to the selected unit and the nodes to highlight."""
-        if layer == "supply":
-            return None, supplied_provinces(self.state, self.state.active)
         if unit is None:
             return None, set()
         if unit.is_land:
@@ -137,50 +174,64 @@ class GameRenderer:
 
     # Drawing --------------------------------------------------------------------------
 
-    def draw(self, view: ViewState, hover: str | None, dialog_open: bool = False) -> None:
-        theme, state = self.theme, self.state
-        theme.tips.begin()
+    def draw(self, view: ViewState, hover: str | None, window_open: bool = False) -> None:
+        ui, state = self.ui, self.state
+        ui.tips.begin()
+        self.layout()
         unit = state.units.get(view.selected)
-        paths, highlights = self.reach(unit, view.layer)
+        paths, highlights = self.reach(unit)
         visible = self.visible(view)
+        layer = unit.layer if unit else "land"
+        if view.mode == SUPPLY and unit and unit.is_land:
+            layer = "supply"
+        view.layer = layer
         scene = Scene(
-            layer=view.layer,
+            layer=layer,
+            mode=view.mode,
             unit=unit,
             hover=hover,
-            inspected=view.inspected,
+            inspected=view.inspected if self.panel is not None else None,
             debug=view.debug,
             animation=view.animation,
             air_mode=view.air_mode,
             paths=paths,
-            highlights=highlights,
-            city_hover=self.city_at(self.context.mouse_pos(), view.layer),
+            highlights=highlights if layer != "supply" else set(),
+            city_hover=self.city_at(ui.mouse()),
             time=self.time,
             build_effects=self.build_effects,
             viewer=self.campaign.player,
             visible=visible,
         )
-        covered = [self.controls.rect]
-        if self.province_window.is_open:
-            covered.append(self.province_window.rect)
-        reserved = [self.top_bar.rect, self.objectives.button]
-        if not self.objectives.collapsed:
-            reserved.append(self.objectives.rect)
-        message = self.map.draw(theme.screen, scene, view.message, reserved, covered)
-
-        self.controls.draw(state, self.player, view.layer)
-        self.selection.draw(state, unit, hover, paths, view.debug, view.air_mode)
-        draw_status_bar(theme, message)
-        self.province_window.draw(state, view.inspected, self.player, self.time, self.build_effects)
-        self.objectives.draw(state)
+        rects = self.interface_rects()
+        description = self.map.draw(ui.surface, scene, rects, rects)
+        if self.interactive:
+            self.unit_card.draw(state, unit, hover, paths, view.air_mode, self.place_name)
+            self.sidebar.draw(getattr(self.panel, "name", None))
+            if self.campaign.player:
+                self.outliner.draw(state, self.player, view.selected)
+            self.controls.draw(state, self.player, view.mode, self.campaign.human_turn)
+            if self.panel is not None:
+                self.panel.draw()
         self.top_bar.draw(state, self.player)
-        overlay_open = self.market.open or self.province_window.is_open or self.menu.open or dialog_open
+        left = self.sidebar.rect.right if self.interactive else 0
+        if self.interactive and self.panel is not None and self.panel.rect is not None:
+            left = self.panel.rect.right
+        right = self.outliner.rect.left if self.interactive and self.campaign.player else self.ui.screen.right
+        self.toasts.draw(self.top_bar.rect.bottom, left, right)
+        pointer_free = not window_open and not self.blocks_map(ui.mouse())
         # A forecast would reveal hidden defenders, so only forecast what can be seen.
-        hover_seen = visible is None or hover in visible
-        if view.layer != "supply" and not overlay_open and hover_seen:
+        if pointer_free and (visible is None or hover in visible):
             self.forecast.draw(state, unit, hover, paths, view.air_mode)
-        if self.campaign.player is None:
-            self.picker.draw(state)
-        self.menu.draw()
-        if self.market.open and self.campaign.player:
-            theme.tips.begin()
-            self.market.draw(state, self.campaign.player)
+        if pointer_free and description:
+            self._pointer_note(description)
+
+    def _pointer_note(self, text: str) -> None:
+        """A short line beside the pointer describing the map feature under it."""
+        ui = self.ui
+        font = ui.font(style.SMALL)
+        label = font.render(text, True, style.ON_SLATE)
+        x, y = ui.mouse()
+        box = label.get_rect(topleft=(x + ui.px(18), y + ui.px(18))).inflate(ui.px(12), ui.px(6))
+        box.clamp_ip(ui.screen)
+        pygame.draw.rect(ui.surface, style.SLATE_DARK, box, border_radius=ui.px(3))
+        ui.surface.blit(label, label.get_rect(center=box.center))
