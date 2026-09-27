@@ -193,11 +193,7 @@ class PediaWindow(Window):
             )
         text_width = width - (plate_width + ui.px(16) if plate_width else 0)
         ui.text(article.title, (x, y), style.TITLE + 4, style.SLATE, bold=True, width=text_width)
-        y += ui.px(42)
-        if article.summary:
-            y += ui.paragraph(
-                article.summary, pygame.Rect(x, y, text_width, ui.px(80)), style.BODY, style.INK_MUTED
-            ) + ui.px(8)
+        y += ui.px(46)
         if article.facts:
             y += facts(ui, x, y, text_width, [(label, self._plain(value)) for label, value in article.facts])
             y += ui.px(6)

@@ -122,13 +122,16 @@ class DiplomacyPanel(DockedPanel):
         label = "Offer peace" if at_war else "Declare war"
         button = pygame.Rect(x, y, ui.px(170), ui.px(32))
         self.button(button, label, "treaty:" + faction, enabled=not refusal, kind="primary")
-        explanation = refusal or (
+        effect = (
             f"Peace closes both borders and ends attacks for a {RULES.truce_rounds}-round truce."
             if at_war
             else "War reopens the border at once."
         )
+        ui.hint(button, label, effect)
+        if not refusal:
+            return button.height + ui.px(6)
         ui.paragraph(
-            explanation,
+            refusal,
             pygame.Rect(button.right + ui.px(12), y + ui.px(2), width - button.width - ui.px(12), ui.px(40)),
             style.SMALL,
             style.INK_MUTED,

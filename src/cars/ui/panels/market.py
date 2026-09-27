@@ -27,13 +27,7 @@ class MarketPanel(DockedPanel):
             style.BODY,
             style.INK_MUTED,
         )
-        y += ui.px(60)
-        y += ui.paragraph(
-            f"Each contract trades a lot of {RULES.lot_size}. Buying drains the merchants' stock and "
-            "raises the price; selling refills it at a discount.",
-            pygame.Rect(x, y, width, ui.px(60)),
-            style.BODY,
-        ) + ui.px(8)
+        y += ui.px(66)
         y += section(ui, "Contracts", x, y, width)
         rows, hints = [], []
         for resource in RESOURCES:
@@ -69,8 +63,9 @@ class MarketPanel(DockedPanel):
                 (
                     resource.title(),
                     reasons
-                    or f"Buy {RULES.lot_size} for {buy_price} gold, "
-                    f"or sell {RULES.lot_size} for {sell_price}.",
+                    or f"Buy {RULES.lot_size} for {buy_price} gold, or sell {RULES.lot_size} for "
+                    f"{sell_price}. Buying drains the merchants' stock and raises the price; they "
+                    f"restock {RULES.replenishment} a round.",
                 )
             )
         columns = [
@@ -82,13 +77,6 @@ class MarketPanel(DockedPanel):
         ]
         y += draw_grid(ui, x, y, width, columns, rows, row_height=36, hints=hints)
         y += ui.px(10)
-        ui.text(
-            f"Merchant stock grows by {RULES.replenishment} of each resource every round.",
-            (x, y),
-            style.SMALL,
-            style.INK_MUTED,
-        )
-        y += ui.px(24)
         if self.notice:
             ui.text(self.notice, (x, y), style.BODY, style.SLATE, width=width)
             y += ui.px(24)

@@ -48,8 +48,7 @@ class EventWindow(Window):
             button = pygame.Rect(x, y, width, ui.px(40))
             self.button(button, option.label, f"option:{i}", kind="primary" if i == 0 else "secondary")
             y += ui.px(48)
-        ui.text("Choose how your nation responds.", (x, y + ui.px(4)), style.SMALL, style.INK_MUTED)
-        return y - rect.y + ui.px(30)
+        return y - rect.y
 
     def act(self, action: str) -> None:
         event = self.event

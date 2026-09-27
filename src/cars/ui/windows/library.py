@@ -25,14 +25,6 @@ class _LibraryWindow(Window):
 
     def draw_body(self, ui, rect: pygame.Rect) -> int:
         y = rect.y
-        ui.text(
-            "Three campaign slots and a separate autosave taken at the end of every turn.",
-            (rect.x, y),
-            style.BODY,
-            style.INK_MUTED,
-            width=rect.width,
-        )
-        y += ui.px(30)
         height = ui.px(66)
         for i in SLOTS:
             action = f"slot{i}"
@@ -54,12 +46,14 @@ class _LibraryWindow(Window):
                 style.INK_MUTED,
                 width=row.width - ui.px(28),
             )
+            if i == SaveLibrary.AUTOSAVE:
+                ui.hint(row, name, "Written automatically at the end of each turn.")
             self.clickable(row, action)
             y += height + ui.px(8)
-        ui.text(
-            self.notice or "Click a slot.", (rect.x, y + ui.px(4)), style.BODY, style.SLATE, width=rect.width
-        )
-        return y - rect.y + ui.px(30)
+        if self.notice:
+            ui.text(self.notice, (rect.x, y + ui.px(4)), style.BODY, style.SLATE, width=rect.width)
+            y += ui.px(30)
+        return y - rect.y
 
 
 class SaveWindow(_LibraryWindow):

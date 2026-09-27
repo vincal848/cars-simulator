@@ -99,13 +99,6 @@ class PickerWindow(Window):
             y += draw_grid(ui, x, y, width, [("Trait", 160, "left"), ("Effect", None, "left")], rows)
         button = pygame.Rect(rect.right - ui.px(260), rect.bottom - ui.px(44), ui.px(260), ui.px(44))
         self.button(button, f"Lead {faction.name}", "start", kind="primary")
-        ui.text(
-            "Seven rivals take their turns on their own. F9 loads a saved campaign.",
-            (x, button.y + ui.px(12)),
-            style.SMALL,
-            style.INK_MUTED,
-            width=width - button.width - ui.px(16),
-        )
 
     def handle_other(self, event: pygame.event.Event) -> bool:
         if event.type == pygame.KEYDOWN:

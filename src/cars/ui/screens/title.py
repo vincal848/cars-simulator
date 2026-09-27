@@ -119,9 +119,7 @@ class TitleScreen:
             if enabled:
                 self.buttons[action] = button
         footer = inner.y + len(ACTIONS) * ui.px(48) + ui.px(8)
-        ui.text(
-            f"Version {RELEASE}  ·  Enter starts a campaign", (inner.x, footer), style.SMALL, style.INK_MUTED
-        )
+        ui.text(f"Version {RELEASE}", (inner.x, footer), style.SMALL, style.INK_MUTED)
         mods = active_mods()
         if mods:
             names = ", ".join(mod.name for mod in mods)

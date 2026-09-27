@@ -96,7 +96,8 @@ class StrategyWindow(Window):
         button_width = ui.px(120)
         for i, name in enumerate(LAYERS):
             button = pygame.Rect(rect.x + i * (button_width + ui.px(6)), rect.y, button_width, ui.px(30))
-            self.button(button, name.title(), "layer:" + name, selected=self.layer == name, icon=name)
+            label = "Balloons" if name == "air" else name.title()
+            self.button(button, label, "layer:" + name, selected=self.layer == name, icon=name)
         top = rect.y + ui.px(42)
         plot = pygame.Rect(rect.x, top, rect.width - ui.px(SIDE) - ui.px(14), rect.bottom - top)
         ui.inset(plot)
@@ -140,24 +141,31 @@ class StrategyWindow(Window):
         y += ui.px(12)
         if self.selected in nodes:
             y += self._details(ui, side, y, graph, metrics, supplied, paths)
-        else:
-            y += ui.paragraph(
-                "Click a node to inspect it. Select a unit on the map first to trace its land or naval "
-                "route.",
-                pygame.Rect(side.x, y, side.width, ui.px(120)),
-                style.BODY,
-            )
-        legend = (
-            "Rings: cut points. Gold links: bridges whose loss splits the network. Blue: the selected "
-            "unit's route. Supply: green is connected to a hub, red is cut off."
+        ui.hint(
+            plot,
+            "Strategic atlas",
+            "Click a node to inspect it. Select a unit on the map first to trace its route.",
         )
-        ui.paragraph(
-            legend,
-            pygame.Rect(side.x, side.bottom - ui.px(120), side.width, ui.px(120)),
-            style.SMALL,
-            style.INK_MUTED,
-        )
+        self._legend(ui, side)
         return rect.height
+
+    def _legend(self, ui, side: pygame.Rect) -> None:
+        """A key to the diagram's marks, along the bottom of the side column."""
+        keys = [("ring", BRIDGE, "Cut point"), ("line", BRIDGE, "Bridge"), ("line", ROUTE, "Route")]
+        if self.layer == "supply":
+            keys += [("dot", SUPPLIED, "Supplied"), ("dot", CUT_OFF, "Cut off")]
+        y = side.bottom - len(keys) * ui.px(24)
+        for mark, color, label in keys:
+            centre = (side.x + ui.px(8), y + ui.px(10))
+            if mark == "ring":
+                pygame.draw.circle(ui.surface, color, centre, ui.px(7), max(1, ui.px(2)))
+            elif mark == "line":
+                start, end = (centre[0] - ui.px(8), centre[1]), (centre[0] + ui.px(8), centre[1])
+                pygame.draw.line(ui.surface, color, start, end, max(2, ui.px(3)))
+            else:
+                pygame.draw.circle(ui.surface, color, centre, ui.px(5))
+            ui.text(label, (side.x + ui.px(26), y), style.SMALL, style.INK_MUTED)
+            y += ui.px(24)
 
     def _details(self, ui, side: pygame.Rect, y: int, graph, metrics, supplied, paths) -> int:
         node = self.selected

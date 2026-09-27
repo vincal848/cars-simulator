@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- **Less filler text.** Explanatory lines under titles and at the foot of
+  windows are gone: the save slots' introduction and "Click a slot.", the
+  market's paragraphs, the calendar's steps of a turn, the strategic atlas's
+  instructions (now a small key), the replay studio's paragraphs, the picker's
+  footer, the event prompt and the summary under every CARSapedia title. What
+  was worth keeping moved into tooltips.
 - **A cooler, cleaner palette.** Panels are light neutral grey with dark ink under
   deep slate title bars, with a muted gold for emphasis and a single thin frame,
   in place of parchment and brass.

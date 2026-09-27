@@ -1,4 +1,4 @@
-"""The campaign calendar: the season, how a turn unfolds and the path to dominion."""
+"""The campaign calendar: the season and the path to dominion."""
 
 import pygame
 
@@ -9,11 +9,6 @@ from cars.ui.kit import style
 from cars.ui.kit.grid import section
 
 STAGES = ("Foothold", "Expansion", "Consolidation", "Dominion")
-TURN = (
-    "Issue orders and develop your nation at your own pace.",
-    "End Turn collects production, pays upkeep and hands play to the seven rivals.",
-    "The next date refreshes movement and counts your city-holding streak.",
-)
 
 
 class TimelineWindow(Window):
@@ -42,13 +37,6 @@ class TimelineWindow(Window):
             cell = pygame.Rect(x + i * step, y, step - ui.px(6), ui.px(34))
             ui.button(cell, period or "Year", selected=i == current)
         y += ui.px(52)
-        y += section(ui, "A turn", x, y, width)
-        for i, line in enumerate(TURN):
-            ui.text(f"{i + 1}.", (x, y), style.BODY, style.SLATE, bold=True)
-            y += ui.paragraph(
-                line, pygame.Rect(x + ui.px(24), y, width - ui.px(24), ui.px(60)), style.BODY
-            ) + ui.px(4)
-        y += ui.px(10)
         y += section(ui, "The path to dominion", x, y, width)
         stage = campaign_stage(state)
         step = width // len(STAGES)
