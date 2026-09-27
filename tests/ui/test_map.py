@@ -1,7 +1,9 @@
 import unittest
+from unittest.mock import patch
 
 import pygame
 
+from cars.sim.entities import Unit
 from cars.ui.camera import Camera, point_in_polygon
 from cars.ui.map.labels import layout_labels
 from cars.ui.map.map_view import MapView, Scene
@@ -74,6 +76,20 @@ class MapViewTests(unittest.TestCase):
         self.assertEqual(labels[0].rect.topleft, (first.x + 12, first.y + 5))
         self.map.draw(screen, Scene("land"), "", [], [])  # The drag has stopped.
         self.assertIsNot(self.map.labels, labels)
+
+    def test_each_stack_gets_one_marker_that_steps_off_city_pins(self):
+        lead = self.state.units["infantry0_0"]
+        for i in range(2):
+            self.state.units[f"extra{i}"] = Unit(f"extra{i}", lead.owner, lead.location, hp=5)
+        calls = []
+        with patch("cars.ui.map.map_view.draw_army", lambda *args, **kw: calls.append(args)):
+            self.map.draw(self.theme.screen, Scene("land"), "", [], [])
+        units = [u for u in self.state.units.values() if u.location == lead.location and u.is_land]
+        stack = [args for args in calls if args[4] == len(units)]
+        self.assertEqual(len(stack), 1)
+        self.assertAlmostEqual(stack[0][5], sum(u.hp for u in units) / (10 * len(units)))
+        pin = self.map.city_markers[0]
+        self.assertGreater(self.map._clear_of_pins(*pin.point), 0)
 
     def test_a_captured_province_is_repainted(self):
         province = self.state.provinces[self.state.units["infantry0_0"].location]

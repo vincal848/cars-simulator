@@ -11,7 +11,7 @@ Victoria and Civilization V, reached in sprints that each land as their own comm
    stockpiles; a large End Turn button and unit controls bottom right; the
    province window docked to the left edge; objectives as a collapsible tab;
    less ornament, textured panels and stronger text contrast.
-3. **Army markers:** one marker per stack with the nation's colour and emblem, a
+3. **Army markers** (done): one marker per stack with the nation's colour and emblem, a
    regiment count and a strength bar, simplified when zoomed out.
 4. **Names on the map:** each nation's name lettered across its territory,
    sea names in a light italic.

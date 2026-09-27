@@ -141,7 +141,8 @@ mountain symbols; then faint province borders, strong nation borders and the
 coastline. Borders come from `geometry.borders`, which classifies every outline
 segment by the provinces on either side of it. Fog of war is a separate tile
 layer, cached per set of hidden provinces. Pins, units, routes and labels are
-drawn over the atlas in screen space every frame.
+drawn over the atlas in screen space every frame. Each stack is one plate
+(`map/markers.py`); zoomed out, plates and city pins replace figures and towns.
 
 ## Content and modding
 

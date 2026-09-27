@@ -12,6 +12,10 @@
   on the left; and the objectives panel is narrower and collapses to a tab. The
   title plaque, compass and panel wallpaper are gone, leaving more of the map
   visible.
+- **Army markers:** each stack is one plate in its nation's colour with a
+  map symbol for its leading arm, a unit count and a strength bar, stepping
+  aside from city pins. Zoomed in, the leading unit's figure stands on the plate;
+  zoomed out, only plates and city pins are drawn.
 - **Smooth panning:** the map is painted once per zoom level in cached tiles;
   panning costs about 3 ms a frame instead of about 145 ms.
 - **Recovery:** damaged units regain strength at the start of their turn: +1 when

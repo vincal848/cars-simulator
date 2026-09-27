@@ -3,7 +3,7 @@
     "id": "first-orders",
     "title": "First orders",
     "category": "Basics",
-    "body": "Choose a faction. Click a regiment, then hover a gold-bordered province. The route arrow and order forecast explain its cost and likely outcome. Click the destination to issue the order. Esc clears selection; Tab cycles stacks. N finds the next unit with orders; F centers it. Right-click a province to inspect it."
+    "body": "Choose a faction. Click a regiment, then hover a gold-bordered province. The route arrow and order forecast explain its cost and likely outcome. Click the destination to issue the order. Each stack shows as one plate in its nation's colour: the symbol of its leading arm (a cross for infantry, a slash for cavalry, a dot for artillery), the number of units and a strength bar; a red mark means it is out of supply. Esc clears selection; Tab cycles stacks. N finds the next unit with orders; F centers it. Right-click a province to inspect it."
   },
   {
     "id": "turns",

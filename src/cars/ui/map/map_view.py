@@ -13,7 +13,7 @@ from typing import TYPE_CHECKING
 import pygame
 
 from cars.sim.air import STRIKE_TARGET_KINDS, is_airbase
-from cars.sim.entities import AIR, FLEET
+from cars.sim.entities import AIR, FLEET, FULL_STRENGTH
 from cars.sim.regional import CHARTERS
 from cars.sim.supply import supply_route, threatened_route
 from cars.sim.visibility import can_see
@@ -26,6 +26,7 @@ from cars.ui.map.animation import MoveAnimation
 from cars.ui.map.atlas import OPEN_SEA, Atlas
 from cars.ui.map.geometry import Rings, borders, centroid, province_polygons
 from cars.ui.map.labels import Label, draw_labels, layout_labels
+from cars.ui.map.markers import PLATE_SIZE, draw_army
 from cars.ui.map.relief import RASTER_NORTH, RASTER_WEST
 from cars.ui.palette import (
     HOSTILE,
@@ -365,6 +366,9 @@ class MapView:
                 pygame.draw.circle(screen, ROUTE_GOLD, center, animation.arrival_radius, 1)
 
     def _draw_cities(self, screen) -> None:
+        """Town sprites, only when zoomed in; zoomed out the pins alone mark the cities."""
+        if self.camera.scale < UNIT_CLOSE_SCALE:
+            return
         size = (38, 32) if self.camera.scale < CLOSE_SCALE else (52, 44)
         for marker in self.city_markers:
             city = self.state.cities[marker.city]
@@ -385,49 +389,57 @@ class MapView:
         ]
 
     def _draw_units(self, screen, scene: Scene) -> None:
-        """One sprite per stack, with the selected unit's stack drawn first."""
+        """One marker per stack; a marching unit is drawn on its own along its route."""
         selected = scene.unit.id if scene.unit else None
-        units = self.visible_units(scene)
-        shown = set()
-        for unit in sorted(units, key=lambda u: u.id != selected):
-            if unit.location in shown:
-                continue
-            shown.add(unit.location)
-            stack = [other for other in units if other.location == unit.location]
-            position = self.anchors[unit.location]
-            if scene.animation and scene.animation.unit == unit.id:
-                position = (scene.animation.position[0], scene.animation.position[1] + scene.animation.bob())
-            for x, y in self.camera.copies(position):
-                if MAP_AREA.collidepoint((x, y)):
-                    self._draw_unit(screen, unit, (x, y), unit.id == selected, len(stack))
+        marching = scene.animation.unit if scene.animation else None
+        stacks: dict[str, list[Unit]] = {}
+        for unit in self.visible_units(scene):
+            if unit.id != marching:
+                stacks.setdefault(unit.location, []).append(unit)
+        # The selected stack is drawn last, on top of any neighbour it overlaps.
+        for stack in sorted(stacks.values(), key=lambda stack: any(u.id == selected for u in stack)):
+            lead = next((u for u in stack if u.id == selected), stack[0])
+            self._draw_stack(screen, stack, lead, self.anchors[lead.location], lead.id == selected)
+        unit = self.state.units.get(marching)
+        if unit and scene.shows(unit):
+            x, y = scene.animation.position
+            self._draw_stack(screen, [unit], unit, (x, y + scene.animation.bob()), unit.id == selected)
 
-    def _draw_unit(self, screen, unit: "Unit", position, selected: bool, stack_size: int) -> None:
-        x, y = position
-        faction = self.state.factions[unit.owner]
-        contact_shadow(screen, (x + 2, y + 14), (43, 18))
-        pygame.draw.ellipse(screen, ROUTE_GOLD if selected else faction.color, (x - 17, y + 10, 34, 10), 2)
-        style = CHARTERS[unit.regional].style if unit.regional else faction.style
-        sprite = self.sprites.sprite(unit.kind, faction.color, style)
-        if unit.regional:
-            # A gold diamond marks a regional formation.
-            sprite = sprite.copy()
-            pygame.draw.polygon(sprite, ROUTE_GOLD, [(4, 0), (8, 5), (4, 10), (0, 5)])
+    def _draw_stack(self, screen, stack: list["Unit"], lead: "Unit", position, selected: bool) -> None:
+        faction = self.state.factions[lead.owner]
         close = self.camera.scale >= UNIT_CLOSE_SCALE
-        if unit.is_land:
-            size = (51, 51) if close else (37, 37)
-            sprite = pygame.transform.smoothscale(sprite, size)
-            screen.blit(sprite, (x - size[0] // 2, y + 17 - size[1]))
-        elif not close:
-            screen.blit(pygame.transform.smoothscale(sprite, (27, 30)), (x - 13, y - 18))
-        else:
-            screen.blit(sprite, (x - 18, y - 24))
-        pygame.draw.rect(screen, (25, 35, 38), (x - 13, y + 20, 26, 3))
-        pygame.draw.rect(screen, (145, 211, 151), (x - 13, y + 20, max(0, int(26 * unit.hp / 10)), 3))
-        if stack_size > 1:
-            pygame.draw.circle(screen, (39, 28, 30), (int(x + 20), int(y + 13)), 8)
-            self._plain_text(screen, str(stack_size), (x + 16, y + 6), ROUTE_GOLD, self.theme.small)
-        if not unit.supplied:
-            self._plain_text(screen, "!", (x + 16, y - 12), (255, 139, 100), self.theme.body)
+        strength = sum(u.hp for u in stack) / (len(stack) * FULL_STRENGTH)
+        for x, y in self.camera.copies(position):
+            if not MAP_AREA.collidepoint((x, y)):
+                continue
+            plate_y = y + 14 if close else y
+            x += self._clear_of_pins(x, plate_y)
+            if close:
+                # Zoomed in, the leading unit's figure stands on the plate.
+                style = CHARTERS[lead.regional].style if lead.regional else faction.style
+                sprite = self.sprites.sprite(lead.kind, faction.color, style)
+                size = (46, 46) if lead.is_land else (36, 40)
+                contact_shadow(screen, (x + 2, y + 8), (40, 16))
+                screen.blit(pygame.transform.smoothscale(sprite, size), (x - size[0] // 2, y + 8 - size[1]))
+            draw_army(
+                screen,
+                (x, plate_y),
+                faction.color,
+                lead.kind,
+                len(stack),
+                strength,
+                self.theme.small,
+                selected=selected,
+                supplied=all(u.supplied for u in stack),
+                regional=bool(lead.regional),
+            )
+
+    def _clear_of_pins(self, x: float, y: float) -> float:
+        """How far right a marker at (x, y) must step to stand beside a city pin rather than on it."""
+        plate = pygame.Rect(0, 0, PLATE_SIZE[0] + 4, PLATE_SIZE[1] + 8)
+        plate.center = (x, y)
+        pins = [m.rect.inflate(4, 4) for m in self.city_markers if plate.colliderect(m.rect.inflate(4, 4))]
+        return max((pin.right - plate.left for pin in pins), default=0)
 
     def _draw_air_targets(self, screen, scene: Scene) -> str | None:
         unit, hover, in_range = scene.unit, scene.hover, scene.highlights
