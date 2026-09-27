@@ -10,6 +10,7 @@ import pygame
 
 from cars.sim.entities import BALLOON, FLEET
 from cars.sim.forecast import MOVE, forecast_order, signature
+from cars.ui.battle import draw_modifiers, modifier_rows
 from cars.ui.kit import style
 
 if TYPE_CHECKING:
@@ -18,7 +19,8 @@ if TYPE_CHECKING:
     from cars.sim.state import GameState
     from cars.ui.kit.ui import Ui
 
-SIZE = (330, 176)
+WIDTH = 330
+TITLE_HEIGHT = 40
 
 
 class ForecastCard:
@@ -61,8 +63,11 @@ class ForecastCard:
 
     def _draw_card(self, state: "GameState", unit: "Unit", target: str, result: dict) -> None:
         ui = self.ui
+        modifiers = modifier_rows(result["factors"])
+        line = ui.px(24)
+        width = ui.px(WIDTH)
+        height = ui.px(TITLE_HEIGHT) + line * 4 + ui.px(26) * (len(modifiers) + 1) + ui.px(34)
         mouse_x, mouse_y = ui.mouse()
-        width, height = ui.px(SIZE[0]), ui.px(SIZE[1])
         offset = ui.px(22)
         screen = ui.screen
         x = (
@@ -78,7 +83,6 @@ class ForecastCard:
         rect = pygame.Rect(x, y, width, height).clamp(screen.inflate(-ui.px(16), -ui.px(16)))
         self.rect = rect
         inner = ui.panel(rect, "Order forecast", "war")
-        line = ui.px(24)
         success = "captured" in result["message"] or "destroyed" in result["message"].lower()
         ui.text(
             result["message"],
@@ -105,9 +109,4 @@ class ForecastCard:
             top = inner.y + line * (i + 1) + ui.px(2)
             ui.text(label, (inner.x, top), style.SMALL, style.INK_MUTED)
             ui.text(value, (inner.right, top), style.SMALL, color, align="right")
-        if target in state.provinces:
-            supply = "supplied" if unit.supplied else "out of supply"
-            terrain = state.provinces[target].terrain.title()
-            ui.text(
-                f"{terrain} · attacker {supply}", (inner.x, inner.bottom - line), style.SMALL, style.SLATE
-            )
+        draw_modifiers(ui, inner.x, inner.y + line * 4 + ui.px(6), inner.width, result["factors"])

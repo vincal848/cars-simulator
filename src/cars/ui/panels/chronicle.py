@@ -3,6 +3,7 @@
 import pygame
 
 from cars.sim.journal import BATTLE_KINDS
+from cars.ui.battle import draw_losses, draw_modifiers
 from cars.ui.frames import DockedPanel
 from cars.ui.kit import style
 
@@ -56,13 +57,19 @@ class ChroniclePanel(DockedPanel):
         )
         y += ui.px(18)
         y += ui.paragraph(entry["summary"], pygame.Rect(x, y, width, ui.px(200)), style.BODY)
-        for line in entry["details"]:
-            y += ui.paragraph(
-                line,
-                pygame.Rect(x + ui.px(12), y, width - ui.px(12), ui.px(200)),
-                style.SMALL,
-                style.INK_MUTED,
-            )
+        if "losses" in entry:
+            y += ui.px(6)
+            y += draw_modifiers(ui, x, y, width, entry["factors"])
+            y += ui.px(8)
+            y += draw_losses(ui, x, y, width, self.state, entry["losses"])
+        else:
+            for line in entry["details"]:
+                y += ui.paragraph(
+                    line,
+                    pygame.Rect(x + ui.px(12), y, width - ui.px(12), ui.px(200)),
+                    style.SMALL,
+                    style.INK_MUTED,
+                )
         ui.rule(x, x + width, y + ui.px(4))
         return y - top + ui.px(4)
 

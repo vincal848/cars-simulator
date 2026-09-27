@@ -410,6 +410,14 @@ def _check_tutorial(tutorial: object) -> None:
         raise ValueError("Invalid tutorial progress.")
 
 
+def _rows(rows: object, width: int) -> bool:
+    """A table kept in a journal entry: a list of rows of ``width`` strings."""
+    return isinstance(rows, list) and all(
+        isinstance(row, list) and len(row) == width and all(isinstance(cell, str) for cell in row)
+        for row in rows
+    )
+
+
 def _check_journal(state: GameState) -> None:
     def valid(entry: object) -> bool:
         return (
@@ -418,11 +426,8 @@ def _check_journal(state: GameState) -> None:
             and isinstance(entry.get("round"), int)
             and isinstance(entry.get("details"), list)
             and all(isinstance(line, str) for line in entry["details"])
-            and isinstance(entry.get("factors", []), list)
-            and all(
-                isinstance(row, list) and len(row) == 2 and all(isinstance(cell, str) for cell in row)
-                for row in entry.get("factors", [])
-            )
+            and _rows(entry.get("factors", []), 2)
+            and _rows(entry.get("losses", []), 4)
             and isinstance(entry.get("participants"), list)
             and all(faction in state.factions for faction in entry["participants"])
         )
