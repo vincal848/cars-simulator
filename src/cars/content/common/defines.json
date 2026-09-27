@@ -44,6 +44,11 @@
   "recruitment": {
     "regional_surcharge": 2
   },
+  "economy": {
+    "occupied_yield": 0.5,
+    "storage_base": 100,
+    "storage_per_city": 25
+  },
   "recovery": {
     "per_turn": 1.0,
     "city_bonus": 1.0
@@ -62,7 +67,8 @@
   "diplomacy": {
     "peace_strength_ratio": 1.0,
     "truce_rounds": 6,
-    "war_strength_ratio": 1.5
+    "war_strength_ratio": 1.5,
+    "coalition_share": 0.25
   },
   "journal": {
     "entry_limit": 160
@@ -74,6 +80,8 @@
     "unknown_front_distance": 100,
     "route_cost_weight": 0.15,
     "rejected_score": -1000,
+    "recruits_per_turn": 3,
+    "builds_per_turn": 2,
     "recruitment_rotation": ["infantry", "scout", "fleet", "cavalry", "air", "artillery"]
   }
 }

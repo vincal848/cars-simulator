@@ -63,6 +63,13 @@ class RecruitmentDefines:
 
 
 @dataclass(frozen=True)
+class EconomyDefines:
+    occupied_yield: float
+    storage_base: int
+    storage_per_city: int
+
+
+@dataclass(frozen=True)
 class RecoveryDefines:
     per_turn: float
     city_bonus: float
@@ -79,6 +86,7 @@ class DiplomacyDefines:
     peace_strength_ratio: float
     truce_rounds: int
     war_strength_ratio: float
+    coalition_share: float
 
 
 @dataclass(frozen=True)
@@ -94,6 +102,8 @@ class AIDefines:
     unknown_front_distance: int
     route_cost_weight: float
     rejected_score: float
+    recruits_per_turn: int
+    builds_per_turn: int
     recruitment_rotation: tuple[str, ...]
 
 
@@ -104,6 +114,7 @@ class Defines:
     naval: NavalDefines
     air: AirDefines
     recruitment: RecruitmentDefines
+    economy: EconomyDefines
     recovery: RecoveryDefines
     upkeep: UpkeepDefines
     diplomacy: DiplomacyDefines
@@ -120,6 +131,7 @@ class Defines:
             naval=NavalDefines(**raw["naval"]),
             air=AirDefines(**raw["air"]),
             recruitment=RecruitmentDefines(**raw["recruitment"]),
+            economy=EconomyDefines(**raw["economy"]),
             recovery=RecoveryDefines(**raw["recovery"]),
             upkeep=UpkeepDefines(**raw["upkeep"]),
             diplomacy=DiplomacyDefines(**raw["diplomacy"]),

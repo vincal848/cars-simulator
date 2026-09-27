@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, ClassVar
 import pygame
 
 from cars.sim.calendar import date_label
-from cars.sim.economy import forecast
+from cars.sim.economy import forecast, storage
 from cars.sim.entities import AIR, FLEET, RESOURCES
 from cars.sim.upkeep import upkeep
 from cars.ui.art.icons import draw_resource_icon
@@ -104,6 +104,7 @@ class CouncilPanel:
         stock = state.factions[player].resources
         gains = forecast(state, player)
         costs = upkeep(state, player)
+        limit = storage(state, player)
         for i, resource in enumerate(RESOURCES):
             net = gains[resource] - costs[resource]
             left = x + 20 + i * 110
@@ -112,14 +113,17 @@ class CouncilPanel:
             draw_resource_icon(t.screen, resource, left + 9, y + 145, 23)
             t.text(resource.upper(), left + 10, y + 128, t.small, GOLD)
             t.text(f"{stock[resource]:,.0f}", left + 38, y + 142, t.number, width=61)
-            t.text(f"{net:+.1f} / turn", left + 10, y + 180, t.small, GREEN if net >= 0 else HOSTILE)
+            full = stock[resource] >= limit
+            label = "Storage full" if full else f"{net:+.1f} / turn"
+            t.text(label, left + 10, y + 180, t.small, HOSTILE if full or net < 0 else GREEN)
             t.hint(
                 well,
                 resource.title(),
-                f"Stock: {stock[resource]:g}. Production {gains[resource]:.1f}, "
+                f"Stock: {stock[resource]:g} of {limit} storage. Production {gains[resource]:.1f}, "
                 f"upkeep {costs[resource]:.1f}: net {net:+.1f} on your faction turn. Production depends on "
-                "controlled provinces, regional output and local improvements. If upkeep cannot be paid, "
-                "the units that need it lose strength.",
+                "controlled provinces, regional output and local improvements; occupied provinces yield "
+                "half. Each city you hold adds storage and anything beyond it spoils. If upkeep cannot be "
+                "paid, the units that need it lose strength.",
             )
 
     def _draw_forces(self, state: "GameState", player: str, x: int, y: int) -> None:

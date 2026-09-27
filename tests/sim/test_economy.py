@@ -1,7 +1,7 @@
 import unittest
 
 from cars.sim.buildings import build, quote
-from cars.sim.economy import forecast, produce
+from cars.sim.economy import RULES, forecast, produce, storage
 from cars.sim.market import quote as quote_trade
 from cars.sim.market import trade, treasury_income
 from cars.sim.turn import end_turn
@@ -45,7 +45,8 @@ class ConstructionTests(unittest.TestCase):
         self.state.provinces[self.province].controller = "f1"
         with_mine = forecast(self.state, "f1")["iron"]
         self.state.provinces[self.province].buildings.clear()
-        self.assertEqual(with_mine - forecast(self.state, "f1")["iron"], 6)
+        # Occupied: f1 controls the province but f0 still owns it, so it yields half.
+        self.assertAlmostEqual(with_mine - forecast(self.state, "f1")["iron"], 3)
 
     def test_shipyard_needs_a_port(self):
         self.state.factions["f0"].resources = dict(wood=1000, food=1000, iron=1000)
@@ -73,6 +74,28 @@ class ProductionTests(unittest.TestCase):
         self.assertEqual(state.active, "f0")
         self.assertEqual(state.round, 2)
         self.assertEqual(unit.remaining, 6)
+
+    def test_occupied_provinces_yield_half(self):
+        state, _, _ = compact()
+        state.provinces["cascadia"].owner = "f1"
+        state.provinces["cascadia"].controller = "f1"
+        owned = forecast(state, "f1")
+        state.provinces["cascadia"].owner = "f0"
+        occupied = forecast(state, "f1")
+        for resource, amount in owned.items():
+            self.assertLessEqual(occupied[resource], amount)
+        self.assertLess(sum(occupied.values()), sum(owned.values()))
+
+    def test_stockpiles_are_limited_by_city_storage(self):
+        state, _, _ = compact()
+        limit = storage(state, "f0")
+        self.assertEqual(limit, RULES.storage_base + RULES.storage_per_city)  # One city.
+        stock = state.factions["f0"].resources
+        stock.update(wood=limit - 1, food=limit + 50, iron=0)
+        produce(state, "f0")
+        self.assertEqual(stock["wood"], limit)
+        self.assertEqual(stock["food"], limit + 50)  # Never reduced, only capped.
+        self.assertEqual(stock["iron"], 4)
 
 
 class MarketTests(unittest.TestCase):

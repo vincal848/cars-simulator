@@ -21,7 +21,7 @@
     "id": "diplomacy",
     "title": "Diplomacy",
     "category": "Basics",
-    "body": "Every nation starts at war with every other. Press D to offer peace: a rival accepts only if it is no stronger than you. At peace, neither side may enter the other's provinces, strike its forces or fight its fleets. A truce lasts six rounds; after that either side may declare war, and a rival much stronger than you will. Rivals stay at war with one another."
+    "body": "Every nation starts at war with every other. Press D to offer peace: a rival accepts only if it is no stronger than you. At peace, neither side may enter the other's provinces, strike its forces or fight its fleets. A truce lasts six rounds; after that either side may declare war, and a rival much stronger than you will. Rivals fight one another too, until one nation holds a quarter of the continent's cities: then the others form a coalition. They make peace among themselves, welcome peace from anyone but the leader, refuse the leader outright and turn every war against it. Peace grants no military access, so a coalition member can only reach the leader across its own or enemy ground."
   },
   {
     "id": "movement",
@@ -57,7 +57,7 @@
     "id": "economy",
     "title": "Resources and development",
     "category": "Economy",
-    "body": "Wood, food and iron fund construction and recruitment. Regional base output is shared by controlled province count. Local resource sites and buildings add income. Estates contains farms, lumber mills and iron mines; each level adds two of its resource per turn. Improvements complete immediately in this prototype and persist after capture. Population and industry counters describe the whole administrative region."
+    "body": "Wood, food and iron fund construction and recruitment. Regional base output is shared by controlled province count. Local resource sites and buildings add income. Estates contains farms, lumber mills and iron mines; each level adds two of its resource per turn. Improvements complete immediately in this prototype and persist after capture. Occupied provinces (held but owned by another nation) yield half. Each resource is stored up to 100 plus 25 per city you hold; production beyond that spoils. Population and industry counters describe the whole administrative region."
   },
   {
     "id": "upkeep",

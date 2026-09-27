@@ -11,7 +11,7 @@ from cars.sim.air import STRIKE, STRIKE_TARGET_KINDS, coverage, mission
 from cars.sim.buildings import BUILDINGS, build, quote
 from cars.sim.combat import assess
 from cars.sim.defines import DEFINES
-from cars.sim.diplomacy import declare_war, wants_war
+from cars.sim.diplomacy import coalition_partners, declare_war, join_coalition, wants_war
 from cars.sim.entities import AIR, FLEET, LAND_KINDS
 from cars.sim.graph import step_cost
 from cars.sim.movement import reachable
@@ -46,6 +46,7 @@ class RivalCommander:
         self.owner = state.active
 
     def take_turn(self) -> Iterator[Action]:
+        yield from self._join_coalition()
         yield from self._consider_war()
         yield from self._command_air_and_fleets()
         yield from self._command_armies()
@@ -57,6 +58,10 @@ class RivalCommander:
             unit = self.state.units.get(unit_id)
             if unit is not None and unit.owner == self.owner:
                 yield unit
+
+    def _join_coalition(self) -> Iterator[Action]:
+        for partner in coalition_partners(self.state, self.owner):
+            yield None, [], join_coalition(self.state, self.owner, partner)
 
     def _consider_war(self) -> Iterator[Action]:
         """Break at most one peace per turn, and only against a much weaker nation."""
@@ -126,14 +131,15 @@ class RivalCommander:
     # Armies ---------------------------------------------------------------------------
 
     def _front_distance(self) -> dict[str, int]:
-        """Land hops from each province to the nearest one this faction does not control."""
+        """Land hops from each province to the nearest enemy one, never crossing the
+        territory of a nation at peace, which grants no military access."""
         state = self.state
         distance = {p.id: 0 for p in state.provinces.values() if state.at_war(self.owner, p.controller)}
         queue = deque(distance)
         while queue:
             node = queue.popleft()
             for neighbor, _ in state.land.neighbors(node):
-                if neighbor not in distance:
+                if neighbor not in distance and state.provinces[neighbor].controller == self.owner:
                     distance[neighbor] = distance[node] + 1
                     queue.append(neighbor)
         return distance
@@ -191,32 +197,43 @@ class RivalCommander:
         return all(income[resource] >= cost for resource, cost in unit_upkeep(kind).items())
 
     def _develop(self) -> Iterator[Action]:
-        """Recruit one unit of this turn's rotation if it can be fed, then build one thing."""
+        """Recruit what the realm can feed, then spend what is left on construction."""
         state = self.state
         rotation = RULES.recruitment_rotation
-        kind = rotation[(state.round + state.active_index) % len(rotation)]
-        if self._can_support(kind):
-            for city in state.cities.values():
-                if not quote_recruit(state, city.province, kind)[1]:
-                    unit_id, message = recruit(state, city.province, kind)
-                    yield unit_id, [], message
-                    break
+        first = state.round + state.active_index
+        for index in range(RULES.recruits_per_turn):
+            kind = rotation[(first + index) % len(rotation)]
+            yield from self._recruit(kind)
+        for _ in range(RULES.builds_per_turn):
+            action = self._build(rotation[first % len(rotation)])
+            if action is None:
+                return
+            yield action
 
-        # A service turn first tries to build the facility that branch needs.
+    def _recruit(self, kind: str) -> Iterator[Action]:
+        if not self._can_support(kind):
+            return
+        for city in self.state.cities.values():
+            if not quote_recruit(self.state, city.province, kind)[1]:
+                unit_id, message = recruit(self.state, city.province, kind)
+                yield unit_id, [], message
+                return
+
+    def _build(self, kind: str) -> Action | None:
+        """Build the facility this turn's service branch needs, or else a producer
+        of whichever resource has the lowest net income."""
+        state = self.state
         facility = REQUIRED_FACILITY.get(kind)
         if facility:
             for city in state.cities.values():
                 if not quote(state, city.province, facility)[1]:
                     _, message = build(state, city.province, facility)
-                    yield None, [], message
-                    return
-
-        # Otherwise improve whichever resource currently has the lowest net income.
+                    return None, [], message
         income = net_income(state, self.owner)
         producers = [spec for spec in BUILDINGS.values() if spec.produces]
         for spec in sorted(producers, key=lambda spec: income[spec.resource]):
             for province in sorted(state.provinces):
                 if not quote(state, province, spec.id)[1]:
                     _, message = build(state, province, spec.id)
-                    yield None, [], message
-                    return
+                    return None, [], message
+        return None

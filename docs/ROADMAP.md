@@ -5,11 +5,6 @@
 - **Panning is slow on large windows.** Every drag event re-projects the relief
   raster at full resolution. It should be scaled once per zoom level and shifted
   while panning.
-- **The economy is too loose.** In 40-round AI games stockpiles grow into the
-  thousands and upkeep rarely binds; there is little to spend resources on.
-- **One rival usually snowballs.** A single AI tends to take half the continent
-  while small nations are wiped out early. Catch-up mechanics or AI coalitions
-  against the leader would help.
 
 ## Next
 
@@ -17,8 +12,9 @@
 - Amphibious transport, maritime supply and port throughput.
 - Supply capacity: roads, rails and depots, then max-flow allocation over the
   supply graph.
-- Stronger AI: supply awareness, coordinated artillery and invasions.
-- Diplomacy among the rival nations themselves, alliances and military access.
+- Stronger AI: supply awareness, coordinated attacks by several regiments, and
+  amphibious invasions (it cannot yet reach nations on other land masses).
+- Alliances and military access, so coalition members can cross each other's land.
 
 ## Later
 

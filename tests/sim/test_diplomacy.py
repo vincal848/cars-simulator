@@ -4,9 +4,10 @@ from cars.persist.replay import Playback, Recorder, digest
 from cars.sim.ai import faction_actions
 from cars.sim.air import mission
 from cars.sim.campaign import Campaign
-from cars.sim.diplomacy import declare_war, military_strength, propose_peace, truce_ends
+from cars.sim.diplomacy import declare_war, leader, military_strength, propose_peace, truce_ends, wants_war
 from cars.sim.entities import Unit
 from cars.sim.movement import hostile_zoc, reachable
+from cars.sim.objectives import begin
 from cars.sim.orders import issue_move
 from tests.support import compact
 
@@ -77,3 +78,44 @@ class DiplomacyTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class CoalitionTests(unittest.TestCase):
+    """f1 takes Sonora's city, giving it a quarter of the continent's cities."""
+
+    def setUp(self):
+        self.state, _, _ = compact()
+        begin(self.state, "f0")
+        self.state.provinces["sonora"].controller = "f1"
+
+    def test_a_quarter_of_the_cities_makes_a_leader(self):
+        self.assertEqual(leader(self.state), "f1")
+        self.state.provinces["sonora"].controller = "f2"
+        self.assertIsNone(leader(self.state))
+
+    def test_rivals_make_peace_with_each_other_but_not_the_player_or_leader(self):
+        self.state.active_index = 2
+        messages = [message for _, _, message in faction_actions(self.state)]
+        self.assertIn("join forces against Atlantic League", messages[0])
+        self.assertFalse(self.state.at_war("f2", "f3"))
+        self.assertTrue(self.state.at_war("f2", "f1"))
+        self.assertTrue(self.state.at_war("f2", "f0"))
+
+    def test_the_leader_is_refused_peace_and_everyone_else_welcomed(self):
+        self.state.active_index = 1
+        ok, message = propose_peace(self.state, "f1", "f2")
+        self.assertFalse(ok)
+        self.assertIn("leading power", message)
+        self.state.active_index = 0
+        for i in range(10):
+            self.state.units[f"guard{i}"] = Unit(f"guard{i}", "f2", "gulf_coast")
+        self.assertTrue(propose_peace(self.state, "f0", "f2")[0])
+
+    def test_coalition_members_only_go_to_war_with_the_leader(self):
+        self.state.active_index = 2
+        for other in ("f1", "f3"):
+            self.state.relations["|".join(sorted(("f2", other)))] = {"status": "peace", "since": -10}
+        for i in range(10):
+            self.state.units[f"horde{i}"] = Unit(f"horde{i}", "f2", "gulf_coast")
+        self.assertTrue(wants_war(self.state, "f2", "f1"))
+        self.assertFalse(wants_war(self.state, "f2", "f3"))

@@ -22,6 +22,12 @@
   only attacks when the province would fall or the exchange favours it. It plays
   under the fog of war, and only enemies in sight exert a zone of control, so route
   costs no longer reveal hidden armies.
+- **Tighter economy:** occupied provinces yield half, and each stockpile holds 100
+  plus 25 per city; production beyond that spoils. Rivals recruit and build more
+  each turn instead of hoarding.
+- **Coalitions:** once a nation holds a quarter of the continent's cities, the
+  other rivals make peace among themselves and turn on it, and it cannot buy
+  peace. In 40-round test games no nation now takes the whole mainland.
 - **Mods:** folders in the user-data `mods` directory layer over the bundled
   content: objects merge key by key, lists replace, events are added. See
   `docs/MODDING.md`.
