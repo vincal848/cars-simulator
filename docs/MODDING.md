@@ -55,11 +55,18 @@ fires at most once per campaign. The available names are the `TRIGGERS` and
 A misspelled name stops the game at start-up with a message naming the event,
 instead of failing halfway through a campaign.
 
+## Paintings
+
+A mod can supply the optional paintings: event illustrations, leader portraits
+and the title backdrop. Put them under `gfx/paintings/`, for example
+`mods/my_mod/gfx/paintings/events/lean_winter.png`. See
+[ART.md](ART.md) for the sizes, names and art direction.
+
 ## Things to know
 
 - Replays re-run the rules. A replay recorded with a mod only verifies with the
   same mods active.
-- Saves store the map and units they need, but not the rules. Loading a campaign
+- Saves store the units and campaign state they need, but not the rules. Loading a campaign
   with different mods continues it under the new rules.
 - Scenarios are separate: start a custom scenario with
   `python -m cars --scenario path/to/scenario.json`.

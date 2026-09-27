@@ -12,6 +12,9 @@
   on the left; and the objectives panel is narrower and collapses to a tab. The
   title plaque, compass and panel wallpaper are gone, leaving more of the map
   visible.
+- **Room for paintings:** event pop-ups, the diplomacy screen and the title screen
+  show a painting when one is bundled or supplied by a mod, and fall back to the
+  procedural art otherwise. `docs/ART.md` specifies every painting.
 - **Names on the map:** zoomed out, each nation's name is lettered along a gentle
   curve across its territory, on two lines where one will not fit, and follows
   its conquests; province names take over when zoomed in. Sea names are set in

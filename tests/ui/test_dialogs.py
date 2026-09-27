@@ -1,3 +1,5 @@
+import os
+import shutil
 import tempfile
 import unittest
 from pathlib import Path
@@ -7,7 +9,9 @@ import pygame
 from cars.persist.replay import digest
 from cars.persist.savegame import SaveLibrary, load_game, save_game
 from cars.sim.scenario import DETAILED_SCENARIO
+from cars.ui.art import paintings
 from cars.ui.audio import Audio
+from cars.ui.dialogs.event import PAINTING
 from cars.ui.screens.replay import ReplayScreen
 from tests.ui.screen_case import ScreenTestCase
 
@@ -197,3 +201,20 @@ class EventDialogTests(ScreenTestCase):
         self.assertEqual(self.state.factions["f0"].gold, gold + 35)
         self.game.update(0.1)
         self.assertIsNone(self.game.dialogs.mode)
+
+    def test_a_painting_illustrates_the_event_when_a_mod_supplies_one(self):
+        mods = Path(os.environ["CARS_SAVE_DIR"]).parent / "mods" / "art" / "gfx" / "paintings" / "events"
+        mods.mkdir(parents=True, exist_ok=True)
+        self.addCleanup(shutil.rmtree, mods.parents[2])
+        image = pygame.Surface((400, 200))
+        image.fill((180, 120, 60))
+        pygame.image.save(image, str(mods / "lean_winter.png"))
+        paintings._cache.clear()
+        self.addCleanup(paintings._cache.clear)
+        self.state.events["pending"].append("lean_winter")
+        self.game.update(0.1)
+        dialog = self.game.dialogs.active
+        self.assertIsNotNone(dialog.illustration())
+        self.assertGreater(dialog.buttons["option0"].top, 440)
+        self.draw()
+        self.assertEqual(self.screen.get_at(PAINTING.center)[:3], (180, 120, 60))

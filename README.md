@@ -111,7 +111,9 @@ packaging/    Windows executable build
 Balance lives in data: combat modifiers, movement costs and AI weights are all in
 `content/common/defines.json`, so tuning never requires touching code, and mods
 can override any of it without editing the game ([docs/MODDING.md](docs/MODDING.md)).
-See [docs/DESIGN.md](docs/DESIGN.md) for how the pieces fit together.
+See [docs/DESIGN.md](docs/DESIGN.md) for how the pieces fit together. [docs/ART.md](docs/ART.md)
+specifies the optional paintings (event illustrations, leader portraits and the
+title backdrop) for anyone who wants to contribute artwork.
 
 ## Development
 

@@ -3,6 +3,7 @@
 import pygame
 
 from cars.sim.diplomacy import RULES, military_strength, quote_peace, quote_war, truce_ends
+from cars.ui.art.paintings import LEADERS, frame, painting
 from cars.ui.dialogs.base import Dialog
 from cars.ui.palette import DIM, GOLD, GREEN, HOSTILE
 
@@ -41,8 +42,12 @@ class DiplomacyDialog(Dialog):
         for i, faction in enumerate(self.rivals()):
             top = 185 + i * ROW_HEIGHT
             rival = state.factions[faction]
-            pygame.draw.circle(t.screen, rival.color, (286, top + 25), 12)
-            pygame.draw.circle(t.screen, GOLD, (286, top + 25), 12, 1)
+            portrait = painting(LEADERS, faction, (34, 42))
+            if portrait:
+                frame(t.screen, portrait, pygame.Rect(270, top + 4, 34, 42))
+            else:
+                pygame.draw.circle(t.screen, rival.color, (286, top + 25), 12)
+                pygame.draw.circle(t.screen, GOLD, (286, top + 25), 12, 1)
             t.text(rival.name, 308, top + 6, t.heading, width=260)
             strength = military_strength(state, faction)
             t.text(f"Strength {strength:.0f} against your {own_strength:.0f}", 308, top + 31, t.small, DIM)

@@ -45,6 +45,16 @@ def load_content(*parts: str) -> Any:
     return data
 
 
+def find_asset(*parts: str) -> Path | None:
+    """A bundled or modded file such as an image; the last active mod that has it wins."""
+    for mod in reversed(active_mods()):
+        candidate = mod.joinpath(*parts)
+        if candidate.is_file():
+            return candidate
+    bundled = content_path(*parts)
+    return bundled if bundled.is_file() else None
+
+
 def mods_dir() -> Path:
     return saves_dir().parent / "mods"
 

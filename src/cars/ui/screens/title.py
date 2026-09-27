@@ -8,6 +8,7 @@ from cars import __version__
 from cars.paths import active_mods
 from cars.persist.savegame import SaveLibrary
 from cars.ui.art.ornament import branch, crown, fleur
+from cars.ui.art.paintings import TITLE, painting
 from cars.ui.palette import CANVAS_SIZE, DIM, GOLD, PAPER
 
 if TYPE_CHECKING:
@@ -56,6 +57,9 @@ class TitleScreen:
 
     @staticmethod
     def _draw_backdrop(geometry: dict) -> pygame.Surface:
+        painted = painting(TITLE, "backdrop", CANVAS_SIZE)
+        if painted:
+            return painted
         backdrop = pygame.Surface(CANVAS_SIZE)
         backdrop.fill((23, 39, 45))
         for x in range(0, CANVAS_SIZE[0], 80):

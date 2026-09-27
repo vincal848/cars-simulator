@@ -15,9 +15,9 @@ Victoria and Civilization V, reached in sprints that each land as their own comm
    regiment count and a strength bar, simplified when zoomed out.
 4. **Names on the map** (done): each nation's name lettered across its territory,
    sea names in a light italic.
-5. **Painted artwork:** specifications for event illustrations and leader
+5. **Painted artwork** (specified; paintings still to be made): specifications for event illustrations and leader
    portraits, to be produced with an image generator or taken from public-domain
-   sources.
+   sources. The game already shows any painting placed where `docs/ART.md` says.
 
 ## Next
 
