@@ -14,13 +14,12 @@ class UpkeepTests(unittest.TestCase):
         self.stock = self.state.factions["f0"].resources
 
     def test_each_unit_costs_its_upkeep(self):
-        # f0 starts with one infantry regiment, one fleet and one balloon corps, and its
-        # Long Winters trait cuts food upkeep by a fifth.
-        for resource, amount in dict(wood=1, food=1.2, iron=0.5).items():
+        # f0 starts with one infantry regiment, one fleet and one balloon corps.
+        for resource, amount in dict(wood=1, food=1.5, iron=0.5).items():
             self.assertAlmostEqual(upkeep(self.state, "f0")[resource], amount)
         income = net_income(self.state, "f0")
         gross = forecast(self.state, "f0")
-        self.assertAlmostEqual(income["food"], gross["food"] - 1.2)
+        self.assertAlmostEqual(income["food"], gross["food"] - 1.5)
 
     def test_upkeep_is_paid_after_production(self):
         before = dict(self.stock)

@@ -41,8 +41,8 @@ resolutions in future.
 - **Light:** one warm key light from the upper left, which the map and interface
   lighting also use. Soft shadows, and a gentle vignette into dark edges so the
   image sits in its gilt frame.
-- **Content:** these are invented nations. Show no real flags, coats of arms,
-  national uniforms, monarchs or other identifiable historical people. There
+- **Content:** the nations are those of 1836, so period dress, uniforms and
+  flags are welcome, and should be accurate to the 1830s. There
   must be no lettering, signatures, logos, borders or frames in the image; the
   game draws the frame.
 - **Composition:** event bands are wide, low panoramas with the focal point
@@ -81,27 +81,26 @@ One for each event in `content/events/americas.json`, named by its id.
 
 ## Leader portraits
 
-One for each nation in `content/common/factions.json`, named by its id. The
-dress follows the nation's uniform style (`content/gfx/uniform_styles.json`) so
-that portraits match the regiments on the map. Background: plain, dark, with a
-faint wash of the nation's map colour.
+One for each nation in `content/common/factions.json`, named by its id, showing
+the ruler named in `content/common/nations.json`. Every one of them was painted
+or engraved in their lifetime, and many of those portraits are in the public
+domain: a cropped, credited period portrait is the best choice. Background:
+plain and dark, with a faint wash of the nation's map colour.
 
-| File | Nation | Dress and bearing | Colour wash |
+| File | Nation | Ruler in 1836 | Colour wash |
 | --- | --- | --- | --- |
-| `f0.png` | Northern Union | Fur cap, long slate-blue greatcoat with pale trim; frontier commander, weathered | `#4E97BF` |
-| `f1.png` | Atlantic League | Tricorn, red tailcoat with cream facings; polished courtier-general | `#C76F58` |
-| `f2.png` | Sierra Compact | Wide-brimmed hat, short tan coat; desert ranger, sun-lined face | `#C5A753` |
-| `f3.png` | Caribbean Accord | Sailor's hat, short cream jacket with teal trim; admiral of a merchant republic | `#69A876` |
-| `f4.png` | Andean Pact | Wool cap, plum poncho with ochre border; mountain marshal | `#9979BD` |
-| `f5.png` | Amazon Federation | Brimmed hat, short green coat; river captain | `#45ADA6` |
-| `f6.png` | Southern Coalition | Brimmed hat, rust poncho with pale trim; plains caudillo | `#C689AF` |
-| `f7.png` | Austral Republic | Kepi, long grey-blue coat; expedition leader, severe | `#949F63` |
-
-Leaders may be of any gender or background; aim for a varied set.
+| `f0.png` | United States | President Andrew Jackson | `#3E68AA` |
+| `f1.png` | Mexico | Acting President José Justo Corro | `#308C70` |
+| `f2.png` | Texas | Interim President David G. Burnet | `#B66278` |
+| `f3.png` | British North America | The Earl of Gosford, Governor-in-Chief | `#BE4640` |
+| `f4.png` | New Granada | President Francisco de Paula Santander | `#E2AE3C` |
+| `f5.png` | Peru-Bolivian Confederation | Supreme Protector Andrés de Santa Cruz | `#7C62AC` |
+| `f6.png` | Empire of Brazil | Emperor Pedro II as a boy (or the Regent Feijó) | `#64A048` |
+| `f7.png` | Argentine Confederation | Governor Juan Manuel de Rosas | `#6CA8D6` |
 
 ## Title backdrop
 
-`title/backdrop.png`: an imagined 1800 map room. A large hand-drawn map of the
+`title/backdrop.png`: a map room of the 1830s. A large hand-drawn map of the
 Americas is spread on a table under warm lamplight, with brass instruments,
 wax-sealed letters and model regiments in several colours. Keep the right third
 darker and quieter, because the menu is drawn there, and the top left clear for

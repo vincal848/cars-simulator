@@ -1,6 +1,7 @@
 """War and peace between factions.
 
-Every pair of factions starts at war. A rival accepts peace only when it is no
+A scenario may name the wars already under way; every other pair then starts at
+peace, and without that list every pair starts at war. A rival accepts peace only when it is no
 stronger than the faction offering it. Peace forbids entering each other's
 provinces or attacking each other's forces, and holds for a truce period before
 either side may declare war again.
@@ -124,10 +125,20 @@ def declare_war(state: "GameState", declarer: str, target: str) -> tuple[bool, s
     return True, message
 
 
+def borders(state: "GameState", a: str, b: str) -> bool:
+    """Whether provinces held by ``a`` and ``b`` touch by land."""
+    return any(
+        state.provinces[neighbor].controller == b
+        for province in state.provinces.values()
+        if province.controller == a
+        for neighbor, _ in state.land.neighbors(province.id)
+    )
+
+
 def wants_war(state: "GameState", declarer: str, target: str) -> bool:
-    """Whether a rival would break the peace: only once the truce ends, and then against
-    the coalition's leader or a much weaker nation."""
-    if quote_war(state, declarer, target):
+    """Whether a rival would break the peace: only once the truce ends, only against a
+    neighbour, and then against the coalition's leader or a much weaker nation."""
+    if quote_war(state, declarer, target) or not borders(state, declarer, target):
         return False
     lead = leader(state)
     if lead is not None and declarer != lead:

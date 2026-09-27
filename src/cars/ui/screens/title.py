@@ -98,7 +98,7 @@ class TitleScreen:
             "COMBAT ARMS REGION SIMULATOR", (x + ui.px(4), y), style.HEADING, style.BRASS_LIGHT, bold=True
         )
         ui.text(
-            "Eight nations. One continent. The Americas, 1800.",
+            "Eight nations. One continent. The Americas, 1836.",
             (x + ui.px(4), y + ui.px(30)),
             style.BODY,
             style.ON_SLATE,

@@ -487,7 +487,7 @@
   "regions": [
     {
       "id": "r0",
-      "name": "Yukon Region",
+      "name": "Northwest Coast",
       "provinces": [
         "yukon",
         "canadian_shield",
@@ -501,7 +501,7 @@
     },
     {
       "id": "r1",
-      "name": "Great Lakes Region",
+      "name": "The Canadas",
       "provinces": [
         "great_lakes",
         "great_basin",
@@ -515,7 +515,7 @@
     },
     {
       "id": "r2",
-      "name": "Sonora Region",
+      "name": "Sonora",
       "provinces": [
         "sonora",
         "gulf_coast",
@@ -529,7 +529,7 @@
     },
     {
       "id": "r3",
-      "name": "Yucatan Region",
+      "name": "Yucatán and Cuba",
       "provinces": [
         "yucatan",
         "guatemala",
@@ -543,7 +543,7 @@
     },
     {
       "id": "r4",
-      "name": "Colombia Region",
+      "name": "New Granada",
       "provinces": [
         "colombia",
         "guiana",
@@ -557,7 +557,7 @@
     },
     {
       "id": "r5",
-      "name": "Amazonas Region",
+      "name": "Amazonas",
       "provinces": [
         "amazonas",
         "andes",
@@ -571,7 +571,7 @@
     },
     {
       "id": "r6",
-      "name": "Atacama Region",
+      "name": "Chile",
       "provinces": [
         "atacama",
         "la_plata",
@@ -585,7 +585,7 @@
     },
     {
       "id": "r7",
-      "name": "Pampas Region",
+      "name": "Pampas",
       "provinces": [
         "pampas",
         "austral_andes",

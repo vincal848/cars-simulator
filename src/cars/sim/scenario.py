@@ -8,7 +8,7 @@ from cars.sim.entities import RESOURCES, UNIT_STATS, City, Faction, Province, Re
 from cars.sim.graph import Edge, Graph
 from cars.sim.market import RULES as MARKET_RULES
 from cars.sim.objectives import DEFAULT_RULES
-from cars.sim.state import FACTION_COUNT, GameState
+from cars.sim.state import FACTION_COUNT, PEACE, GameState, relation_key
 from cars.sim.supply import refresh_supply
 
 DETAILED_SCENARIO = content_path("scenarios", "americas_detailed.json")
@@ -82,9 +82,25 @@ def load_scenario(path: Path = DETAILED_SCENARIO) -> Scenario:
 
     state = GameState(provinces, regions, cities, factions, units, **graphs, ports=raw["ports"])
     state.objectives = {"rules": dict(raw.get("objectives", DEFAULT_RULES))}
+    if "wars" in raw:
+        _open_with(state, raw["wars"])
     state.reindex_units()
     for faction in factions.values():
         faction.gold = raw.get("starting_gold", MARKET_RULES.starting_gold)
         faction.resources.update(raw.get("starting_resources", {}))
     refresh_supply(state)
     return Scenario(state, shapes, raw["sea_zones"])
+
+
+def _open_with(state: GameState, wars: list[list[str]]) -> None:
+    """A scenario that lists its opening wars starts every other pair at peace, under truce."""
+    fighting = set()
+    for pair in wars:
+        if len(pair) != 2 or not all(faction in state.factions for faction in pair):
+            raise ValueError(f"Invalid opening war {pair}")
+        fighting.add(relation_key(*pair))
+    names = list(state.factions)
+    for i, a in enumerate(names):
+        for b in names[i + 1 :]:
+            if relation_key(a, b) not in fighting:
+                state.relations[relation_key(a, b)] = {"status": PEACE, "since": state.round}

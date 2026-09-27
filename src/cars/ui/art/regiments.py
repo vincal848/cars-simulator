@@ -9,7 +9,7 @@ from cars.paths import load_content
 from cars.sim.entities import ARTILLERY, BALLOON, CAVALRY, FLEET, LAND_KINDS, SCOUT
 
 UNIFORMS: dict[str, dict] = load_content("gfx", "uniform_styles.json")
-DEFAULT_UNIFORM = "northern"
+DEFAULT_UNIFORM = "american"
 SCALE = 3
 SPRITE_SIZE = (36, 40)
 INK = (231, 233, 209)

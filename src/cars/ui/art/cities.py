@@ -1,6 +1,6 @@
 """Regional settlement silhouettes and the one-point city pin.
 
-Each of the eight fictional cultural styles gets its own skyline. Sprites are drawn
+Each regional building style gets its own skyline. Sprites are drawn
 on a 48x40 design grid at three times resolution.
 """
 

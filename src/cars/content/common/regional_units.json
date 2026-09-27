@@ -1,218 +1,218 @@
 {
   "r0": {
-    "name": "Yukon Trail Wardens",
-    "region": "Yukon Region",
+    "name": "Fur Brigade",
+    "region": "Northwest Coast",
     "kind": "scout",
     "terrain": "mountains",
     "discount": 0.2,
-    "history": "Scenario history (fictional): the Yukon Trail Wardens were chartered to patrol the Yukon approaches. Their training favors mountains and local supply routes. These are original game formations, not claims about a historical people or army.",
-    "style": "northern"
+    "history": "The Hudson's Bay Company moved its furs in brigades of boats and pack trains, crewed by voyageurs who knew every portage between the Pacific posts and the bay.",
+    "style": "british"
   },
   "r1": {
-    "name": "Shield Rangers",
-    "region": "Canadian Shield Region",
+    "name": "Métis Buffalo Hunters",
+    "region": "Rupert's Land",
     "kind": "scout",
     "terrain": "forest",
     "discount": 0.2,
-    "history": "Scenario history (fictional): the Shield Rangers were chartered to patrol the Canadian Shield approaches. Their training favors forest and local supply routes. These are original game formations, not claims about a historical people or army.",
-    "style": "northern"
+    "history": "The Métis of the Red River organised their great buffalo hunts like a campaign, with captains, scouts and a camp that could form a defensive circle in minutes.",
+    "style": "british"
   },
   "r2": {
-    "name": "Cascadian Foresters",
-    "region": "Cascadia Region",
+    "name": "Columbia Trappers",
+    "region": "Oregon Country",
     "kind": "scout",
     "terrain": "forest",
     "discount": 0.2,
-    "history": "Scenario history (fictional): the Cascadian Foresters were chartered to patrol the Cascadia approaches. Their training favors forest and local supply routes. These are original game formations, not claims about a historical people or army.",
-    "style": "northern"
+    "history": "American free trappers and the first missionaries worked the Columbia basin, which Britain and the United States had agreed in 1818 to occupy jointly.",
+    "style": "american"
   },
   "r3": {
-    "name": "Lakes Fusiliers",
-    "region": "Great Lakes Region",
+    "name": "Glengarry Light Infantry",
+    "region": "The Canadas",
     "kind": "infantry",
     "terrain": "plains",
     "discount": 0.2,
-    "history": "Scenario history (fictional): the Lakes Fusiliers were chartered to patrol the Great Lakes approaches. Their training favors plains and local supply routes. These are original game formations, not claims about a historical people or army.",
-    "style": "atlantic"
+    "history": "Raised in Upper Canada for the War of 1812, the Glengarry Light Infantry Fencibles were remembered as the colony's own regiment when rebellion threatened in 1837.",
+    "style": "british"
   },
   "r4": {
-    "name": "Basin Outriders",
-    "region": "Great Basin Region",
+    "name": "Mountain Men",
+    "region": "Mississippi Valley",
     "kind": "cavalry",
     "terrain": "plains",
     "discount": 0.2,
-    "history": "Scenario history (fictional): the Basin Outriders were chartered to patrol the Great Basin approaches. Their training favors plains and local supply routes. These are original game formations, not claims about a historical people or army.",
-    "style": "atlantic"
+    "history": "The trappers of the Rocky Mountain fur trade set out from St. Louis each spring for the summer rendezvous, and knew the plains and passes better than any army.",
+    "style": "american"
   },
   "r5": {
-    "name": "Appalachian Riflemen",
-    "region": "Appalachia Region",
+    "name": "Kentucky Riflemen",
+    "region": "Atlantic Seaboard",
     "kind": "infantry",
     "terrain": "mountains",
     "discount": 0.2,
-    "history": "Scenario history (fictional): the Appalachian Riflemen were chartered to patrol the Appalachia approaches. Their training favors mountains and local supply routes. These are original game formations, not claims about a historical people or army.",
-    "style": "atlantic"
+    "history": "Backcountry militia armed with the long rifle, the men who had held the line at New Orleans in 1815 and who still answered their states' calls.",
+    "style": "american"
   },
   "r6": {
-    "name": "Sonoran Lancers",
-    "region": "Sonora Region",
+    "name": "Presidial Cavalry",
+    "region": "Sonora",
     "kind": "cavalry",
     "terrain": "plains",
     "discount": 0.2,
-    "history": "Scenario history (fictional): the Sonoran Lancers were chartered to patrol the Sonora approaches. Their training favors plains and local supply routes. These are original game formations, not claims about a historical people or army.",
-    "style": "sierra"
+    "history": "The presidial companies, the soldados de cuera in their layered leather coats, had guarded Mexico's northern frontier since Spanish times.",
+    "style": "mexican"
   },
   "r7": {
-    "name": "Gulf Coast Guard",
-    "region": "Gulf Coast Region",
-    "kind": "infantry",
+    "name": "Texas Rangers",
+    "region": "Texas",
+    "kind": "cavalry",
     "terrain": "plains",
     "discount": 0.2,
-    "history": "Scenario history (fictional): the Gulf Coast Guard were chartered to patrol the Gulf Coast approaches. Their training favors plains and local supply routes. These are original game formations, not claims about a historical people or army.",
-    "style": "sierra"
+    "history": "Formally organised by the Texian provisional government in 1835, the Rangers were mounted volunteers who patrolled the frontier and scouted for the army.",
+    "style": "texan"
   },
   "r8": {
-    "name": "Plateau Grenadiers",
-    "region": "Mexican Plateau Region",
+    "name": "Zapadores Battalion",
+    "region": "Mexican Plateau",
     "kind": "infantry",
     "terrain": "mountains",
     "discount": 0.2,
-    "history": "Scenario history (fictional): the Plateau Grenadiers were chartered to patrol the Mexican Plateau approaches. Their training favors mountains and local supply routes. These are original game formations, not claims about a historical people or army.",
-    "style": "sierra"
+    "history": "The sapper battalion was among the best-trained units of the Mexican army, and led the assault on the Alamo in March 1836.",
+    "style": "mexican"
   },
   "r9": {
-    "name": "Yucatan Pathfinders",
-    "region": "Yucatan Region",
+    "name": "Yucatán Chasseurs",
+    "region": "Yucatán and Cuba",
     "kind": "scout",
     "terrain": "forest",
     "discount": 0.2,
-    "history": "Scenario history (fictional): the Yucatan Pathfinders were chartered to patrol the Yucatan approaches. Their training favors forest and local supply routes. These are original game formations, not claims about a historical people or army.",
-    "style": "caribbean"
+    "history": "Light infantry of the peninsula, raised from a province that resented rule from Mexico City and would declare itself independent in 1841.",
+    "style": "mexican"
   },
   "r10": {
-    "name": "Highland Scouts",
-    "region": "Guatemala Region",
+    "name": "Morazán's Veterans",
+    "region": "Central America",
     "kind": "scout",
     "terrain": "mountains",
     "discount": 0.2,
-    "history": "Scenario history (fictional): the Highland Scouts were chartered to patrol the Guatemala approaches. Their training favors mountains and local supply routes. These are original game formations, not claims about a historical people or army.",
-    "style": "caribbean"
+    "history": "Francisco Morazán led the Federal Republic of Central America through its civil wars; his veterans knew the highland roads from Guatemala to Costa Rica.",
+    "style": "mexican"
   },
   "r11": {
-    "name": "Isthmus Watch",
-    "region": "Panama Region",
+    "name": "Isthmus Militia",
+    "region": "Isthmus and Antilles",
     "kind": "infantry",
     "terrain": "forest",
     "discount": 0.2,
-    "history": "Scenario history (fictional): the Isthmus Watch were chartered to patrol the Panama approaches. Their training favors forest and local supply routes. These are original game formations, not claims about a historical people or army.",
-    "style": "caribbean"
+    "history": "Panama, a province of New Granada, kept its own militia to guard the crossing between the oceans and the port of Portobelo.",
+    "style": "granadine"
   },
   "r12": {
-    "name": "Magdalena Rifles",
-    "region": "Colombia Region",
+    "name": "Rifles Battalion",
+    "region": "New Granada",
     "kind": "infantry",
     "terrain": "forest",
     "discount": 0.2,
-    "history": "Scenario history (fictional): the Magdalena Rifles were chartered to patrol the Colombia approaches. Their training favors forest and local supply routes. These are original game formations, not claims about a historical people or army.",
-    "style": "andean"
+    "history": "The Batallón Rifles, first raised with British and Irish volunteers, fought from the Orinoco to Ayacucho in the wars of independence.",
+    "style": "granadine"
   },
   "r13": {
-    "name": "Guiana Rangers",
-    "region": "Guiana Region",
-    "kind": "scout",
+    "name": "West India Regiment",
+    "region": "British West Indies",
+    "kind": "infantry",
     "terrain": "forest",
     "discount": 0.2,
-    "history": "Scenario history (fictional): the Guiana Rangers were chartered to patrol the Guiana approaches. Their training favors forest and local supply routes. These are original game formations, not claims about a historical people or army.",
-    "style": "andean"
+    "history": "Britain's West India Regiments, raised from the 1790s, garrisoned the islands and Guiana, where European troops died of fever in their hundreds.",
+    "style": "british"
   },
   "r14": {
-    "name": "Sierra Mountaineers",
-    "region": "Peru Region",
+    "name": "Legion of the Guard",
+    "region": "Peru",
     "kind": "infantry",
     "terrain": "mountains",
     "discount": 0.2,
-    "history": "Scenario history (fictional): the Sierra Mountaineers were chartered to patrol the Peru approaches. Their training favors mountains and local supply routes. These are original game formations, not claims about a historical people or army.",
-    "style": "andean"
+    "history": "The Peruvian Legion of the Guard was raised in 1821 and fought at Junín and Ayacucho; Santa Cruz's confederation inherited its traditions.",
+    "style": "confederation"
   },
   "r15": {
-    "name": "Amazon River Guard",
-    "region": "Amazonas Region",
+    "name": "Rio Negro Guard",
+    "region": "Amazonas",
     "kind": "infantry",
     "terrain": "forest",
     "discount": 0.2,
-    "history": "Scenario history (fictional): the Amazon River Guard were chartered to patrol the Amazonas approaches. Their training favors forest and local supply routes. These are original game formations, not claims about a historical people or army.",
-    "style": "amazon"
+    "history": "Garrisons of the upper Amazon, holding the river forts against smugglers and the Cabanagem rebels who seized Belém in 1835.",
+    "style": "brazilian"
   },
   "r16": {
-    "name": "Andean Sentinels",
-    "region": "Andes Region",
+    "name": "Colorados Regiment",
+    "region": "Upper Peru",
     "kind": "infantry",
     "terrain": "mountains",
     "discount": 0.2,
-    "history": "Scenario history (fictional): the Andean Sentinels were chartered to patrol the Andes approaches. Their training favors mountains and local supply routes. These are original game formations, not claims about a historical people or army.",
-    "style": "amazon"
+    "history": "Bolivia's red-coated guard regiment, the Colorados, formed the core of Santa Cruz's army in his campaign to join Peru and Bolivia.",
+    "style": "confederation"
   },
   "r17": {
-    "name": "Plateau Horse",
-    "region": "Brazilian Plateau Region",
+    "name": "Dragoons of Independence",
+    "region": "Brazilian Highlands",
     "kind": "cavalry",
     "terrain": "plains",
     "discount": 0.2,
-    "history": "Scenario history (fictional): the Plateau Horse were chartered to patrol the Brazilian Plateau approaches. Their training favors plains and local supply routes. These are original game formations, not claims about a historical people or army.",
-    "style": "amazon"
+    "history": "The Imperial Guard of Honour, raised in 1822 to escort Pedro I, whose dragoons rode with him when he proclaimed Brazil's independence.",
+    "style": "brazilian"
   },
   "r18": {
-    "name": "Atacama Scouts",
-    "region": "Atacama Region",
-    "kind": "scout",
-    "terrain": "mountains",
+    "name": "Frontier Dragoons",
+    "region": "Chile",
+    "kind": "cavalry",
+    "terrain": "plains",
     "discount": 0.2,
-    "history": "Scenario history (fictional): the Atacama Scouts were chartered to patrol the Atacama approaches. Their training favors mountains and local supply routes. These are original game formations, not claims about a historical people or army.",
-    "style": "southern"
+    "history": "Chile's Dragones de la Frontera held the line of forts along the Biobío, the border with the unconquered Mapuche lands of Araucanía.",
+    "style": "argentine"
   },
   "r19": {
-    "name": "La Plata Dragoons",
-    "region": "La Plata Region",
+    "name": "Colorados del Monte",
+    "region": "Río de la Plata",
     "kind": "cavalry",
     "terrain": "plains",
     "discount": 0.2,
-    "history": "Scenario history (fictional): the La Plata Dragoons were chartered to patrol the La Plata approaches. Their training favors plains and local supply routes. These are original game formations, not claims about a historical people or army.",
-    "style": "southern"
+    "history": "Juan Manuel de Rosas raised the Colorados del Monte from the gauchos of his own estancias in the 1820s; they were the backbone of his rise to power.",
+    "style": "argentine"
   },
   "r20": {
-    "name": "Patagonian Riders",
-    "region": "Patagonia Region",
+    "name": "Rio Grande Lancers",
+    "region": "Rio Grande",
     "kind": "cavalry",
     "terrain": "plains",
     "discount": 0.2,
-    "history": "Scenario history (fictional): the Patagonian Riders were chartered to patrol the Patagonia approaches. Their training favors plains and local supply routes. These are original game formations, not claims about a historical people or army.",
-    "style": "southern"
+    "history": "The gaúcho horsemen of Rio Grande do Sul were the empire's best cavalry, and in 1835 the core of the Ragamuffin rebellion against it.",
+    "style": "brazilian"
   },
   "r21": {
-    "name": "Pampas Lancers",
-    "region": "Pampas Region",
+    "name": "Gaucho Lancers",
+    "region": "Pampas",
     "kind": "cavalry",
     "terrain": "plains",
     "discount": 0.2,
-    "history": "Scenario history (fictional): the Pampas Lancers were chartered to patrol the Pampas approaches. Their training favors plains and local supply routes. These are original game formations, not claims about a historical people or army.",
-    "style": "austral"
+    "history": "Horsemen of the pampas, armed with the lance and bolas, who served every faction of the Argentine civil wars.",
+    "style": "argentine"
   },
   "r22": {
-    "name": "Austral Mountain Guard",
-    "region": "Austral Andes Region",
+    "name": "Patagones Garrison",
+    "region": "Patagonia",
     "kind": "infantry",
     "terrain": "mountains",
     "discount": 0.2,
-    "history": "Scenario history (fictional): the Austral Mountain Guard were chartered to patrol the Austral Andes approaches. Their training favors mountains and local supply routes. These are original game formations, not claims about a historical people or army.",
-    "style": "austral"
+    "history": "The fort at Carmen de Patagones on the Río Negro was the southern limit of Argentine settlement, and beat off a Brazilian landing in 1827.",
+    "style": "argentine"
   },
   "r23": {
-    "name": "Fuegian Coast Watch",
-    "region": "Tierra del Fuego Region",
+    "name": "Magellan Strait Watch",
+    "region": "Tierra del Fuego",
     "kind": "infantry",
     "terrain": "forest",
     "discount": 0.2,
-    "history": "Scenario history (fictional): the Fuegian Coast Watch were chartered to patrol the Tierra del Fuego approaches. Their training favors forest and local supply routes. These are original game formations, not claims about a historical people or army.",
-    "style": "austral"
+    "history": "Lookouts over the strait, where the Beagle's surveys of 1826 to 1834 had charted the channels of Tierra del Fuego.",
+    "style": "argentine"
   }
 }

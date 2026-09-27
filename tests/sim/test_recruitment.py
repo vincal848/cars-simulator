@@ -3,6 +3,7 @@ import unittest
 from cars.sim.balloons import coverage
 from cars.sim.buildings import build
 from cars.sim.economy import forecast
+from cars.sim.entities import City
 from cars.sim.graph import Edge
 from cars.sim.movement import movement_cost
 from cars.sim.recruitment import RECRUITS, quote_recruit, recruit
@@ -77,10 +78,10 @@ class RegionalCharterTests(unittest.TestCase):
         state, _, _ = detailed()
         self.assertEqual(set(CHARTERS), set(state.regions))
         for region_id, charter in CHARTERS.items():
-            city = next(
-                c for c in state.cities.values() if state.provinces[c.province].region_id == region_id
-            )
-            province = state.provinces[city.province]
+            # Not every region has a town in 1836; found one where needed.
+            province = state.provinces[state.regions[region_id].provinces[0]]
+            if not state.has_city(province.id):
+                state.cities["town_" + region_id] = City("town_" + region_id, "Town", province.id)
             province.controller = "f0"
             state.factions["f0"].resources = dict(wood=100, food=100, iron=100)
             unit_id, message = recruit(state, province.id, "regional")

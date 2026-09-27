@@ -26,12 +26,13 @@ class ArtworkTests(unittest.TestCase):
         }
         self.assertEqual(len(uniforms), 8)
         roles = {
-            pygame.image.tobytes(sprites.sprite(kind, (100, 120, 140), "atlantic"), "RGBA")
+            pygame.image.tobytes(sprites.sprite(kind, (100, 120, 140), "british"), "RGBA")
             for kind in LAND_KINDS
         }
         self.assertEqual(len(roles), 4)
-        cities = {pygame.image.tobytes(city_sprite(f.style), "RGBA") for f in state.factions.values()}
-        self.assertEqual(len(cities), 8)
+        styles = {city.style for city in state.cities.values()}
+        cities = {pygame.image.tobytes(city_sprite(style), "RGBA") for style in styles}
+        self.assertEqual(len(cities), len(styles))
 
     def test_producing_buildings_animate(self):
         for kind in ("farm", "lumber_mill", "mine"):

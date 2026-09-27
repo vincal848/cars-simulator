@@ -54,6 +54,8 @@ the battle itself uses.
 | Air | provinces | A balloon corps' range from a province its nation controls. |
 
 Every pair of factions is at war unless `state.relations` records a peace treaty.
+A scenario can list the wars already under way (`"wars"` in its JSON); every other
+pair then starts at peace under a truce. Rivals only declare war on a neighbour.
 All hostility checks go through `GameState.at_war`: peace makes the partner's
 provinces impassable and removes its units from combat and zones of control,
 and ends any artillery spotting over its ground.

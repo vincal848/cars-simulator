@@ -30,7 +30,7 @@ class TraitEffectTests(unittest.TestCase):
         self.state, _, _ = compact()
 
     def test_cheaper_recruitment(self):
-        self.state.active_index = 3  # Caribbean Accord: fleets a quarter cheaper.
+        self.state.active_index = 3  # British North America: the Royal Navy's fleets are a quarter cheaper.
         city = next(
             c for c in self.state.cities.values() if self.state.provinces[c.province].controller == "f3"
         )
@@ -41,8 +41,8 @@ class TraitEffectTests(unittest.TestCase):
         state = self.state
         state.provinces["canadian_shield"].controller = "f4"
         state.provinces["canadian_shield"].terrain = "mountains"
-        attacker = Unit("a", "f1", "great_lakes")  # Atlantic League: infantry +10%.
-        defender = Unit("d", "f4", "canadian_shield")  # Andean Pact: +20% in mountains.
+        attacker = Unit("a", "f1", "great_lakes")  # Mexico: infantry +10%.
+        defender = Unit("d", "f4", "canadian_shield")  # New Granada: +20% in mountains.
         plain = Unit("p", "f2", "canadian_shield")
         odds = assess(state, attacker, "great_lakes", "canadian_shield", Edge(), [defender])
         baseline = assess(state, attacker, "great_lakes", "canadian_shield", Edge(), [plain])
@@ -51,13 +51,13 @@ class TraitEffectTests(unittest.TestCase):
 
     def test_movement_production_storage_and_gold(self):
         state = self.state
-        unit = Unit("u", "f5", "yukon")
+        unit = Unit("u", "f6", "yukon")  # Brazil: 20% cheaper through forest.
         state.provinces["cascadia"].terrain = "forest"
-        state.provinces["cascadia"].controller = "f5"
+        state.provinces["cascadia"].controller = "f6"
         forest = movement_cost("yukon", "cascadia", Edge(), unit, state, set())
         unit.owner = "f2"
         state.provinces["cascadia"].controller = "f2"
         self.assertAlmostEqual(forest, movement_cost("yukon", "cascadia", Edge(), unit, state, set()) * 0.8)
-        self.assertEqual(storage(state, "f7") - storage(state, "f6"), 50)
+        self.assertEqual(storage(state, "f7"), storage(state, "f6"))
         self.assertEqual(treasury_income(state, "f1") - treasury_income(state, "f2"), 3)
         self.assertGreater(forecast(state, "f5")["food"], 0)

@@ -31,7 +31,7 @@ class DetailedScenarioTests(unittest.TestCase):
     def test_cities_are_real_settlements(self):
         for city in self.state.cities.values():
             self.assertTrue(city.coordinates)
-            self.assertEqual(city.location_source, "Natural Earth populated place")
+            self.assertEqual(city.location_source, "Historical town, 1836")
 
     def test_city_style_survives_capture(self):
         city = next(iter(self.state.cities.values()))

@@ -342,7 +342,7 @@ def environment(screen_font) -> dict:
     """What screenshot pixels depend on besides our code: pygame, SDL and system fonts."""
     samples = {}
     for index, (name, _) in enumerate(FONT_CHOICES):
-        rendered = system_font(index, 15).render("Qg The Americas 1800", True, (255, 255, 255))
+        rendered = system_font(index, 15).render("Qg The Americas 1836", True, (255, 255, 255))
         samples[name] = fingerprint(pygame.image.tobytes(rendered, "RGBA").hex())
     rendered = screen_font.render("North Pacific", True, (255, 255, 255))
     samples["georgia"] = fingerprint(pygame.image.tobytes(rendered, "RGBA").hex())

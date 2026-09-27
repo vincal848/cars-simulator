@@ -1,122 +1,122 @@
 {
-  "northern": {
-    "name": "Northern frontier",
-    "hat": "fur",
-    "coat": "long",
-    "cloth": [
-      91,
-      123,
-      145
-    ],
-    "trim": [
-      189,
-      178,
-      146
-    ]
-  },
-  "atlantic": {
-    "name": "Atlantic court",
-    "hat": "tricorn",
+  "american": {
+    "name": "United States Army",
+    "hat": "cap",
     "coat": "tails",
     "cloth": [
-      155,
-      63,
-      54
+      40,
+      54,
+      96
     ],
     "trim": [
-      236,
-      211,
-      157
+      232,
+      230,
+      220
     ]
   },
-  "sierra": {
-    "name": "Sierra frontier",
+  "mexican": {
+    "name": "Mexican Army",
+    "hat": "cap",
+    "coat": "tails",
+    "cloth": [
+      46,
+      60,
+      108
+    ],
+    "trim": [
+      196,
+      48,
+      46
+    ]
+  },
+  "texan": {
+    "name": "Texian volunteers",
     "hat": "brim",
     "coat": "short",
     "cloth": [
-      153,
-      119,
-      73
+      150,
+      118,
+      78
     ],
     "trim": [
       220,
-      195,
-      134
-    ]
-  },
-  "caribbean": {
-    "name": "Caribbean maritime",
-    "hat": "sailor",
-    "coat": "short",
-    "cloth": [
-      223,
-      216,
-      181
-    ],
-    "trim": [
-      64,
-      126,
-      140
-    ]
-  },
-  "andean": {
-    "name": "Andean highland",
-    "hat": "cap",
-    "coat": "poncho",
-    "cloth": [
-      126,
-      78,
-      100
-    ],
-    "trim": [
-      213,
-      167,
-      110
-    ]
-  },
-  "amazon": {
-    "name": "Amazon riverlands",
-    "hat": "brim",
-    "coat": "short",
-    "cloth": [
-      78,
-      120,
-      88
-    ],
-    "trim": [
       198,
-      180,
-      117
+      150
     ]
   },
-  "southern": {
-    "name": "Southern plains",
-    "hat": "brim",
-    "coat": "poncho",
+  "british": {
+    "name": "British Army",
+    "hat": "cap",
+    "coat": "tails",
     "cloth": [
-      147,
-      78,
-      72
+      176,
+      36,
+      38
     ],
     "trim": [
-      218,
-      204,
-      169
+      238,
+      228,
+      204
     ]
   },
-  "austral": {
-    "name": "Austral expedition",
+  "granadine": {
+    "name": "Army of New Granada",
+    "hat": "cap",
+    "coat": "long",
+    "cloth": [
+      44,
+      62,
+      112
+    ],
+    "trim": [
+      236,
+      196,
+      70
+    ]
+  },
+  "confederation": {
+    "name": "Army of the Confederation",
     "hat": "kepi",
     "coat": "long",
     "cloth": [
-      77,
-      90,
-      100
+      150,
+      42,
+      52
     ],
     "trim": [
-      179,
-      172,
-      134
+      232,
+      214,
+      170
+    ]
+  },
+  "brazilian": {
+    "name": "Imperial Brazilian Army",
+    "hat": "cap",
+    "coat": "short",
+    "cloth": [
+      46,
+      92,
+      68
+    ],
+    "trim": [
+      226,
+      192,
+      72
+    ]
+  },
+  "argentine": {
+    "name": "Federal Army",
+    "hat": "brim",
+    "coat": "poncho",
+    "cloth": [
+      168,
+      44,
+      44
+    ],
+    "trim": [
+      236,
+      226,
+      206
     ]
   }
 }

@@ -20,9 +20,10 @@ class ConstructionTests(unittest.TestCase):
         self.assertTrue(build(self.state, self.province, "farm")[0])
         self.assertEqual(self.stock["wood"], stock["wood"] - 4)
         self.assertEqual(self.stock["iron"], stock["iron"] - 2)
-        self.assertEqual(forecast(self.state, "f0")["food"], before["food"] + 2)
+        # The United States' Yeoman Farms trait adds 15% to food.
+        self.assertAlmostEqual(forecast(self.state, "f0")["food"], before["food"] + 2 * 1.15)
         self.assertEqual(quote(self.state, self.province, "farm")[0]["wood"], 8)
-        self.assertEqual(produce(self.state, "f0")["food"], before["food"] + 2)
+        self.assertAlmostEqual(produce(self.state, "f0")["food"], before["food"] + 2 * 1.15)
 
     def test_rejections_change_nothing(self):
         enemy = next(p.id for p in self.state.provinces.values() if p.controller == "f1")
@@ -64,7 +65,7 @@ class ConstructionTests(unittest.TestCase):
 class ProductionTests(unittest.TestCase):
     def test_regional_share_and_turn_order(self):
         state, _, _ = compact()
-        self.assertEqual(produce(state, "f0"), dict(wood=3, food=5, iron=4))
+        self.assertEqual(produce(state, "f0"), dict(wood=3, food=5 * 1.15, iron=4))
         state.provinces["cascadia"].controller = "f1"
         self.assertAlmostEqual(produce(state, "f0")["iron"], 4 / 3)
         unit = state.units["infantry0"]

@@ -60,7 +60,11 @@ class TutorialTests(ScreenTestCase):
         game.next_ready()
         self.complete("select")
         unit = game.state.units[game.view.selected]
-        destination = next(p for p in reachable(game.state, unit).costs if p != unit.location)
+        destination = next(
+            p
+            for p in sorted(reachable(game.state, unit).costs)
+            if p != unit.location and game.state.provinces[p].controller == unit.owner
+        )
         game.campaign.move(unit.id, destination)
         self.complete("move")
         game.inspect(destination)

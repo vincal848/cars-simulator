@@ -2,9 +2,11 @@
 
 **You play on a map. The simulation plays on graphs.**
 
-C.A.R.S. is a turn-based grand-strategy prototype set in an imagined Americas of
-1800. Eight nations, each with its own history and national traits, compete over
-186 provinces drawn on real Natural Earth geography. You command one; seven AI rivals take their turns. Armies, fleets,
+C.A.R.S. is a turn-based grand-strategy prototype set in the Americas of 1836.
+The United States, Mexico, the new Republic of Texas, British North America,
+New Granada, the Peru-Bolivian Confederation, the Empire of Brazil and the
+Argentine Confederation compete over 186 provinces drawn on real Natural Earth
+geography. You command one; seven AI rivals take their turns. Armies, fleets,
 balloon corps and supply lines each move on their own graph, and every rule works
 on those graphs. The map you see is only a way to click on them.
 
@@ -12,8 +14,9 @@ on those graphs. The map you see is only a way to click on them.
 
 ## Features
 
-- **Eight nations with a history**: rulers, capitals, forms of government and two
-  national traits each, such as cheaper fleets or stronger mountain defence.
+- **Eight nations of 1836**: their real rulers, capitals, forms of government and
+  histories, and two national traits each, such as the Royal Navy's cheaper
+  fleets or the Texas Rangers' cheap cavalry.
 - **A grand-strategy interface** in the manner of Victoria and Europa Universalis:
   a painted political map with nation names, map modes, an outliner, docked
   panels with sortable tables, and an interface that scales from a laptop to a
@@ -29,7 +32,8 @@ on those graphs. The map you see is only a way to click on them.
   for the ones that grow strong enough to break it.
 - **Economy**: regional wood, food and iron; farms, mills, mines, roads, shipyards
   and gas works; unit upkeep; a merchant exchange for gold.
-- **24 regional charters**: named local regiments with their own uniforms and a
+- **24 regional charters**: period formations such as the Texas Rangers or the
+  Colorados del Monte, with their own uniforms and a
   terrain specialty.
 - **Order forecasts** that run the real combat rules on a copy of the game, so the
   preview always matches the outcome.
@@ -148,4 +152,4 @@ Code and procedural artwork are [MIT licensed](LICENSE). Map data comes from
 [Natural Earth](MAP_SOURCES.md) (public domain). Recordings are by Kimiko Ishizaka
 (CC0) and the Musopen Symphony (public-domain dedication); see
 [MUSIC_CREDITS.md](MUSIC_CREDITS.md). Bundled libraries are listed in
-[THIRD_PARTY.md](THIRD_PARTY.md). Provinces, nations and regiments are fictional.
+[THIRD_PARTY.md](THIRD_PARTY.md). Province outlines are drawn from modern geography, not the frontiers of 1836.

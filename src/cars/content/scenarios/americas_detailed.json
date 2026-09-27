@@ -3,11 +3,11 @@
   "provinces": [
     {
       "id": "province_000",
-      "name": "Queen Elizabeth Islands",
+      "name": "Arctic Archipelago",
       "region_id": "r1",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_000",
       "resource_sites": {},
       "geography": {
@@ -26,8 +26,8 @@
       "name": "Parry Islands",
       "region_id": "r0",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_001",
       "resource_sites": {},
       "geography": {
@@ -46,8 +46,8 @@
       "name": "Bathurst Island",
       "region_id": "r1",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_002",
       "resource_sites": {},
       "geography": {
@@ -66,8 +66,8 @@
       "name": "Melville Island",
       "region_id": "r1",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_003",
       "resource_sites": {},
       "geography": {
@@ -86,8 +86,8 @@
       "name": "Melville Island",
       "region_id": "r0",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_004",
       "resource_sites": {},
       "geography": {
@@ -103,11 +103,11 @@
     },
     {
       "id": "province_005",
-      "name": "Queen Elizabeth Islands",
+      "name": "Arctic Archipelago",
       "region_id": "r1",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_005",
       "resource_sites": {},
       "geography": {
@@ -126,8 +126,8 @@
       "name": "Devon Island",
       "region_id": "r1",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_006",
       "resource_sites": {},
       "geography": {
@@ -146,8 +146,8 @@
       "name": "Devon Island",
       "region_id": "r1",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_007",
       "resource_sites": {},
       "geography": {
@@ -166,8 +166,8 @@
       "name": "Cornwallis Island",
       "region_id": "r1",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_008",
       "resource_sites": {},
       "geography": {
@@ -183,11 +183,11 @@
     },
     {
       "id": "province_009",
-      "name": "Nunavut",
+      "name": "Barren Grounds",
       "region_id": "r1",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_009",
       "resource_sites": {},
       "geography": {
@@ -206,8 +206,8 @@
       "name": "Banks Island",
       "region_id": "r0",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_010",
       "resource_sites": {},
       "geography": {
@@ -226,8 +226,8 @@
       "name": "Somerset Island",
       "region_id": "r1",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_011",
       "resource_sites": {},
       "geography": {
@@ -243,11 +243,11 @@
     },
     {
       "id": "province_012",
-      "name": "Nunavut",
+      "name": "Barren Grounds",
       "region_id": "r1",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_012",
       "resource_sites": {},
       "geography": {
@@ -266,8 +266,8 @@
       "name": "Bylot Island",
       "region_id": "r1",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_013",
       "resource_sites": {},
       "geography": {
@@ -286,8 +286,8 @@
       "name": "Somerset Island",
       "region_id": "r1",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_014",
       "resource_sites": {},
       "geography": {
@@ -306,8 +306,8 @@
       "name": "Banks Island",
       "region_id": "r0",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_015",
       "resource_sites": {},
       "geography": {
@@ -326,8 +326,8 @@
       "name": "Baffin Island",
       "region_id": "r1",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_016",
       "resource_sites": {},
       "geography": {
@@ -346,8 +346,8 @@
       "name": "Prince of Wales Island",
       "region_id": "r1",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_017",
       "resource_sites": {},
       "geography": {
@@ -363,11 +363,11 @@
     },
     {
       "id": "province_018",
-      "name": "Victoria Island",
+      "name": "Wollaston Land",
       "region_id": "r0",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_018",
       "resource_sites": {},
       "geography": {
@@ -386,8 +386,8 @@
       "name": "Baffin Island",
       "region_id": "r1",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_019",
       "resource_sites": {},
       "geography": {
@@ -403,11 +403,11 @@
     },
     {
       "id": "province_020",
-      "name": "Victoria Island",
+      "name": "Wollaston Land",
       "region_id": "r1",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_020",
       "resource_sites": {},
       "geography": {
@@ -426,8 +426,8 @@
       "name": "Baffin Island",
       "region_id": "r1",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_021",
       "resource_sites": {},
       "geography": {
@@ -443,11 +443,11 @@
     },
     {
       "id": "province_022",
-      "name": "Victoria Island",
+      "name": "Wollaston Land",
       "region_id": "r1",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_022",
       "resource_sites": {},
       "geography": {
@@ -463,11 +463,11 @@
     },
     {
       "id": "province_023",
-      "name": "Victoria Island",
+      "name": "Wollaston Land",
       "region_id": "r0",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_023",
       "resource_sites": {},
       "geography": {
@@ -483,11 +483,11 @@
     },
     {
       "id": "province_024",
-      "name": "Nunavut",
+      "name": "Boothia",
       "region_id": "r1",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_024",
       "resource_sites": {},
       "geography": {
@@ -503,11 +503,11 @@
     },
     {
       "id": "province_025",
-      "name": "Victoria Island",
+      "name": "Wollaston Land",
       "region_id": "r1",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_025",
       "resource_sites": {},
       "geography": {
@@ -523,11 +523,11 @@
     },
     {
       "id": "province_026",
-      "name": "Nunavut",
+      "name": "Melville Peninsula",
       "region_id": "r1",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_026",
       "resource_sites": {},
       "geography": {
@@ -543,11 +543,11 @@
     },
     {
       "id": "province_027",
-      "name": "Victoria Island",
+      "name": "Wollaston Land",
       "region_id": "r1",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_027",
       "resource_sites": {},
       "geography": {
@@ -563,11 +563,11 @@
     },
     {
       "id": "province_028",
-      "name": "Victoria Island",
+      "name": "Wollaston Land",
       "region_id": "r1",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_028",
       "resource_sites": {},
       "geography": {
@@ -586,8 +586,8 @@
       "name": "King William Island",
       "region_id": "r1",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_029",
       "resource_sites": {},
       "geography": {
@@ -603,11 +603,11 @@
     },
     {
       "id": "province_030",
-      "name": "Victoria Island",
+      "name": "Wollaston Land",
       "region_id": "r1",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_030",
       "resource_sites": {},
       "geography": {
@@ -623,11 +623,11 @@
     },
     {
       "id": "province_031",
-      "name": "Nunavut",
+      "name": "Boothia",
       "region_id": "r1",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_031",
       "resource_sites": {},
       "geography": {
@@ -643,11 +643,11 @@
     },
     {
       "id": "province_032",
-      "name": "Alaska",
+      "name": "Russian America",
       "region_id": "r0",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_032",
       "resource_sites": {},
       "geography": {
@@ -666,8 +666,8 @@
       "name": "Baffin Island",
       "region_id": "r3",
       "terrain": "forest",
-      "owner": "f1",
-      "controller": "f1",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_033",
       "resource_sites": {},
       "geography": {
@@ -683,11 +683,11 @@
     },
     {
       "id": "province_034",
-      "name": "Northwest Territories",
+      "name": "Mackenzie",
       "region_id": "r0",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_034",
       "resource_sites": {},
       "geography": {
@@ -703,11 +703,11 @@
     },
     {
       "id": "province_035",
-      "name": "Alaska",
+      "name": "Russian America",
       "region_id": "r0",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_035",
       "resource_sites": {},
       "geography": {
@@ -723,11 +723,11 @@
     },
     {
       "id": "province_036",
-      "name": "Nunavut",
+      "name": "Foxe Basin",
       "region_id": "r3",
       "terrain": "forest",
-      "owner": "f1",
-      "controller": "f1",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_036",
       "resource_sites": {},
       "geography": {
@@ -743,11 +743,11 @@
     },
     {
       "id": "province_037",
-      "name": "Alaska",
+      "name": "Russian America",
       "region_id": "r0",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_037",
       "resource_sites": {},
       "geography": {
@@ -763,11 +763,11 @@
     },
     {
       "id": "province_038",
-      "name": "Prince Charles Island",
+      "name": "Foxe Basin",
       "region_id": "r1",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_038",
       "resource_sites": {},
       "geography": {
@@ -783,11 +783,11 @@
     },
     {
       "id": "province_039",
-      "name": "Nunavut",
+      "name": "Barren Grounds",
       "region_id": "r1",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_039",
       "resource_sites": {},
       "geography": {
@@ -803,11 +803,11 @@
     },
     {
       "id": "province_040",
-      "name": "Nunavut",
+      "name": "Back River",
       "region_id": "r1",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_040",
       "resource_sites": {},
       "geography": {
@@ -826,8 +826,8 @@
       "name": "Baffin Island",
       "region_id": "r3",
       "terrain": "forest",
-      "owner": "f1",
-      "controller": "f1",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_041",
       "resource_sites": {},
       "geography": {
@@ -843,11 +843,11 @@
     },
     {
       "id": "province_042",
-      "name": "Northwest Territories",
+      "name": "Great Bear Lake",
       "region_id": "r0",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_042",
       "resource_sites": {},
       "geography": {
@@ -863,11 +863,11 @@
     },
     {
       "id": "province_043",
-      "name": "Northwest Territories",
+      "name": "Coppermine",
       "region_id": "r1",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_043",
       "resource_sites": {},
       "geography": {
@@ -886,8 +886,8 @@
       "name": "Baffin Island",
       "region_id": "r3",
       "terrain": "forest",
-      "owner": "f1",
-      "controller": "f1",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_044",
       "resource_sites": {},
       "geography": {
@@ -903,11 +903,11 @@
     },
     {
       "id": "province_045",
-      "name": "Alaska",
+      "name": "Russian America",
       "region_id": "r0",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_045",
       "resource_sites": {},
       "geography": {
@@ -926,8 +926,8 @@
       "name": "Yukon",
       "region_id": "r0",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_046",
       "resource_sites": {},
       "geography": {
@@ -943,11 +943,11 @@
     },
     {
       "id": "province_047",
-      "name": "Nunavut",
+      "name": "Chesterfield Inlet",
       "region_id": "r1",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_047",
       "resource_sites": {},
       "geography": {
@@ -963,11 +963,11 @@
     },
     {
       "id": "province_048",
-      "name": "Nunavut",
+      "name": "Barren Grounds",
       "region_id": "r1",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_048",
       "resource_sites": {},
       "geography": {
@@ -983,11 +983,11 @@
     },
     {
       "id": "province_049",
-      "name": "Northwest Territories",
+      "name": "Thelon",
       "region_id": "r1",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_049",
       "resource_sites": {},
       "geography": {
@@ -1006,8 +1006,8 @@
       "name": "Southampton Island",
       "region_id": "r1",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_050",
       "resource_sites": {},
       "geography": {
@@ -1026,8 +1026,8 @@
       "name": "Baffin Island",
       "region_id": "r3",
       "terrain": "forest",
-      "owner": "f1",
-      "controller": "f1",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_051",
       "resource_sites": {},
       "geography": {
@@ -1046,8 +1046,8 @@
       "name": "St. Lawrence Island",
       "region_id": "r0",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_052",
       "resource_sites": {},
       "geography": {
@@ -1063,11 +1063,11 @@
     },
     {
       "id": "province_053",
-      "name": "Alaska",
+      "name": "Russian America",
       "region_id": "r0",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_053",
       "resource_sites": {},
       "geography": {
@@ -1086,8 +1086,8 @@
       "name": "Baffin Island",
       "region_id": "r3",
       "terrain": "forest",
-      "owner": "f1",
-      "controller": "f1",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_054",
       "resource_sites": {},
       "geography": {
@@ -1106,8 +1106,8 @@
       "name": "Yukon",
       "region_id": "r0",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_055",
       "resource_sites": {},
       "geography": {
@@ -1126,8 +1126,8 @@
       "name": "Coats Island",
       "region_id": "r1",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_056",
       "resource_sites": {},
       "geography": {
@@ -1146,8 +1146,8 @@
       "name": "Baffin Island",
       "region_id": "r3",
       "terrain": "forest",
-      "owner": "f1",
-      "controller": "f1",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_057",
       "resource_sites": {},
       "geography": {
@@ -1163,11 +1163,11 @@
     },
     {
       "id": "province_058",
-      "name": "Alaska",
+      "name": "Russian America",
       "region_id": "r0",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_058",
       "resource_sites": {},
       "geography": {
@@ -1186,8 +1186,8 @@
       "name": "Mansel Island",
       "region_id": "r3",
       "terrain": "forest",
-      "owner": "f1",
-      "controller": "f1",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_059",
       "resource_sites": {},
       "geography": {
@@ -1203,11 +1203,11 @@
     },
     {
       "id": "province_060",
-      "name": "Quebec",
+      "name": "Hudson Strait",
       "region_id": "r3",
       "terrain": "forest",
-      "owner": "f1",
-      "controller": "f1",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_060",
       "resource_sites": {},
       "geography": {
@@ -1223,11 +1223,11 @@
     },
     {
       "id": "province_061",
-      "name": "British Columbia",
+      "name": "New Caledonia",
       "region_id": "r0",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_061",
       "resource_sites": {},
       "geography": {
@@ -1246,8 +1246,8 @@
       "name": "Nunivak Island",
       "region_id": "r0",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_062",
       "resource_sites": {},
       "geography": {
@@ -1263,11 +1263,11 @@
     },
     {
       "id": "province_063",
-      "name": "Alaska",
+      "name": "Russian America",
       "region_id": "r0",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_063",
       "resource_sites": {},
       "geography": {
@@ -1283,11 +1283,11 @@
     },
     {
       "id": "province_064",
-      "name": "Alaska",
+      "name": "Russian America",
       "region_id": "r0",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_064",
       "resource_sites": {},
       "geography": {
@@ -1303,11 +1303,11 @@
     },
     {
       "id": "province_065",
-      "name": "Alberta",
+      "name": "Athabasca",
       "region_id": "r1",
       "terrain": "mountains",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_065",
       "resource_sites": {
         "iron": 1
@@ -1325,11 +1325,11 @@
     },
     {
       "id": "province_066",
-      "name": "Alaska",
+      "name": "Russian America",
       "region_id": "r0",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_066",
       "resource_sites": {},
       "geography": {
@@ -1345,11 +1345,11 @@
     },
     {
       "id": "province_067",
-      "name": "British Columbia",
+      "name": "New Caledonia",
       "region_id": "r0",
       "terrain": "mountains",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_067",
       "resource_sites": {
         "iron": 1
@@ -1367,11 +1367,11 @@
     },
     {
       "id": "province_068",
-      "name": "Alaska",
+      "name": "Russian America",
       "region_id": "r0",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_068",
       "resource_sites": {},
       "geography": {
@@ -1390,8 +1390,8 @@
       "name": "Alexander Archipelago",
       "region_id": "r0",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_069",
       "resource_sites": {},
       "geography": {
@@ -1407,11 +1407,11 @@
     },
     {
       "id": "province_070",
-      "name": "Quebec",
+      "name": "Ungava",
       "region_id": "r3",
       "terrain": "forest",
-      "owner": "f1",
-      "controller": "f1",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_070",
       "resource_sites": {},
       "geography": {
@@ -1430,8 +1430,8 @@
       "name": "Saskatchewan",
       "region_id": "r1",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_071",
       "resource_sites": {},
       "geography": {
@@ -1450,8 +1450,8 @@
       "name": "Alexander Archipelago",
       "region_id": "r0",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_072",
       "resource_sites": {},
       "geography": {
@@ -1470,8 +1470,8 @@
       "name": "Kodiak Island",
       "region_id": "r0",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_073",
       "resource_sites": {},
       "geography": {
@@ -1490,8 +1490,8 @@
       "name": "Alexander Archipelago",
       "region_id": "r0",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_074",
       "resource_sites": {},
       "geography": {
@@ -1510,8 +1510,8 @@
       "name": "Alexander Archipelago",
       "region_id": "r0",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_075",
       "resource_sites": {},
       "geography": {
@@ -1527,11 +1527,11 @@
     },
     {
       "id": "province_076",
-      "name": "Alaska",
+      "name": "Russian America",
       "region_id": "r0",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_076",
       "resource_sites": {},
       "geography": {
@@ -1550,8 +1550,8 @@
       "name": "Belcher Islands",
       "region_id": "r3",
       "terrain": "forest",
-      "owner": "f1",
-      "controller": "f1",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_077",
       "resource_sites": {},
       "geography": {
@@ -1567,11 +1567,11 @@
     },
     {
       "id": "province_078",
-      "name": "British Columbia",
+      "name": "New Caledonia",
       "region_id": "r0",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_078",
       "resource_sites": {},
       "geography": {
@@ -1587,11 +1587,11 @@
     },
     {
       "id": "province_079",
-      "name": "Manitoba",
+      "name": "Nelson River",
       "region_id": "r1",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_079",
       "resource_sites": {},
       "geography": {
@@ -1610,8 +1610,8 @@
       "name": "Alexander Archipelago",
       "region_id": "r0",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_080",
       "resource_sites": {},
       "geography": {
@@ -1630,8 +1630,8 @@
       "name": "Alexander Archipelago",
       "region_id": "r0",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_081",
       "resource_sites": {},
       "geography": {
@@ -1647,11 +1647,11 @@
     },
     {
       "id": "province_082",
-      "name": "Alaska",
+      "name": "Russian America",
       "region_id": "r0",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_082",
       "resource_sites": {},
       "geography": {
@@ -1667,11 +1667,11 @@
     },
     {
       "id": "province_083",
-      "name": "Quebec",
-      "region_id": "r5",
+      "name": "Eastmain",
+      "region_id": "r3",
       "terrain": "forest",
-      "owner": "f1",
-      "controller": "f1",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_083",
       "resource_sites": {},
       "geography": {
@@ -1690,8 +1690,8 @@
       "name": "Unimak Island",
       "region_id": "r0",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_084",
       "resource_sites": {},
       "geography": {
@@ -1707,11 +1707,11 @@
     },
     {
       "id": "province_085",
-      "name": "Alberta",
-      "region_id": "r2",
+      "name": "Athabasca",
+      "region_id": "r0",
       "terrain": "mountains",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_085",
       "resource_sites": {
         "iron": 1
@@ -1729,11 +1729,11 @@
     },
     {
       "id": "province_086",
-      "name": "Haida Gwaii",
+      "name": "Queen Charlotte Islands",
       "region_id": "r0",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_086",
       "resource_sites": {},
       "geography": {
@@ -1752,8 +1752,8 @@
       "name": "Aleutian Islands",
       "region_id": "r0",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_087",
       "resource_sites": {},
       "geography": {
@@ -1772,8 +1772,8 @@
       "name": "Akimiski Island",
       "region_id": "r3",
       "terrain": "forest",
-      "owner": "f1",
-      "controller": "f1",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_088",
       "resource_sites": {},
       "geography": {
@@ -1789,11 +1789,11 @@
     },
     {
       "id": "province_089",
-      "name": "British Columbia",
-      "region_id": "r2",
+      "name": "New Caledonia",
+      "region_id": "r0",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_089",
       "resource_sites": {},
       "geography": {
@@ -1809,11 +1809,11 @@
     },
     {
       "id": "province_090",
-      "name": "Haida Gwaii",
-      "region_id": "r2",
+      "name": "Queen Charlotte Islands",
+      "region_id": "r0",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_090",
       "resource_sites": {},
       "geography": {
@@ -1829,11 +1829,11 @@
     },
     {
       "id": "province_091",
-      "name": "Newfoundland and Labrador",
-      "region_id": "r5",
+      "name": "Labrador",
+      "region_id": "r3",
       "terrain": "forest",
-      "owner": "f1",
-      "controller": "f1",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_091",
       "resource_sites": {},
       "geography": {
@@ -1849,11 +1849,11 @@
     },
     {
       "id": "province_092",
-      "name": "Ontario",
+      "name": "Albany River",
       "region_id": "r3",
       "terrain": "forest",
-      "owner": "f1",
-      "controller": "f1",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_092",
       "resource_sites": {},
       "geography": {
@@ -1869,11 +1869,11 @@
     },
     {
       "id": "province_093",
-      "name": "British Columbia",
-      "region_id": "r2",
+      "name": "New Caledonia",
+      "region_id": "r0",
       "terrain": "mountains",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_093",
       "resource_sites": {
         "iron": 1
@@ -1894,8 +1894,8 @@
       "name": "Saskatchewan",
       "region_id": "r1",
       "terrain": "mountains",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_094",
       "resource_sites": {
         "iron": 1
@@ -1913,11 +1913,11 @@
     },
     {
       "id": "province_095",
-      "name": "Quebec",
+      "name": "Mistassini",
       "region_id": "r3",
       "terrain": "forest",
-      "owner": "f1",
-      "controller": "f1",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_095",
       "resource_sites": {},
       "geography": {
@@ -1933,11 +1933,11 @@
     },
     {
       "id": "province_096",
-      "name": "Quebec",
-      "region_id": "r5",
+      "name": "Saguenay",
+      "region_id": "r3",
       "terrain": "forest",
-      "owner": "f1",
-      "controller": "f1",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_096",
       "resource_sites": {},
       "geography": {
@@ -1953,11 +1953,11 @@
     },
     {
       "id": "province_097",
-      "name": "Manitoba",
+      "name": "Red River",
       "region_id": "r1",
       "terrain": "forest",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_097",
       "resource_sites": {},
       "geography": {
@@ -1974,10 +1974,10 @@
     {
       "id": "province_098",
       "name": "Vancouver Island",
-      "region_id": "r2",
+      "region_id": "r0",
       "terrain": "mountains",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_098",
       "resource_sites": {
         "iron": 1
@@ -1996,10 +1996,10 @@
     {
       "id": "province_099",
       "name": "Anticosti Island",
-      "region_id": "r5",
+      "region_id": "r3",
       "terrain": "plains",
-      "owner": "f1",
-      "controller": "f1",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_099",
       "resource_sites": {},
       "geography": {
@@ -2016,10 +2016,10 @@
     {
       "id": "province_100",
       "name": "Newfoundland",
-      "region_id": "r5",
+      "region_id": "r3",
       "terrain": "plains",
-      "owner": "f1",
-      "controller": "f1",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_100",
       "resource_sites": {},
       "geography": {
@@ -2035,11 +2035,11 @@
     },
     {
       "id": "province_101",
-      "name": "Ontario",
+      "name": "Lake Superior",
       "region_id": "r3",
       "terrain": "forest",
-      "owner": "f1",
-      "controller": "f1",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_101",
       "resource_sites": {},
       "geography": {
@@ -2056,10 +2056,10 @@
     {
       "id": "province_102",
       "name": "Newfoundland",
-      "region_id": "r5",
+      "region_id": "r3",
       "terrain": "plains",
-      "owner": "f1",
-      "controller": "f1",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_102",
       "resource_sites": {},
       "geography": {
@@ -2075,11 +2075,11 @@
     },
     {
       "id": "province_103",
-      "name": "New Brunswick",
-      "region_id": "r5",
+      "name": "Lower Canada",
+      "region_id": "r3",
       "terrain": "plains",
-      "owner": "f1",
-      "controller": "f1",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_103",
       "resource_sites": {},
       "geography": {
@@ -2095,7 +2095,7 @@
     },
     {
       "id": "province_104",
-      "name": "Washington",
+      "name": "Puget Sound",
       "region_id": "r2",
       "terrain": "mountains",
       "owner": "f0",
@@ -2117,7 +2117,7 @@
     },
     {
       "id": "province_105",
-      "name": "Washington",
+      "name": "Columbia",
       "region_id": "r2",
       "terrain": "mountains",
       "owner": "f0",
@@ -2140,10 +2140,10 @@
     {
       "id": "province_106",
       "name": "Prince Edward Island",
-      "region_id": "r5",
+      "region_id": "r3",
       "terrain": "plains",
-      "owner": "f1",
-      "controller": "f1",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_106",
       "resource_sites": {},
       "geography": {
@@ -2160,10 +2160,10 @@
     {
       "id": "province_107",
       "name": "Cape Breton Island",
-      "region_id": "r5",
+      "region_id": "r3",
       "terrain": "plains",
-      "owner": "f1",
-      "controller": "f1",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_107",
       "resource_sites": {},
       "geography": {
@@ -2179,7 +2179,7 @@
     },
     {
       "id": "province_108",
-      "name": "Oregon",
+      "name": "Oregon Country",
       "region_id": "r2",
       "terrain": "mountains",
       "owner": "f0",
@@ -2202,10 +2202,10 @@
     {
       "id": "province_109",
       "name": "New Brunswick",
-      "region_id": "r5",
+      "region_id": "r3",
       "terrain": "plains",
-      "owner": "f1",
-      "controller": "f1",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_109",
       "resource_sites": {},
       "geography": {
@@ -2221,11 +2221,11 @@
     },
     {
       "id": "province_110",
-      "name": "Ontario",
+      "name": "Upper Canada",
       "region_id": "r3",
       "terrain": "plains",
-      "owner": "f1",
-      "controller": "f1",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_110",
       "resource_sites": {},
       "geography": {
@@ -2244,8 +2244,8 @@
       "name": "New York",
       "region_id": "r5",
       "terrain": "plains",
-      "owner": "f1",
-      "controller": "f1",
+      "owner": "f0",
+      "controller": "f0",
       "shape_id": "province_111",
       "resource_sites": {},
       "geography": {
@@ -2261,11 +2261,11 @@
     },
     {
       "id": "province_112",
-      "name": "South Dakota",
-      "region_id": "r3",
+      "name": "Upper Missouri",
+      "region_id": "r4",
       "terrain": "plains",
-      "owner": "f1",
-      "controller": "f1",
+      "owner": "f0",
+      "controller": "f0",
       "shape_id": "province_112",
       "resource_sites": {},
       "geography": {
@@ -2281,11 +2281,11 @@
     },
     {
       "id": "province_113",
-      "name": "Wyoming",
+      "name": "Rocky Mountains",
       "region_id": "r4",
       "terrain": "mountains",
-      "owner": "f1",
-      "controller": "f1",
+      "owner": "f0",
+      "controller": "f0",
       "shape_id": "province_113",
       "resource_sites": {
         "iron": 1
@@ -2304,10 +2304,10 @@
     {
       "id": "province_114",
       "name": "Illinois",
-      "region_id": "r3",
+      "region_id": "r4",
       "terrain": "plains",
-      "owner": "f1",
-      "controller": "f1",
+      "owner": "f0",
+      "controller": "f0",
       "shape_id": "province_114",
       "resource_sites": {},
       "geography": {
@@ -2323,11 +2323,11 @@
     },
     {
       "id": "province_115",
-      "name": "California",
-      "region_id": "r2",
+      "name": "Alta California",
+      "region_id": "r8",
       "terrain": "mountains",
-      "owner": "f0",
-      "controller": "f0",
+      "owner": "f1",
+      "controller": "f1",
       "shape_id": "province_115",
       "resource_sites": {
         "iron": 1
@@ -2345,8 +2345,8 @@
     },
     {
       "id": "province_116",
-      "name": "Nevada",
-      "region_id": "r4",
+      "name": "Great Basin",
+      "region_id": "r8",
       "terrain": "mountains",
       "owner": "f1",
       "controller": "f1",
@@ -2370,8 +2370,8 @@
       "name": "Long Island",
       "region_id": "r5",
       "terrain": "plains",
-      "owner": "f1",
-      "controller": "f1",
+      "owner": "f0",
+      "controller": "f0",
       "shape_id": "province_117",
       "resource_sites": {},
       "geography": {
@@ -2390,8 +2390,8 @@
       "name": "Virginia",
       "region_id": "r5",
       "terrain": "plains",
-      "owner": "f1",
-      "controller": "f1",
+      "owner": "f0",
+      "controller": "f0",
       "shape_id": "province_118",
       "resource_sites": {},
       "geography": {
@@ -2407,7 +2407,7 @@
     },
     {
       "id": "province_119",
-      "name": "Texas",
+      "name": "Llano Estacado",
       "region_id": "r7",
       "terrain": "plains",
       "owner": "f2",
@@ -2427,8 +2427,8 @@
     },
     {
       "id": "province_120",
-      "name": "California",
-      "region_id": "r4",
+      "name": "Southern California",
+      "region_id": "r8",
       "terrain": "mountains",
       "owner": "f1",
       "controller": "f1",
@@ -2450,10 +2450,10 @@
     {
       "id": "province_121",
       "name": "Arkansas",
-      "region_id": "r7",
+      "region_id": "r4",
       "terrain": "plains",
-      "owner": "f2",
-      "controller": "f2",
+      "owner": "f0",
+      "controller": "f0",
       "shape_id": "province_121",
       "resource_sites": {},
       "geography": {
@@ -2472,8 +2472,8 @@
       "name": "Georgia",
       "region_id": "r5",
       "terrain": "plains",
-      "owner": "f1",
-      "controller": "f1",
+      "owner": "f0",
+      "controller": "f0",
       "shape_id": "province_122",
       "resource_sites": {},
       "geography": {
@@ -2492,8 +2492,8 @@
       "name": "Chihuahua",
       "region_id": "r6",
       "terrain": "mountains",
-      "owner": "f2",
-      "controller": "f2",
+      "owner": "f1",
+      "controller": "f1",
       "shape_id": "province_123",
       "resource_sites": {
         "iron": 1
@@ -2514,8 +2514,8 @@
       "name": "Sonora",
       "region_id": "r6",
       "terrain": "mountains",
-      "owner": "f2",
-      "controller": "f2",
+      "owner": "f1",
+      "controller": "f1",
       "shape_id": "province_124",
       "resource_sites": {
         "iron": 1
@@ -2536,8 +2536,8 @@
       "name": "Florida",
       "region_id": "r5",
       "terrain": "plains",
-      "owner": "f1",
-      "controller": "f1",
+      "owner": "f0",
+      "controller": "f0",
       "shape_id": "province_125",
       "resource_sites": {},
       "geography": {
@@ -2553,8 +2553,8 @@
     },
     {
       "id": "province_126",
-      "name": "Nuevo León",
-      "region_id": "r8",
+      "name": "Texas",
+      "region_id": "r7",
       "terrain": "plains",
       "owner": "f2",
       "controller": "f2",
@@ -2576,8 +2576,8 @@
       "name": "Durango",
       "region_id": "r6",
       "terrain": "plains",
-      "owner": "f2",
-      "controller": "f2",
+      "owner": "f1",
+      "controller": "f1",
       "shape_id": "province_127",
       "resource_sites": {},
       "geography": {
@@ -2593,11 +2593,11 @@
     },
     {
       "id": "province_128",
-      "name": "Baja California Sur",
+      "name": "Baja California",
       "region_id": "r6",
       "terrain": "plains",
-      "owner": "f2",
-      "controller": "f2",
+      "owner": "f1",
+      "controller": "f1",
       "shape_id": "province_128",
       "resource_sites": {},
       "geography": {
@@ -2613,8 +2613,8 @@
     },
     {
       "id": "province_129",
-      "name": "North Andros",
-      "region_id": "r9",
+      "name": "Bahamas",
+      "region_id": "r13",
       "terrain": "plains",
       "owner": "f3",
       "controller": "f3",
@@ -2633,11 +2633,11 @@
     },
     {
       "id": "province_130",
-      "name": "Sancti Spíritus",
+      "name": "Havana",
       "region_id": "r9",
       "terrain": "plains",
-      "owner": "f3",
-      "controller": "f3",
+      "owner": "f1",
+      "controller": "f1",
       "shape_id": "province_130",
       "resource_sites": {},
       "geography": {
@@ -2653,11 +2653,11 @@
     },
     {
       "id": "province_131",
-      "name": "Pinar del Río",
+      "name": "Vuelta Abajo",
       "region_id": "r9",
       "terrain": "plains",
-      "owner": "f3",
-      "controller": "f3",
+      "owner": "f1",
+      "controller": "f1",
       "shape_id": "province_131",
       "resource_sites": {},
       "geography": {
@@ -2676,8 +2676,8 @@
       "name": "Guanajuato",
       "region_id": "r8",
       "terrain": "plains",
-      "owner": "f2",
-      "controller": "f2",
+      "owner": "f1",
+      "controller": "f1",
       "shape_id": "province_132",
       "resource_sites": {},
       "geography": {
@@ -2693,11 +2693,11 @@
     },
     {
       "id": "province_133",
-      "name": "Las Tunas",
+      "name": "Oriente",
       "region_id": "r9",
       "terrain": "plains",
-      "owner": "f3",
-      "controller": "f3",
+      "owner": "f1",
+      "controller": "f1",
       "shape_id": "province_133",
       "resource_sites": {},
       "geography": {
@@ -2713,11 +2713,11 @@
     },
     {
       "id": "province_134",
-      "name": "Quintana Roo",
+      "name": "Yucatán",
       "region_id": "r9",
       "terrain": "plains",
-      "owner": "f3",
-      "controller": "f3",
+      "owner": "f1",
+      "controller": "f1",
       "shape_id": "province_134",
       "resource_sites": {},
       "geography": {
@@ -2733,7 +2733,7 @@
     },
     {
       "id": "province_135",
-      "name": "Hawaii",
+      "name": "Hawaiian Islands",
       "region_id": "r2",
       "terrain": "plains",
       "owner": "f0",
@@ -2753,11 +2753,11 @@
     },
     {
       "id": "province_136",
-      "name": "San José de Ocoa",
+      "name": "Hispaniola",
       "region_id": "r11",
       "terrain": "plains",
-      "owner": "f3",
-      "controller": "f3",
+      "owner": "f4",
+      "controller": "f4",
       "shape_id": "province_136",
       "resource_sites": {},
       "geography": {
@@ -2774,7 +2774,7 @@
     {
       "id": "province_137",
       "name": "Puerto Rico",
-      "region_id": "r13",
+      "region_id": "r11",
       "terrain": "plains",
       "owner": "f4",
       "controller": "f4",
@@ -2793,8 +2793,8 @@
     },
     {
       "id": "province_138",
-      "name": "Saint Catherine",
-      "region_id": "r11",
+      "name": "Jamaica",
+      "region_id": "r13",
       "terrain": "plains",
       "owner": "f3",
       "controller": "f3",
@@ -2814,10 +2814,10 @@
     {
       "id": "province_139",
       "name": "Veracruz",
-      "region_id": "r10",
+      "region_id": "r8",
       "terrain": "plains",
-      "owner": "f3",
-      "controller": "f3",
+      "owner": "f1",
+      "controller": "f1",
       "shape_id": "province_139",
       "resource_sites": {},
       "geography": {
@@ -2833,11 +2833,11 @@
     },
     {
       "id": "province_140",
-      "name": "Madriz",
+      "name": "Central America",
       "region_id": "r10",
       "terrain": "plains",
-      "owner": "f3",
-      "controller": "f3",
+      "owner": "f1",
+      "controller": "f1",
       "shape_id": "province_140",
       "resource_sites": {},
       "geography": {
@@ -2853,11 +2853,11 @@
     },
     {
       "id": "province_141",
-      "name": "Couva-Tabaquite-Talparo",
+      "name": "Trinidad",
       "region_id": "r13",
       "terrain": "plains",
-      "owner": "f4",
-      "controller": "f4",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_141",
       "resource_sites": {},
       "geography": {
@@ -2873,11 +2873,11 @@
     },
     {
       "id": "province_142",
-      "name": "Córdoba",
+      "name": "Panama",
       "region_id": "r11",
       "terrain": "plains",
-      "owner": "f3",
-      "controller": "f3",
+      "owner": "f4",
+      "controller": "f4",
       "shape_id": "province_142",
       "resource_sites": {},
       "geography": {
@@ -2913,11 +2913,11 @@
     },
     {
       "id": "province_144",
-      "name": "Sipaliwini",
+      "name": "Guiana",
       "region_id": "r13",
       "terrain": "forest",
-      "owner": "f4",
-      "controller": "f4",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_144",
       "resource_sites": {},
       "geography": {
@@ -2933,8 +2933,8 @@
     },
     {
       "id": "province_145",
-      "name": "Roraima",
-      "region_id": "r13",
+      "name": "Guayana",
+      "region_id": "r12",
       "terrain": "forest",
       "owner": "f4",
       "controller": "f4",
@@ -2953,11 +2953,11 @@
     },
     {
       "id": "province_146",
-      "name": "Isabela Island",
-      "region_id": "r11",
+      "name": "Galápagos",
+      "region_id": "r12",
       "terrain": "plains",
-      "owner": "f3",
-      "controller": "f3",
+      "owner": "f4",
+      "controller": "f4",
       "shape_id": "province_146",
       "resource_sites": {},
       "geography": {
@@ -2973,7 +2973,7 @@
     },
     {
       "id": "province_147",
-      "name": "Tungurahua",
+      "name": "Quito",
       "region_id": "r12",
       "terrain": "mountains",
       "owner": "f4",
@@ -2996,10 +2996,10 @@
     {
       "id": "province_148",
       "name": "Marajó",
-      "region_id": "r13",
+      "region_id": "r15",
       "terrain": "forest",
-      "owner": "f4",
-      "controller": "f4",
+      "owner": "f6",
+      "controller": "f6",
       "shape_id": "province_148",
       "resource_sites": {},
       "geography": {
@@ -3015,11 +3015,11 @@
     },
     {
       "id": "province_149",
-      "name": "Pará",
-      "region_id": "r13",
+      "name": "Mouths of the Amazon",
+      "region_id": "r15",
       "terrain": "forest",
-      "owner": "f4",
-      "controller": "f4",
+      "owner": "f6",
+      "controller": "f6",
       "shape_id": "province_149",
       "resource_sites": {},
       "geography": {
@@ -3035,7 +3035,7 @@
     },
     {
       "id": "province_150",
-      "name": "Amazonas",
+      "name": "Cundinamarca",
       "region_id": "r12",
       "terrain": "mountains",
       "owner": "f4",
@@ -3058,10 +3058,10 @@
     {
       "id": "province_151",
       "name": "Pará",
-      "region_id": "r13",
+      "region_id": "r15",
       "terrain": "forest",
-      "owner": "f4",
-      "controller": "f4",
+      "owner": "f6",
+      "controller": "f6",
       "shape_id": "province_151",
       "resource_sites": {},
       "geography": {
@@ -3077,11 +3077,11 @@
     },
     {
       "id": "province_152",
-      "name": "Amazonas",
+      "name": "Rio Negro",
       "region_id": "r15",
       "terrain": "forest",
-      "owner": "f5",
-      "controller": "f5",
+      "owner": "f6",
+      "controller": "f6",
       "shape_id": "province_152",
       "resource_sites": {},
       "geography": {
@@ -3100,8 +3100,8 @@
       "name": "Maranhão",
       "region_id": "r17",
       "terrain": "forest",
-      "owner": "f5",
-      "controller": "f5",
+      "owner": "f6",
+      "controller": "f6",
       "shape_id": "province_153",
       "resource_sites": {},
       "geography": {
@@ -3117,8 +3117,8 @@
     },
     {
       "id": "province_154",
-      "name": "Amazonas",
-      "region_id": "r15",
+      "name": "Madeira",
+      "region_id": "r14",
       "terrain": "forest",
       "owner": "f5",
       "controller": "f5",
@@ -3140,8 +3140,8 @@
       "name": "Pernambuco",
       "region_id": "r17",
       "terrain": "forest",
-      "owner": "f5",
-      "controller": "f5",
+      "owner": "f6",
+      "controller": "f6",
       "shape_id": "province_155",
       "resource_sites": {},
       "geography": {
@@ -3157,11 +3157,11 @@
     },
     {
       "id": "province_156",
-      "name": "Ucayali",
+      "name": "Junín",
       "region_id": "r14",
       "terrain": "mountains",
-      "owner": "f4",
-      "controller": "f4",
+      "owner": "f5",
+      "controller": "f5",
       "shape_id": "province_156",
       "resource_sites": {
         "iron": 1
@@ -3179,11 +3179,11 @@
     },
     {
       "id": "province_157",
-      "name": "Tocantins",
+      "name": "Goiás",
       "region_id": "r17",
       "terrain": "forest",
-      "owner": "f5",
-      "controller": "f5",
+      "owner": "f6",
+      "controller": "f6",
       "shape_id": "province_157",
       "resource_sites": {},
       "geography": {
@@ -3202,8 +3202,8 @@
       "name": "Mato Grosso",
       "region_id": "r15",
       "terrain": "forest",
-      "owner": "f5",
-      "controller": "f5",
+      "owner": "f6",
+      "controller": "f6",
       "shape_id": "province_158",
       "resource_sites": {},
       "geography": {
@@ -3222,8 +3222,8 @@
       "name": "Minas Gerais",
       "region_id": "r17",
       "terrain": "plains",
-      "owner": "f5",
-      "controller": "f5",
+      "owner": "f6",
+      "controller": "f6",
       "shape_id": "province_159",
       "resource_sites": {},
       "geography": {
@@ -3281,11 +3281,11 @@
     },
     {
       "id": "province_162",
-      "name": "Mato Grosso do Sul",
+      "name": "Cuiabá",
       "region_id": "r17",
       "terrain": "plains",
-      "owner": "f5",
-      "controller": "f5",
+      "owner": "f6",
+      "controller": "f6",
       "shape_id": "province_162",
       "resource_sites": {},
       "geography": {
@@ -3304,8 +3304,8 @@
       "name": "São Paulo",
       "region_id": "r17",
       "terrain": "plains",
-      "owner": "f5",
-      "controller": "f5",
+      "owner": "f6",
+      "controller": "f6",
       "shape_id": "province_163",
       "resource_sites": {},
       "geography": {
@@ -3322,10 +3322,10 @@
     {
       "id": "province_164",
       "name": "Salta",
-      "region_id": "r19",
+      "region_id": "r16",
       "terrain": "plains",
-      "owner": "f6",
-      "controller": "f6",
+      "owner": "f5",
+      "controller": "f5",
       "shape_id": "province_164",
       "resource_sites": {},
       "geography": {
@@ -3342,7 +3342,7 @@
     {
       "id": "province_165",
       "name": "Rio Grande do Sul",
-      "region_id": "r19",
+      "region_id": "r20",
       "terrain": "plains",
       "owner": "f6",
       "controller": "f6",
@@ -3361,11 +3361,11 @@
     },
     {
       "id": "province_166",
-      "name": "La Rioja",
+      "name": "Santiago",
       "region_id": "r18",
       "terrain": "mountains",
-      "owner": "f6",
-      "controller": "f6",
+      "owner": "f7",
+      "controller": "f7",
       "shape_id": "province_166",
       "resource_sites": {
         "iron": 1
@@ -3386,8 +3386,8 @@
       "name": "Córdoba",
       "region_id": "r19",
       "terrain": "plains",
-      "owner": "f6",
-      "controller": "f6",
+      "owner": "f7",
+      "controller": "f7",
       "shape_id": "province_167",
       "resource_sites": {},
       "geography": {
@@ -3404,7 +3404,7 @@
     {
       "id": "province_168",
       "name": "Buenos Aires",
-      "region_id": "r21",
+      "region_id": "r19",
       "terrain": "plains",
       "owner": "f7",
       "controller": "f7",
@@ -3423,7 +3423,7 @@
     },
     {
       "id": "province_169",
-      "name": "La Pampa",
+      "name": "Pampas",
       "region_id": "r21",
       "terrain": "plains",
       "owner": "f7",
@@ -3444,10 +3444,10 @@
     {
       "id": "province_170",
       "name": "Araucanía",
-      "region_id": "r20",
+      "region_id": "r18",
       "terrain": "mountains",
-      "owner": "f6",
-      "controller": "f6",
+      "owner": "f7",
+      "controller": "f7",
       "shape_id": "province_170",
       "resource_sites": {
         "iron": 1
@@ -3486,10 +3486,10 @@
     {
       "id": "province_172",
       "name": "Chiloé Island",
-      "region_id": "r20",
+      "region_id": "r18",
       "terrain": "mountains",
-      "owner": "f6",
-      "controller": "f6",
+      "owner": "f7",
+      "controller": "f7",
       "shape_id": "province_172",
       "resource_sites": {
         "iron": 1
@@ -3529,8 +3529,8 @@
     },
     {
       "id": "province_174",
-      "name": "Aysén",
-      "region_id": "r22",
+      "name": "Chonos Archipelago",
+      "region_id": "r18",
       "terrain": "mountains",
       "owner": "f7",
       "controller": "f7",
@@ -3551,7 +3551,7 @@
     },
     {
       "id": "province_175",
-      "name": "Santa Cruz",
+      "name": "Patagonia",
       "region_id": "r22",
       "terrain": "mountains",
       "owner": "f7",
@@ -3573,8 +3573,8 @@
     },
     {
       "id": "province_176",
-      "name": "Aysén",
-      "region_id": "r22",
+      "name": "Taitao",
+      "region_id": "r18",
       "terrain": "plains",
       "owner": "f7",
       "controller": "f7",
@@ -3594,7 +3594,7 @@
     {
       "id": "province_177",
       "name": "Wellington Island",
-      "region_id": "r22",
+      "region_id": "r18",
       "terrain": "plains",
       "owner": "f7",
       "controller": "f7",
@@ -3613,7 +3613,7 @@
     },
     {
       "id": "province_178",
-      "name": "Santa Cruz",
+      "name": "Southern Patagonia",
       "region_id": "r22",
       "terrain": "plains",
       "owner": "f7",
@@ -3634,10 +3634,10 @@
     {
       "id": "province_179",
       "name": "West Falkland",
-      "region_id": "r23",
+      "region_id": "r13",
       "terrain": "plains",
-      "owner": "f7",
-      "controller": "f7",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_179",
       "resource_sites": {},
       "geography": {
@@ -3654,10 +3654,10 @@
     {
       "id": "province_180",
       "name": "East Falkland",
-      "region_id": "r23",
+      "region_id": "r13",
       "terrain": "plains",
-      "owner": "f7",
-      "controller": "f7",
+      "owner": "f3",
+      "controller": "f3",
       "shape_id": "province_180",
       "resource_sites": {},
       "geography": {
@@ -3673,7 +3673,7 @@
     },
     {
       "id": "province_181",
-      "name": "Magellan and the Chilean Antarctic",
+      "name": "Strait of Magellan",
       "region_id": "r23",
       "terrain": "plains",
       "owner": "f7",
@@ -3775,7 +3775,7 @@
   "regions": [
     {
       "id": "r0",
-      "name": "Yukon Region",
+      "name": "Northwest Coast",
       "provinces": [
         "province_001",
         "province_004",
@@ -3812,18 +3812,23 @@
         "province_081",
         "province_082",
         "province_084",
+        "province_085",
         "province_086",
-        "province_087"
+        "province_087",
+        "province_089",
+        "province_090",
+        "province_093",
+        "province_098"
       ],
       "production": {
         "wood": 2,
-        "food": 3,
+        "food": 1,
         "iron": 1
       }
     },
     {
       "id": "r1",
-      "name": "Canadian Shield Region",
+      "name": "Rupert's Land",
       "provinces": [
         "province_000",
         "province_002",
@@ -3868,34 +3873,28 @@
       ],
       "production": {
         "wood": 2,
-        "food": 3,
+        "food": 1,
         "iron": 1
       }
     },
     {
       "id": "r2",
-      "name": "Cascadia Region",
+      "name": "Oregon Country",
       "provinces": [
-        "province_085",
-        "province_089",
-        "province_090",
-        "province_093",
-        "province_098",
         "province_104",
         "province_105",
         "province_108",
-        "province_115",
         "province_135"
       ],
       "production": {
         "wood": 2,
-        "food": 3,
+        "food": 2,
         "iron": 1
       }
     },
     {
       "id": "r3",
-      "name": "Great Lakes Region",
+      "name": "The Canadas",
       "provinces": [
         "province_033",
         "province_036",
@@ -3908,48 +3907,47 @@
         "province_060",
         "province_070",
         "province_077",
+        "province_083",
         "province_088",
+        "province_091",
         "province_092",
         "province_095",
-        "province_101",
-        "province_110",
-        "province_112",
-        "province_114"
-      ],
-      "production": {
-        "wood": 2,
-        "food": 3,
-        "iron": 1
-      }
-    },
-    {
-      "id": "r4",
-      "name": "Great Basin Region",
-      "provinces": [
-        "province_113",
-        "province_116",
-        "province_120"
-      ],
-      "production": {
-        "wood": 2,
-        "food": 3,
-        "iron": 1
-      }
-    },
-    {
-      "id": "r5",
-      "name": "Appalachia Region",
-      "provinces": [
-        "province_083",
-        "province_091",
         "province_096",
         "province_099",
         "province_100",
+        "province_101",
         "province_102",
         "province_103",
         "province_106",
         "province_107",
         "province_109",
+        "province_110"
+      ],
+      "production": {
+        "wood": 3,
+        "food": 4,
+        "iron": 2
+      }
+    },
+    {
+      "id": "r4",
+      "name": "Mississippi Valley",
+      "provinces": [
+        "province_112",
+        "province_113",
+        "province_114",
+        "province_121"
+      ],
+      "production": {
+        "wood": 3,
+        "food": 7,
+        "iron": 3
+      }
+    },
+    {
+      "id": "r5",
+      "name": "Atlantic Seaboard",
+      "provinces": [
         "province_111",
         "province_117",
         "province_118",
@@ -3957,14 +3955,14 @@
         "province_125"
       ],
       "production": {
-        "wood": 2,
-        "food": 3,
-        "iron": 1
+        "wood": 4,
+        "food": 8,
+        "iron": 5
       }
     },
     {
       "id": "r6",
-      "name": "Sonora Region",
+      "name": "Sonora",
       "provinces": [
         "province_123",
         "province_124",
@@ -3972,42 +3970,44 @@
         "province_128"
       ],
       "production": {
-        "wood": 2,
-        "food": 3,
-        "iron": 1
+        "wood": 1,
+        "food": 2,
+        "iron": 3
       }
     },
     {
       "id": "r7",
-      "name": "Gulf Coast Region",
+      "name": "Texas",
       "provinces": [
         "province_119",
-        "province_121"
+        "province_126"
       ],
       "production": {
         "wood": 2,
-        "food": 3,
-        "iron": 1
+        "food": 5,
+        "iron": 2
       }
     },
     {
       "id": "r8",
-      "name": "Mexican Plateau Region",
+      "name": "Mexican Plateau",
       "provinces": [
-        "province_126",
-        "province_132"
+        "province_115",
+        "province_116",
+        "province_120",
+        "province_132",
+        "province_139"
       ],
       "production": {
         "wood": 2,
-        "food": 3,
-        "iron": 1
+        "food": 6,
+        "iron": 5
       }
     },
     {
       "id": "r9",
-      "name": "Yucatan Region",
+      "name": "Yucatán and Cuba",
       "provinces": [
-        "province_129",
         "province_130",
         "province_131",
         "province_133",
@@ -4015,15 +4015,14 @@
       ],
       "production": {
         "wood": 2,
-        "food": 3,
+        "food": 4,
         "iron": 1
       }
     },
     {
       "id": "r10",
-      "name": "Guatemala Region",
+      "name": "Central America",
       "provinces": [
-        "province_139",
         "province_140"
       ],
       "production": {
@@ -4034,93 +4033,97 @@
     },
     {
       "id": "r11",
-      "name": "Panama Region",
+      "name": "Isthmus and Antilles",
       "provinces": [
         "province_136",
-        "province_138",
-        "province_142",
-        "province_146"
+        "province_137",
+        "province_142"
       ],
       "production": {
         "wood": 2,
         "food": 3,
-        "iron": 1
+        "iron": 2
       }
     },
     {
       "id": "r12",
-      "name": "Colombia Region",
+      "name": "New Granada",
       "provinces": [
         "province_143",
+        "province_145",
+        "province_146",
         "province_147",
         "province_150"
       ],
       "production": {
-        "wood": 2,
-        "food": 3,
-        "iron": 1
+        "wood": 3,
+        "food": 5,
+        "iron": 4
       }
     },
     {
       "id": "r13",
-      "name": "Guiana Region",
+      "name": "British West Indies",
       "provinces": [
-        "province_137",
+        "province_129",
+        "province_138",
         "province_141",
         "province_144",
-        "province_145",
-        "province_148",
-        "province_149",
-        "province_151"
+        "province_179",
+        "province_180"
       ],
       "production": {
-        "wood": 2,
-        "food": 3,
+        "wood": 1,
+        "food": 4,
         "iron": 1
       }
     },
     {
       "id": "r14",
-      "name": "Peru Region",
+      "name": "Peru",
       "provinces": [
+        "province_154",
         "province_156"
       ],
       "production": {
         "wood": 2,
-        "food": 3,
-        "iron": 1
+        "food": 4,
+        "iron": 2
       }
     },
     {
       "id": "r15",
-      "name": "Amazonas Region",
+      "name": "Amazonas",
       "provinces": [
+        "province_148",
+        "province_149",
+        "province_151",
         "province_152",
-        "province_154",
         "province_158"
       ],
       "production": {
-        "wood": 2,
-        "food": 3,
+        "wood": 4,
+        "food": 2,
         "iron": 1
       }
     },
     {
       "id": "r16",
-      "name": "Andes Region",
+      "name": "Upper Peru",
       "provinces": [
         "province_160",
-        "province_161"
+        "province_161",
+        "province_164"
       ],
       "production": {
-        "wood": 2,
-        "food": 3,
-        "iron": 1
+        "wood": 1,
+        "food": 4,
+        "iron": 6
       }
     },
     {
       "id": "r17",
-      "name": "Brazilian Plateau Region",
+      "name": "Brazilian Highlands",
       "provinces": [
         "province_153",
         "province_155",
@@ -4130,43 +4133,46 @@
         "province_163"
       ],
       "production": {
-        "wood": 2,
-        "food": 3,
-        "iron": 1
+        "wood": 3,
+        "food": 6,
+        "iron": 4
       }
     },
     {
       "id": "r18",
-      "name": "Atacama Region",
+      "name": "Chile",
       "provinces": [
-        "province_166"
+        "province_166",
+        "province_170",
+        "province_172",
+        "province_174",
+        "province_176",
+        "province_177"
       ],
       "production": {
         "wood": 2,
         "food": 3,
-        "iron": 1
+        "iron": 3
       }
     },
     {
       "id": "r19",
-      "name": "La Plata Region",
+      "name": "Río de la Plata",
       "provinces": [
-        "province_164",
-        "province_165",
-        "province_167"
+        "province_167",
+        "province_168"
       ],
       "production": {
         "wood": 2,
-        "food": 3,
-        "iron": 1
+        "food": 4,
+        "iron": 2
       }
     },
     {
       "id": "r20",
-      "name": "Patagonia Region",
+      "name": "Rio Grande",
       "provinces": [
-        "province_170",
-        "province_172"
+        "province_165"
       ],
       "production": {
         "wood": 2,
@@ -4176,41 +4182,35 @@
     },
     {
       "id": "r21",
-      "name": "Pampas Region",
+      "name": "Pampas",
       "provinces": [
-        "province_168",
         "province_169",
         "province_171"
       ],
       "production": {
-        "wood": 2,
+        "wood": 1,
         "food": 3,
         "iron": 1
       }
     },
     {
       "id": "r22",
-      "name": "Austral Andes Region",
+      "name": "Patagonia",
       "provinces": [
         "province_173",
-        "province_174",
         "province_175",
-        "province_176",
-        "province_177",
         "province_178"
       ],
       "production": {
         "wood": 2,
-        "food": 3,
+        "food": 1,
         "iron": 1
       }
     },
     {
       "id": "r23",
-      "name": "Tierra del Fuego Region",
+      "name": "Tierra del Fuego",
       "provinces": [
-        "province_179",
-        "province_180",
         "province_181",
         "province_182",
         "province_183",
@@ -4218,300 +4218,288 @@
         "province_185"
       ],
       "production": {
-        "wood": 2,
-        "food": 3,
+        "wood": 1,
+        "food": 1,
         "iron": 1
       }
     }
   ],
   "cities": [
     {
-      "id": "city_r0",
-      "name": "Anchorage",
-      "province": "province_053",
-      "port": "north_pacific",
+      "id": "city_f0_0",
+      "name": "Washington",
+      "province": "province_118",
+      "port": "north_atlantic",
       "coordinates": [
-        -149.887446,
-        61.214004
-      ],
-      "style": "northern",
-      "location_source": "Natural Earth populated place"
-    },
-    {
-      "id": "city_r1",
-      "name": "Baker Lake",
-      "province": "province_047",
-      "port": "caribbean_sea",
-      "coordinates": [
-        -96.016656,
-        64.31699
-      ],
-      "style": "northern",
-      "location_source": "Natural Earth populated place"
-    },
-    {
-      "id": "city_r2",
-      "name": "Seattle",
-      "province": "province_105",
-      "port": "north_pacific",
-      "coordinates": [
-        -122.315322,
-        47.600423
-      ],
-      "style": "northern",
-      "location_source": "Natural Earth populated place"
-    },
-    {
-      "id": "city_r3",
-      "name": "Toronto",
-      "province": "province_110",
-      "port": "caribbean_sea",
-      "coordinates": [
-        -79.389459,
-        43.664645
+        -77.04,
+        38.9
       ],
       "style": "atlantic",
-      "location_source": "Natural Earth populated place"
+      "location_source": "Historical town, 1836"
     },
     {
-      "id": "city_r4",
-      "name": "Salt Lake City",
-      "province": "province_116",
-      "port": "north_pacific",
-      "coordinates": [
-        -111.931998,
-        40.776962
-      ],
-      "style": "atlantic",
-      "location_source": "Natural Earth populated place"
-    },
-    {
-      "id": "city_r5",
-      "name": "Boston",
+      "id": "city_f0_1",
+      "name": "New York",
       "province": "province_111",
-      "port": "caribbean_sea",
+      "port": "north_atlantic",
       "coordinates": [
-        -71.07196,
-        42.331906
+        -74.0,
+        40.71
       ],
       "style": "atlantic",
-      "location_source": "Natural Earth populated place"
+      "location_source": "Historical town, 1836"
     },
     {
-      "id": "city_r6",
-      "name": "Ciudad Juárez",
-      "province": "province_123",
-      "port": "north_pacific",
-      "coordinates": [
-        -106.491994,
-        31.692323
-      ],
-      "style": "sierra",
-      "location_source": "Natural Earth populated place"
-    },
-    {
-      "id": "city_r7",
-      "name": "Fort Worth",
-      "province": "province_119",
+      "id": "city_f0_2",
+      "name": "New Orleans",
+      "province": "province_121",
       "port": "caribbean_sea",
       "coordinates": [
-        -97.340038,
-        32.739977
-      ],
-      "style": "sierra",
-      "location_source": "Natural Earth populated place"
-    },
-    {
-      "id": "city_r8",
-      "name": "Houston",
-      "province": "province_126",
-      "port": "caribbean_sea",
-      "coordinates": [
-        -95.348436,
-        29.741273
-      ],
-      "style": "sierra",
-      "location_source": "Natural Earth populated place"
-    },
-    {
-      "id": "city_r9",
-      "name": "Havana",
-      "province": "province_130",
-      "port": "caribbean_sea",
-      "coordinates": [
-        -82.366128,
-        23.133905
+        -90.07,
+        29.95
       ],
       "style": "caribbean",
-      "location_source": "Natural Earth populated place"
+      "location_source": "Historical town, 1836"
     },
     {
-      "id": "city_r10",
+      "id": "city_f1_0",
       "name": "Mexico City",
       "province": "province_139",
       "port": "caribbean_sea",
       "coordinates": [
-        -99.132934,
-        19.444388
+        -99.13,
+        19.43
       ],
-      "style": "caribbean",
-      "location_source": "Natural Earth populated place"
+      "style": "sierra",
+      "location_source": "Historical town, 1836"
     },
     {
-      "id": "city_r11",
-      "name": "Medellín",
-      "province": "province_142",
+      "id": "city_f1_1",
+      "name": "Guadalajara",
+      "province": "province_132",
+      "port": null,
+      "coordinates": [
+        -103.35,
+        20.67
+      ],
+      "style": "sierra",
+      "location_source": "Historical town, 1836"
+    },
+    {
+      "id": "city_f1_2",
+      "name": "Monterey",
+      "province": "province_120",
+      "port": "north_pacific",
+      "coordinates": [
+        -121.89,
+        36.6
+      ],
+      "style": "sierra",
+      "location_source": "Historical town, 1836"
+    },
+    {
+      "id": "city_f2_0",
+      "name": "Washington-on-the-Brazos",
+      "province": "province_126",
       "port": "caribbean_sea",
       "coordinates": [
-        -75.576956,
-        6.276949
+        -96.16,
+        30.33
       ],
-      "style": "caribbean",
-      "location_source": "Natural Earth populated place"
+      "style": "sierra",
+      "location_source": "Historical town, 1836"
     },
     {
-      "id": "city_r12",
-      "name": "Bogota",
+      "id": "city_f2_1",
+      "name": "San Antonio",
+      "province": "province_126",
+      "port": null,
+      "coordinates": [
+        -98.49,
+        29.42
+      ],
+      "style": "sierra",
+      "location_source": "Historical town, 1836"
+    },
+    {
+      "id": "city_f3_0",
+      "name": "Quebec",
+      "province": "province_103",
+      "port": "north_atlantic",
+      "coordinates": [
+        -71.21,
+        46.81
+      ],
+      "style": "atlantic",
+      "location_source": "Historical town, 1836"
+    },
+    {
+      "id": "city_f3_1",
+      "name": "Toronto",
+      "province": "province_110",
+      "port": null,
+      "coordinates": [
+        -79.38,
+        43.65
+      ],
+      "style": "atlantic",
+      "location_source": "Historical town, 1836"
+    },
+    {
+      "id": "city_f3_2",
+      "name": "York Factory",
+      "province": "province_079",
+      "port": "north_atlantic",
+      "coordinates": [
+        -92.4,
+        57.0
+      ],
+      "style": "northern",
+      "location_source": "Historical town, 1836"
+    },
+    {
+      "id": "city_f4_0",
+      "name": "Bogotá",
       "province": "province_150",
-      "port": "caribbean_sea",
+      "port": null,
       "coordinates": [
-        -74.08529,
-        4.598369
+        -74.07,
+        4.71
       ],
       "style": "andean",
-      "location_source": "Natural Earth populated place"
+      "location_source": "Historical town, 1836"
     },
     {
-      "id": "city_r13",
-      "name": "Boa Vista",
-      "province": "province_145",
+      "id": "city_f4_1",
+      "name": "Caracas",
+      "province": "province_143",
       "port": "caribbean_sea",
       "coordinates": [
-        -60.665998,
-        2.816093
+        -66.9,
+        10.5
       ],
-      "style": "andean",
-      "location_source": "Natural Earth populated place"
+      "style": "caribbean",
+      "location_source": "Historical town, 1836"
     },
     {
-      "id": "city_r14",
+      "id": "city_f4_2",
+      "name": "Quito",
+      "province": "province_147",
+      "port": "south_pacific",
+      "coordinates": [
+        -78.47,
+        -0.18
+      ],
+      "style": "andean",
+      "location_source": "Historical town, 1836"
+    },
+    {
+      "id": "city_f5_0",
       "name": "Lima",
       "province": "province_156",
       "port": "south_pacific",
       "coordinates": [
-        -77.052008,
-        -12.046067
+        -77.04,
+        -12.05
       ],
       "style": "andean",
-      "location_source": "Natural Earth populated place"
+      "location_source": "Historical town, 1836"
     },
     {
-      "id": "city_r15",
-      "name": "Porto Velho",
-      "province": "province_154",
-      "port": "caribbean_sea",
-      "coordinates": [
-        -63.900012,
-        -8.750023
-      ],
-      "style": "amazon",
-      "location_source": "Natural Earth populated place"
-    },
-    {
-      "id": "city_r16",
+      "id": "city_f5_1",
       "name": "La Paz",
       "province": "province_160",
-      "port": "south_pacific",
+      "port": null,
       "coordinates": [
-        -68.151931,
-        -16.496028
+        -68.15,
+        -16.5
       ],
-      "style": "amazon",
-      "location_source": "Natural Earth populated place"
+      "style": "andean",
+      "location_source": "Historical town, 1836"
     },
     {
-      "id": "city_r17",
-      "name": "Goiânia",
-      "province": "province_162",
+      "id": "city_f5_2",
+      "name": "Chuquisaca",
+      "province": "province_161",
+      "port": null,
+      "coordinates": [
+        -65.26,
+        -19.04
+      ],
+      "style": "andean",
+      "location_source": "Historical town, 1836"
+    },
+    {
+      "id": "city_f6_0",
+      "name": "Rio de Janeiro",
+      "province": "province_163",
       "port": "south_atlantic",
       "coordinates": [
-        -49.301971,
-        -16.718081
+        -43.2,
+        -22.9
       ],
-      "style": "amazon",
-      "location_source": "Natural Earth populated place"
+      "style": "caribbean",
+      "location_source": "Historical town, 1836"
     },
     {
-      "id": "city_r18",
+      "id": "city_f6_1",
+      "name": "Salvador",
+      "province": "province_155",
+      "port": "south_atlantic",
+      "coordinates": [
+        -38.5,
+        -12.97
+      ],
+      "style": "caribbean",
+      "location_source": "Historical town, 1836"
+    },
+    {
+      "id": "city_f6_2",
+      "name": "Belém",
+      "province": "province_151",
+      "port": "south_atlantic",
+      "coordinates": [
+        -48.5,
+        -1.45
+      ],
+      "style": "amazon",
+      "location_source": "Historical town, 1836"
+    },
+    {
+      "id": "city_f7_0",
+      "name": "Buenos Aires",
+      "province": "province_168",
+      "port": "south_atlantic",
+      "coordinates": [
+        -58.38,
+        -34.6
+      ],
+      "style": "southern",
+      "location_source": "Historical town, 1836"
+    },
+    {
+      "id": "city_f7_1",
       "name": "Santiago",
       "province": "province_166",
       "port": "south_pacific",
       "coordinates": [
-        -70.650504,
-        -33.440205
+        -70.65,
+        -33.45
       ],
       "style": "southern",
-      "location_source": "Natural Earth populated place"
+      "location_source": "Historical town, 1836"
     },
     {
-      "id": "city_r19",
-      "name": "Tucumán",
-      "province": "province_164",
-      "port": "south_pacific",
+      "id": "city_f7_2",
+      "name": "Córdoba",
+      "province": "province_167",
+      "port": null,
       "coordinates": [
-        -65.21857,
-        -26.814054
+        -64.18,
+        -31.42
       ],
       "style": "southern",
-      "location_source": "Natural Earth populated place"
-    },
-    {
-      "id": "city_r20",
-      "name": "Concepción",
-      "province": "province_170",
-      "port": "south_pacific",
-      "coordinates": [
-        -73.050022,
-        -36.830014
-      ],
-      "style": "southern",
-      "location_source": "Natural Earth populated place"
-    },
-    {
-      "id": "city_r21",
-      "name": "Bahía Blanca",
-      "province": "province_169",
-      "port": "south_pacific",
-      "coordinates": [
-        -62.265021,
-        -38.740027
-      ],
-      "style": "austral",
-      "location_source": "Natural Earth populated place"
-    },
-    {
-      "id": "city_r22",
-      "name": "Comodoro Rivadavia",
-      "province": "province_173",
-      "port": "south_pacific",
-      "coordinates": [
-        -67.499999,
-        -45.870031
-      ],
-      "style": "austral",
-      "location_source": "Natural Earth populated place"
-    },
-    {
-      "id": "city_r23",
-      "name": "Fox Bay",
-      "province": "province_179",
-      "port": "south_atlantic",
-      "coordinates": [
-        -60.086963,
-        -51.95059
-      ],
-      "style": "austral",
-      "location_source": "Natural Earth populated place"
+      "location_source": "Historical town, 1836"
     }
   ],
   "units": [
@@ -4519,49 +4507,85 @@
       "id": "infantry0_0",
       "kind": "infantry",
       "owner": "f0",
-      "location": "province_053"
+      "location": "province_118"
     },
     {
       "id": "infantry0_1",
       "kind": "infantry",
       "owner": "f0",
-      "location": "province_047"
+      "location": "province_111"
+    },
+    {
+      "id": "scout0",
+      "kind": "scout",
+      "owner": "f0",
+      "location": "province_118"
+    },
+    {
+      "id": "fleet0",
+      "kind": "fleet",
+      "owner": "f0",
+      "location": "north_atlantic"
     },
     {
       "id": "infantry1_0",
       "kind": "infantry",
       "owner": "f1",
-      "location": "province_110"
+      "location": "province_139"
     },
     {
       "id": "infantry1_1",
       "kind": "infantry",
       "owner": "f1",
-      "location": "province_116"
+      "location": "province_132"
+    },
+    {
+      "id": "scout1",
+      "kind": "scout",
+      "owner": "f1",
+      "location": "province_139"
     },
     {
       "id": "infantry2_0",
       "kind": "infantry",
       "owner": "f2",
-      "location": "province_123"
+      "location": "province_126"
     },
     {
       "id": "infantry2_1",
       "kind": "infantry",
       "owner": "f2",
-      "location": "province_119"
+      "location": "province_126"
+    },
+    {
+      "id": "scout2",
+      "kind": "scout",
+      "owner": "f2",
+      "location": "province_126"
     },
     {
       "id": "infantry3_0",
       "kind": "infantry",
       "owner": "f3",
-      "location": "province_130"
+      "location": "province_103"
     },
     {
       "id": "infantry3_1",
       "kind": "infantry",
       "owner": "f3",
-      "location": "province_139"
+      "location": "province_110"
+    },
+    {
+      "id": "scout3",
+      "kind": "scout",
+      "owner": "f3",
+      "location": "province_103"
+    },
+    {
+      "id": "fleet3",
+      "kind": "fleet",
+      "owner": "f3",
+      "location": "north_atlantic"
     },
     {
       "id": "infantry4_0",
@@ -4573,79 +4597,7 @@
       "id": "infantry4_1",
       "kind": "infantry",
       "owner": "f4",
-      "location": "province_145"
-    },
-    {
-      "id": "infantry5_0",
-      "kind": "infantry",
-      "owner": "f5",
-      "location": "province_154"
-    },
-    {
-      "id": "infantry5_1",
-      "kind": "infantry",
-      "owner": "f5",
-      "location": "province_160"
-    },
-    {
-      "id": "infantry6_0",
-      "kind": "infantry",
-      "owner": "f6",
-      "location": "province_166"
-    },
-    {
-      "id": "infantry6_1",
-      "kind": "infantry",
-      "owner": "f6",
-      "location": "province_164"
-    },
-    {
-      "id": "infantry7_0",
-      "kind": "infantry",
-      "owner": "f7",
-      "location": "province_169"
-    },
-    {
-      "id": "infantry7_1",
-      "kind": "infantry",
-      "owner": "f7",
-      "location": "province_173"
-    },
-    {
-      "id": "balloon0",
-      "kind": "balloon",
-      "owner": "f0",
-      "location": "province_053"
-    },
-    {
-      "id": "fleet0",
-      "kind": "fleet",
-      "owner": "f0",
-      "location": "north_pacific"
-    },
-    {
-      "id": "scout0",
-      "kind": "scout",
-      "owner": "f0",
-      "location": "province_053"
-    },
-    {
-      "id": "scout1",
-      "kind": "scout",
-      "owner": "f1",
-      "location": "province_110"
-    },
-    {
-      "id": "scout2",
-      "kind": "scout",
-      "owner": "f2",
-      "location": "province_123"
-    },
-    {
-      "id": "scout3",
-      "kind": "scout",
-      "owner": "f3",
-      "location": "province_130"
+      "location": "province_143"
     },
     {
       "id": "scout4",
@@ -4654,49 +4606,89 @@
       "location": "province_150"
     },
     {
+      "id": "infantry5_0",
+      "kind": "infantry",
+      "owner": "f5",
+      "location": "province_156"
+    },
+    {
+      "id": "infantry5_1",
+      "kind": "infantry",
+      "owner": "f5",
+      "location": "province_160"
+    },
+    {
       "id": "scout5",
       "kind": "scout",
       "owner": "f5",
-      "location": "province_154"
+      "location": "province_156"
+    },
+    {
+      "id": "infantry6_0",
+      "kind": "infantry",
+      "owner": "f6",
+      "location": "province_163"
+    },
+    {
+      "id": "infantry6_1",
+      "kind": "infantry",
+      "owner": "f6",
+      "location": "province_155"
     },
     {
       "id": "scout6",
       "kind": "scout",
       "owner": "f6",
+      "location": "province_163"
+    },
+    {
+      "id": "fleet6",
+      "kind": "fleet",
+      "owner": "f6",
+      "location": "south_atlantic"
+    },
+    {
+      "id": "infantry7_0",
+      "kind": "infantry",
+      "owner": "f7",
+      "location": "province_168"
+    },
+    {
+      "id": "infantry7_1",
+      "kind": "infantry",
+      "owner": "f7",
       "location": "province_166"
     },
     {
       "id": "scout7",
       "kind": "scout",
       "owner": "f7",
-      "location": "province_169"
+      "location": "province_168"
+    },
+    {
+      "id": "balloon0",
+      "kind": "balloon",
+      "owner": "f0",
+      "location": "province_118"
     }
   ],
   "ports": {
-    "province_053": "north_pacific",
-    "province_047": "caribbean_sea",
-    "province_105": "north_pacific",
-    "province_110": "caribbean_sea",
-    "province_116": "north_pacific",
-    "province_111": "caribbean_sea",
-    "province_123": "north_pacific",
-    "province_119": "caribbean_sea",
-    "province_126": "caribbean_sea",
-    "province_130": "caribbean_sea",
+    "province_118": "north_atlantic",
+    "province_111": "north_atlantic",
+    "province_121": "caribbean_sea",
     "province_139": "caribbean_sea",
-    "province_142": "caribbean_sea",
-    "province_150": "caribbean_sea",
-    "province_145": "caribbean_sea",
+    "province_120": "north_pacific",
+    "province_126": "caribbean_sea",
+    "province_103": "north_atlantic",
+    "province_079": "north_atlantic",
+    "province_143": "caribbean_sea",
+    "province_147": "south_pacific",
     "province_156": "south_pacific",
-    "province_154": "caribbean_sea",
-    "province_160": "south_pacific",
-    "province_162": "south_atlantic",
-    "province_166": "south_pacific",
-    "province_164": "south_pacific",
-    "province_170": "south_pacific",
-    "province_169": "south_pacific",
-    "province_173": "south_pacific",
-    "province_179": "south_atlantic"
+    "province_163": "south_atlantic",
+    "province_155": "south_atlantic",
+    "province_151": "south_atlantic",
+    "province_168": "south_atlantic",
+    "province_166": "south_pacific"
   },
   "starting_resources": {
     "wood": 20,
@@ -9518,5 +9510,15 @@
   "objectives": {
     "cities": 3,
     "turns": 5
-  }
+  },
+  "wars": [
+    [
+      "f1",
+      "f2"
+    ],
+    [
+      "f5",
+      "f7"
+    ]
+  ]
 }

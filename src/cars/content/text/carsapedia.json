@@ -5,7 +5,7 @@
     "category": "Getting started",
     "summary": "What the game is, and how to win it.",
     "body": [
-      "C.A.R.S. (Combat Arms Region Simulator) is a turn-based strategy game set in an imagined Americas of 1800. Eight nations, each with its own history and [[traits|national traits]], contest a continent divided into provinces. You lead one of them; the other seven are played by the computer.",
+      "C.A.R.S. (Combat Arms Region Simulator) is a turn-based strategy game set in the Americas of 1836. Eight nations of the period, each with its own history and [[traits|national traits]], contest a continent divided into provinces. You lead one of them; the other seven are played by the computer.",
       "You win by [[victory|holding enough cities for long enough]]. To get there you will march and fight with armies, fleets and balloon corps, build up your provinces, keep your armies fed and supplied, and decide whom to fight and with whom to make [[war-and-peace|peace]].",
       "New to the game? Read [[first-turn|Your first turn]], then [[interface|The interface]]. Every rule has its own article in this library, and the numbers in it are read from the game itself, so they are always current."
     ],
@@ -17,7 +17,7 @@
     "category": "Getting started",
     "summary": "A walk through the first few orders of a campaign.",
     "body": [
-      "1. Choose a nation. Each has its own [[nations|history, territory and traits]]; the Northern Union starts with a fleet and an air group, the others with armies.",
+      "1. Choose a nation. Each has its own [[nations|history, territory and traits]]; the United States starts with a balloon corps, and the United States, British North America and Brazil each have a fleet.",
       "2. Click one of your army plates on the map. Provinces it can reach this turn are outlined in gold. Hover one to see the route arrow; hover an enemy province to see an [[forecast|order forecast]] of the battle.",
       "3. Click a destination to march. Moving into an enemy province attacks it. See [[movement]] and [[combat|land battles]].",
       "4. Right-click one of your cities to open its province. Build a farm or a road, or raise a new regiment from the recruitment table. See [[construction]] and [[recruitment]].",
@@ -85,7 +85,7 @@
     "summary": "How a round unfolds and how time passes.",
     "body": [
       "A round is one date. On it you give all your orders, then press End Turn: your production is collected, your [[upkeep]] paid, and the seven rival nations take their turns one after another. Your next turn begins on the next date, with movement and sorties restored.",
-      "The calendar runs by season from Spring 1800. Time passes only when you end your turn; there is never a deadline. Press T or click the date for the calendar and the path to [[victory|dominion]]."
+      "The calendar runs by season from Spring 1836. Time passes only when you end your turn; there is never a deadline. Press T or click the date for the calendar and the path to [[victory|dominion]]."
     ],
     "see_also": ["victory", "end-turn"]
   },
@@ -304,7 +304,7 @@
     "category": "Diplomacy",
     "summary": "Making peace, and breaking it.",
     "body": [
-      "Every nation begins at war with every other. The Diplomacy panel (D) lists each rival, its strength and its relation to you.",
+      "The campaign opens with the wars of 1836: Mexico against the rebels of Texas, and the Argentine Confederation against Santa Cruz's Peru-Bolivian Confederation. Every other pair of nations starts at peace, under a truce. The Diplomacy panel (D) lists each rival, its strength and its relation to you.",
       "You can offer peace to a rival no stronger than you. Peace closes both borders: neither side may enter the other's provinces, or attack its armies or fleets. A truce follows for {diplomacy.truce_rounds} rounds, after which either side may declare war again, and a rival more than ×{diplomacy.war_strength_ratio} your strength will.",
       "Rivals also fight each other, until one grows too large: see [[coalitions]]."
     ],
@@ -334,12 +334,14 @@
   },
   {
     "id": "world",
-    "title": "The Americas in 1800",
+    "title": "The Americas in 1836",
     "category": "The world",
-    "summary": "The setting of the campaign.",
+    "summary": "The setting of the campaign, and where it simplifies history.",
     "body": [
-      "This is not the history you know. In this world no single revolution united the colonies of the Americas. Instead, over the last three decades of the eighteenth century, eight nations formed from trading companies, settler councils, city leagues, highland revolts and a pirate navy, and by 1800 they had divided the continent between them.",
-      "Read about each of them under [[nations]]. Their borders follow no historical frontier: the provinces are drawn from real geography, but the nations, their rulers and their regiments are inventions. The game also mixes periods on purpose: an air service exists alongside musket regiments."
+      "The campaign opens in the spring of 1836. Texas has just declared its independence from Mexico; Andrés de Santa Cruz is joining Peru and Bolivia into one confederation; Brazil is ruled by regents for a boy emperor and fighting rebels in the far north and south; Rosas holds Buenos Aires; and Britain's colonies and the Hudson's Bay Company hold the north of the continent.",
+      "Eight nations of the period take part. Read about each under [[nations]]. Their rulers, capitals and histories are real; their borders follow the frontiers of 1836 as closely as the game's provinces allow.",
+      "Some simplifications were needed. The provinces are drawn from modern geography, so their outlines are not the frontiers of 1836, and each belongs to one of the eight nations. Smaller states and colonies are folded into their nearest neighbour: Venezuela and Ecuador stand with New Granada, Chile with the Argentine Confederation, Central America and Spanish Cuba with Mexico, and the Russian-American coast with British North America. The lands of the Comanche, Lakota, Mapuche and many other peoples, which no government of 1836 controlled, are drawn inside the claims of the states around them.",
+      "One invention remains: [[balloons|balloon corps]]. Observation balloons had served France in the 1790s, but no army in the Americas used them before the 1860s."
     ],
     "see_also": ["nations", "charters"]
   },
@@ -349,7 +351,7 @@
     "category": "The world",
     "summary": "What makes each nation play differently.",
     "body": [
-      "Each nation has two traits drawn from its history, with real effects on the rules: cheaper fleets for a maritime republic, better defence in the mountains for a highland pact, more food for a river federation. The table below lists them all; each nation's article explains where they come from.",
+      "Each nation has two traits drawn from its history, with real effects on the rules: cheaper fleets for Britain's Royal Navy, better defence in the Andes for New Granada, cheap cavalry for the Texas Rangers. The table below lists them all; each nation's article explains where they come from.",
       "Traits are data, so a mod can change them (see [[mods]])."
     ],
     "see_also": ["nations"]
@@ -371,8 +373,8 @@
     "category": "The world",
     "summary": "Named local formations.",
     "body": [
-      "Many regions can raise their own formation: scouts of the Yukon trails, riders of the pampas, river companies of the Amazon. Each is a standard arm with {recruitment.regional_surcharge} extra of each resource in its cost and a discount on movement in its home terrain. They wear their region's uniform and carry a gold diamond on their plate. Recruit one from the recruitment table of a city in its region.",
-      "All the charters are listed below. Like the nations, they are inventions of this game."
+      "Many regions can raise their own formation: the Texas Rangers, the Glengarry Light Infantry, Rosas' Colorados del Monte. Each is a standard arm with {recruitment.regional_surcharge} extra of each resource in its cost and a discount on movement in its home terrain. They wear their region's uniform and carry a gold diamond on their plate. Recruit one from the recruitment table of a city in its region.",
+      "All the charters are listed below. Each is modelled on a formation of the period, though its rules are the game's."
     ],
     "see_also": ["recruitment", "units"]
   },

@@ -1,82 +1,82 @@
 [
   {
     "id": "f0",
-    "name": "Northern Union",
+    "name": "United States",
     "color": [
-      78,
-      151,
-      191
+      62,
+      104,
+      170
     ],
-    "style": "northern"
+    "style": "american"
   },
   {
     "id": "f1",
-    "name": "Atlantic League",
+    "name": "Mexico",
     "color": [
-      199,
-      111,
-      88
+      48,
+      140,
+      112
     ],
-    "style": "atlantic"
+    "style": "mexican"
   },
   {
     "id": "f2",
-    "name": "Sierra Compact",
+    "name": "Texas",
     "color": [
-      197,
-      167,
-      83
+      182,
+      98,
+      120
     ],
-    "style": "sierra"
+    "style": "texan"
   },
   {
     "id": "f3",
-    "name": "Caribbean Accord",
+    "name": "British North America",
     "color": [
-      105,
-      168,
-      118
+      190,
+      70,
+      64
     ],
-    "style": "caribbean"
+    "style": "british"
   },
   {
     "id": "f4",
-    "name": "Andean Pact",
+    "name": "New Granada",
     "color": [
-      153,
-      121,
-      189
+      226,
+      174,
+      60
     ],
-    "style": "andean"
+    "style": "granadine"
   },
   {
     "id": "f5",
-    "name": "Amazon Federation",
+    "name": "Peru-Bolivian Confederation",
     "color": [
-      69,
-      173,
-      166
+      124,
+      98,
+      172
     ],
-    "style": "amazon"
+    "style": "confederation"
   },
   {
     "id": "f6",
-    "name": "Southern Coalition",
+    "name": "Empire of Brazil",
     "color": [
-      198,
-      137,
-      175
+      100,
+      160,
+      72
     ],
-    "style": "southern"
+    "style": "brazilian"
   },
   {
     "id": "f7",
-    "name": "Austral Republic",
+    "name": "Argentine Confederation",
     "color": [
-      148,
-      159,
-      99
+      108,
+      168,
+      214
     ],
-    "style": "austral"
+    "style": "argentine"
   }
 ]

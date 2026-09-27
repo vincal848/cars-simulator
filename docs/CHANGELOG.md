@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+- **The Americas of 1836.** The eight invented nations give way to the powers of
+  1836: the United States, Mexico, the new Republic of Texas, British North
+  America, New Granada, the Peru-Bolivian Confederation, the Empire of Brazil
+  and the Argentine Confederation, with their real rulers, capitals, histories
+  and new national traits. Provinces carry period names (Upper Canada, Alta
+  California, Rupert's Land), cities are the towns of the day, regions follow
+  the frontiers of 1836 with production that reflects their weight, and the 24
+  regional charters are formations of the period, from the Texas Rangers to the
+  Colorados del Monte. Uniforms follow each nation's army. The campaign opens in
+  Spring 1836 with the wars then under way (Mexico against Texas, the Argentine
+  Confederation against Santa Cruz); every other pair of nations starts at peace,
+  and rivals only declare war on a neighbour.
 - **Balloon corps replace air groups.** A corps goes up once a turn over a
   province in range: it and its neighbours stay in view through the fog of war
   until your next turn, and your artillery attacking it is half again as

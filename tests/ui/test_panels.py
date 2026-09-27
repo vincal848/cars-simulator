@@ -77,6 +77,7 @@ class DiplomacyPanelTests(ScreenTestCase):
 
     def setUp(self):
         super().setUp()
+        self.state.relations.clear()  # A war of all against all, whatever the scenario opens with.
         self.game.open_panel("diplomacy")
         self.panel = self.game.panel
 

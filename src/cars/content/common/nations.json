@@ -1,138 +1,202 @@
 {
   "f0": {
-    "capital": "Seattle",
-    "ruler": "First Warden Elias Marrow",
-    "government": "Frontier union of trading posts and settler councils",
-    "founded": 1771,
-    "motto": "The long road is ours",
-    "summary": "Fur traders, loggers and settler councils holding the vast northwest from the Pacific ports to the Arctic shore.",
+    "capital": "Washington",
+    "ruler": "President Andrew Jackson",
+    "government": "Federal republic of twenty-four states",
+    "founded": 1776,
+    "motto": "E pluribus unum",
+    "summary": "A young republic of farms, ports and restless settlers, looking west across the Mississippi.",
     "history": [
-      "The Northern Union began as a compact between the fur companies of the Pacific coast and the settler councils of the interior, signed at Seattle in 1771 to keep the peace along the trade roads. Its councils never ruled much, but they ruled far: every post from the Alaskan ports to the shores of Baker Lake owes the Union its roads, its garrisons and its tariffs.",
-      "The Union's strength is distance. Its rivals would have to march for months through forest and tundra to reach anything that matters, and its trappers and rangers know every trail. Its weakness is the same: the Union is thinly settled, its harvests are short, and its armies are small for the ground they must hold.",
-      "The First Warden, Elias Marrow, is a former quartermaster who distrusts the Atlantic League's ambitions in the east and the southern nations' growing fleets. He keeps a fleet at Anchorage and the continent's only air group at readiness, and he means to use them."
+      "Sixty years after its independence, the United States stretches from the Atlantic seaboard to the Louisiana Purchase. Andrew Jackson is in the last year of his presidency; his war on the Bank of the United States and his removal of the southeastern nations beyond the Mississippi have divided the country, and Arkansas and Michigan are about to join the Union.",
+      "Americans have been settling in Mexican Texas for fifteen years, and many in the southern states openly hope the rebellion there will end in annexation. In the northwest the republic shares the Oregon Country with Britain under the joint occupation agreed in 1818, and its fur men already work the passes of the Rockies.",
+      "The regular army is small, a few thousand men scattered along the frontier forts, but the states can raise militia in numbers no neighbour can match. The navy keeps squadrons in the Atlantic, the Caribbean and the Pacific."
     ],
     "traits": [
-      {"name": "Trailwise", "effect": "Land units pay 15% less movement in forests.", "modifiers": {"movement_terrain": {"forest": 0.85}}},
-      {"name": "Long Winters", "effect": "Units eat 20% less food.", "modifiers": {"upkeep": {"food": 0.8}}}
+      {
+        "name": "Westward Settlers",
+        "effect": "Land units pay 15% less movement in forests.",
+        "modifiers": {"movement_terrain": {"forest": 0.85}}
+      },
+      {
+        "name": "Yeoman Farms",
+        "effect": "15% more food.",
+        "modifiers": {"production": {"food": 1.15}}
+      }
     ]
   },
   "f1": {
-    "capital": "Boston",
-    "ruler": "Chancellor Margaret Ashdown",
-    "government": "Mercantile league of chartered cities",
-    "founded": 1776,
-    "motto": "Commerce and constancy",
-    "summary": "The chartered cities of the Atlantic seaboard and the Great Lakes, rich in trade and drilled regiments, hungry for the interior.",
+    "capital": "Mexico City",
+    "ruler": "Acting President José Justo Corro",
+    "government": "Centralist republic",
+    "founded": 1821,
+    "motto": "Religión, Independencia, Unión",
+    "summary": "The largest state of the Americas, rich in silver and divided over who should rule it.",
     "history": [
-      "When the eastern colonies broke from their distant crown in 1776, the victors did not form one republic but a league: Boston, Toronto and a dozen lesser cities, each with its own charter, bound by a common treasury and a common army. The League's Chancellor is elected by the city councils and answers to the merchants who fund them.",
-      "The League is the richest nation on the continent and its regiments are the best drilled. Its merchant houses trade with every port from Havana to the Pacific, and its gold buys what its farms cannot grow. Its borders, though, are long, and it has quarrelled with the Northern Union over the lakes and with the Sierra Compact over the western trails.",
-      "Chancellor Ashdown won office promising to open the continent's interior to League settlers. Salt Lake City, founded by League companies beyond the plains, is the first fruit of that promise, and the one most exposed to attack."
+      "Mexico won its independence from Spain in 1821 and reaches from Yucatán to the Pacific coast of Alta California. Its governments have risen and fallen by pronunciamiento ever since. In 1835 General Antonio López de Santa Anna set aside the federal constitution of 1824, and several states rose against the new centralist order.",
+      "Texas was one of them. Santa Anna marched north to crush the rebels, took the Alamo in March 1836 and was then routed and captured at San Jacinto. In Mexico City the acting president, José Justo Corro, and congress refuse to recognise the treaties the captive general signed, and insist that Texas is still Mexican.",
+      "The silver mines of Zacatecas and Guanajuato pay for a large army of regulars and active militia, but the treasury is always short, the northern frontier is thinly held, and Yucatán and the far north resent rule from the capital."
     ],
     "traits": [
-      {"name": "Merchant Houses", "effect": "+3 gold every turn.", "modifiers": {"gold_income": 3}},
-      {"name": "Drilled Regulars", "effect": "Infantry attack 10% harder.", "modifiers": {"attack": {"infantry": 1.1}}}
+      {
+        "name": "Zacatecas Silver",
+        "effect": "+3 gold every turn.",
+        "modifiers": {"gold_income": 3}
+      },
+      {
+        "name": "Permanent Battalions",
+        "effect": "Infantry attack 10% harder.",
+        "modifiers": {"attack": {"infantry": 1.1}}
+      }
     ]
   },
   "f2": {
-    "capital": "Fort Worth",
-    "ruler": "Governor-General Tomás Villarreal",
-    "government": "Compact of ranching provinces and frontier towns",
-    "founded": 1783,
-    "motto": "Ride together or fall apart",
-    "summary": "Ranchers, riders and river towns of the southern plains and northern Mexico, united by the need to guard a long, open frontier.",
+    "capital": "Washington-on-the-Brazos",
+    "ruler": "Interim President David G. Burnet",
+    "government": "Provisional republic",
+    "founded": 1836,
+    "motto": "Remember the Alamo",
+    "summary": "A rebel republic of a few thousand settlers, declared in March 1836 and fighting for its life.",
     "history": [
-      "The Sierra Compact was sworn at Ciudad Juárez in 1783 by the ranching families of the northern provinces and the new towns of the Texas plains, who had learned that no single one of them could hold the open country alone. Its Governor-General commands the Compact's riders; its provincial juntas levy their pay.",
-      "The Compact's lands are wide, dry and hard to defend, and its people have made a virtue of it. Its cavalry is cheap to raise from the ranches and fast on the open plains, and its towns of Houston and Fort Worth trade cattle and cotton down the rivers to the Gulf.",
-      "Governor-General Villarreal fought the Atlantic League's settlers on the northern trails as a young officer. He trusts horses more than walls and allies more than either, and he watches the Caribbean Accord's hold on Mexico City with open resentment."
+      "Americans came to Mexican Texas from the 1820s at the invitation of empresarios such as Stephen F. Austin, and by 1835 they far outnumbered the Tejano population. When Santa Anna abolished the federal constitution, the colonists rose, drove the Mexican garrisons out of San Antonio, and on 2 March 1836 declared independence at Washington-on-the-Brazos.",
+      "The Alamo fell four days later and the prisoners taken at Goliad were shot. Sam Houston's small army retreated east, drawing the Mexican columns after it, until it turned and routed Santa Anna at San Jacinto on 21 April. The republic survives, but its treasury is empty and its army is made of volunteers who may go home.",
+      "Texas can call on the Rangers, mounted frontier volunteers, and on sympathisers across the Sabine in the United States. It holds little beyond the settled river valleys between the Sabine and the Nueces."
     ],
     "traits": [
-      {"name": "Frontier Riders", "effect": "Cavalry costs 20% less to recruit.", "modifiers": {"recruit_cost": {"cavalry": 0.8}}},
-      {"name": "Open Country", "effect": "Cavalry attack 10% harder.", "modifiers": {"attack": {"cavalry": 1.1}}}
+      {
+        "name": "Texas Rangers",
+        "effect": "Cavalry costs 20% less to recruit.",
+        "modifiers": {"recruit_cost": {"cavalry": 0.8}}
+      },
+      {
+        "name": "Remember the Alamo",
+        "effect": "Units defend 15% better in the republic's own provinces.",
+        "modifiers": {"defense_home": 1.15}
+      }
     ]
   },
   "f3": {
-    "capital": "Havana",
-    "ruler": "Admiral-President Isabel Carranza",
-    "government": "Maritime republic of island and coastal cities",
-    "founded": 1790,
-    "motto": "The sea joins us",
-    "summary": "A maritime republic joining the islands and coasts of the Caribbean, from Havana to Mexico City and Medellín, bound by its fleets.",
+    "capital": "Quebec",
+    "ruler": "Governor-in-Chief the Earl of Gosford",
+    "government": "Crown colonies and the Hudson's Bay Company",
+    "founded": 1763,
+    "motto": "Dieu et mon droit",
+    "summary": "Britain's American colonies and the fur empire of the Hudson's Bay Company, held by the Royal Navy.",
     "history": [
-      "The Caribbean Accord was born at sea. In 1790 the port cities of the islands and the Gulf coast, tired of paying tribute to distant powers, pooled their privateers into one navy and declared a republic with its capital at Havana. Mexico City joined for protection; Medellín for trade.",
-      "No nation on the continent builds ships more cheaply or sails them better. The Accord's harbours ship timber and sugar to every coast, and its merchants are as welcome in League ports as its warships are feared. On land it is weaker: its provinces are scattered across the sea and hard to supply.",
-      "Admiral-President Carranza commanded the fleet that won the Accord its independence. She believes the nation that rules the Caribbean Sea will in the end rule the continent, and she is building ships to prove it."
+      "Britain took New France in 1763 and kept its northern colonies when the thirteen to the south broke away. Upper and Lower Canada, Nova Scotia, New Brunswick, Prince Edward Island and Newfoundland are governed from London through appointed governors; the Earl of Gosford, at Quebec, is trying to calm an assembly that is close to revolt.",
+      "West and north of the Canadas lies Rupert's Land, the vast drainage of Hudson Bay, ruled as a trading monopoly by the Hudson's Bay Company from York Factory. Its brigades reach the Pacific, where the Company shares the Oregon Country with the Americans. In this scenario the Russian-American coast to the northwest is counted within its reach.",
+      "Britain's strength here is the Royal Navy. It holds Jamaica, the Bahamas, Trinidad, Guiana and, since 1833, the Falkland Islands, and no fleet in the Americas can face it. The garrisons ashore are small and the distances immense."
     ],
     "traits": [
-      {"name": "Maritime Charter", "effect": "Fleets cost 25% less to recruit.", "modifiers": {"recruit_cost": {"fleet": 0.75}}},
-      {"name": "Harbour Trade", "effect": "15% more wood.", "modifiers": {"production": {"wood": 1.15}}}
+      {
+        "name": "Royal Navy",
+        "effect": "Fleets cost 25% less to recruit.",
+        "modifiers": {"recruit_cost": {"fleet": 0.75}}
+      },
+      {
+        "name": "Hudson's Bay Company",
+        "effect": "15% more wood.",
+        "modifiers": {"production": {"wood": 1.15}}
+      }
     ]
   },
   "f4": {
-    "capital": "Bogota",
-    "ruler": "Protector Andrés Quispe",
-    "government": "Pact of highland provinces under an elected Protector",
-    "founded": 1781,
-    "motto": "The mountains keep faith",
-    "summary": "The highland provinces of the northern Andes and the Orinoco, a mountain fortress rich in silver and iron.",
+    "capital": "Bogotá",
+    "ruler": "President Francisco de Paula Santander",
+    "government": "Centralist republic",
+    "founded": 1831,
+    "motto": "Libertad y Orden",
+    "summary": "The heart of Bolívar's old Gran Colombia, from the isthmus of Panama to the Andes of Quito.",
     "history": [
-      "The Andean Pact grew out of the highland revolts of 1781, when the mountain provinces from Bogotá to Lima threw out their colonial governors and chose a Protector to lead their common defence. The Protector is elected for life by the provincial assemblies and may not raise taxes without them.",
-      "The Pact sits on the continent's great mountain wall. Its passes are few and easily held, its mines yield iron and silver, and its highland regiments have never lost a battle fought uphill. Beyond the mountains, though, its lowland provinces on the Orinoco and the coast are open to any invader.",
-      "Protector Quispe is a mining engineer turned soldier who built the Pact's foundries. He wants the Pact's lowlands secure before any rival can reach them, and he eyes the Amazon Federation's rivers as the road to doing it."
+      "Simón Bolívar's Gran Colombia joined New Granada, Venezuela and Ecuador in the wars of independence, and fell apart in 1830, the year he died. The Republic of New Granada was proclaimed in 1831, and Francisco de Paula Santander, once Bolívar's vice-president and later his rival, returned from exile to become its president in 1832.",
+      "Venezuela, dominated by José Antonio Páez, and Ecuador under Vicente Rocafuerte went their own way, but the three republics share an army tradition, a border with the new confederation in the south and a fear of its ambitions. In this scenario they stand together under New Granada.",
+      "The republic spans the isthmus of Panama, the Caribbean coast, the valleys of the Magdalena and the cordilleras. Its roads are mule tracks over the mountains, which makes it hard to rule and harder still to invade."
     ],
     "traits": [
-      {"name": "Mountain Fastness", "effect": "Units defend 20% better in mountains.", "modifiers": {"defense_terrain": {"mountains": 1.2}}},
-      {"name": "Highland Mines", "effect": "15% more iron.", "modifiers": {"production": {"iron": 1.15}}}
+      {
+        "name": "Andean Fastness",
+        "effect": "Units defend 20% better in mountains.",
+        "modifiers": {"defense_terrain": {"mountains": 1.2}}
+      },
+      {
+        "name": "Llaneros",
+        "effect": "Cavalry attack 10% harder.",
+        "modifiers": {"attack": {"cavalry": 1.1}}
+      }
     ]
   },
   "f5": {
-    "capital": "La Paz",
-    "ruler": "First Speaker Luiza Andrade",
-    "government": "Federation of river provinces and highland towns",
-    "founded": 1788,
-    "motto": "Many rivers, one current",
-    "summary": "A federation of the great river basins and the Bolivian highlands, feeding itself from rich harvests and moving along its rivers.",
+    "capital": "Lima",
+    "ruler": "Supreme Protector Andrés de Santa Cruz",
+    "government": "Confederation of three states under a protector",
+    "founded": 1836,
+    "motto": "La unión es la fuerza",
+    "summary": "Andrés de Santa Cruz's bid to reunite Peru and Bolivia, won by conquest in 1835 and 1836.",
     "history": [
-      "The Amazon Federation was formed in 1788 when the river towns of the interior, from Porto Velho to Goiânia, joined the highland city of La Paz in a federation to control the trade that flows down the great rivers. Its Speaker presides over a congress of river provinces that rarely agree on anything but defence.",
-      "The Federation's lands are the most fertile on the continent, and its river pilots move troops through forest that would stop any other army. It is, though, surrounded: the Andean Pact to the north and west, the Southern Coalition to the south, and the League's merchants eager for its harvests.",
-      "First Speaker Andrade came to office after a famine year, promising that the Federation would never again sell its grain while its own people went hungry. She wants secure borders and full granaries, and fears the Andean Pact's ambitions most of all."
+      "Peru and Upper Peru had been one viceroyalty under Spain. Andrés de Santa Cruz, president of Bolivia since 1829, was invited into Peru's civil war in 1835 and won it: he defeated Agustín Gamarra at Yanacocha and Felipe Santiago Salaverry at Socabaya, and had Salaverry shot in February 1836.",
+      "Santa Cruz divided Peru into North and South Peru and joined them with Bolivia in a confederation under himself as Supreme Protector, confirmed at Tacna in 1837. The silver of Potosí and the ports of the Pacific coast are his, and so is the enmity of Chile and the Argentine Confederation, who see a new great power on their borders.",
+      "His army is the best-drilled in South America, built around Bolivian veterans such as the Colorados regiment. It is not large, and it must hold the whole length of the Andes."
     ],
     "traits": [
-      {"name": "River Pilots", "effect": "Land units pay 20% less movement in forests.", "modifiers": {"movement_terrain": {"forest": 0.8}}},
-      {"name": "Rich Harvests", "effect": "15% more food.", "modifiers": {"production": {"food": 1.15}}}
+      {
+        "name": "Potosí Mines",
+        "effect": "15% more iron.",
+        "modifiers": {"production": {"iron": 1.15}}
+      },
+      {
+        "name": "Royal Road",
+        "effect": "Land units pay 15% less movement in mountains.",
+        "modifiers": {"movement_terrain": {"mountains": 0.85}}
+      }
     ]
   },
   "f6": {
-    "capital": "Santiago",
-    "ruler": "Director Julián Echeverría",
-    "government": "Coalition of Chilean and Pampean provinces under a Director",
-    "founded": 1785,
-    "motto": "From the mountains to the plains",
-    "summary": "A coalition across the southern Andes, joining the Chilean valleys to the pampas, famous for its horsemen.",
+    "capital": "Rio de Janeiro",
+    "ruler": "Emperor Pedro II, under the Regent Diogo Antônio Feijó",
+    "government": "Constitutional monarchy under a regency",
+    "founded": 1822,
+    "motto": "Independência ou Morte",
+    "summary": "The only monarchy in the Americas, vast and rich, ruled by regents for a ten-year-old emperor.",
     "history": [
-      "The Southern Coalition joined the Chilean valleys and the cattle provinces of the pampas in 1785, after the two had fought each other to exhaustion over the mountain passes. Its Director governs from Santiago with a council of provincial governors, and its army is raised mostly from the estancias.",
-      "The Coalition's gauchos are the finest light horsemen on the continent, cheap to raise and at home on the open plains. Its lands are compact and well connected, but squeezed between the Amazon Federation to the north and the Austral Republic to the south, with little room to grow.",
-      "Director Echeverría is a cattle baron who won his office by ending the pass wars. He is cautious by nature, preferring alliances to battles, but he will not let the Austral Republic take the southern plains."
+      "Brazil became an empire in 1822, when the Portuguese prince Pedro declared its independence rather than return to Lisbon. He abdicated in 1831 in favour of his five-year-old son, and the empire has been governed by regents ever since; Father Diogo Antônio Feijó has held the office since 1835.",
+      "The regency is beset by provincial revolts. The Cabanagem has held Belém and much of Pará since 1835, and in Rio Grande do Sul the Ragamuffin rebels proclaimed a republic in 1836. Sugar and a rising trade in coffee make the empire rich, and the slave trade, outlawed on paper, goes on.",
+      "Brazil keeps the strongest navy in South America and an army that must reach from the Amazon to the River Plate, most of it along rivers rather than roads."
     ],
     "traits": [
-      {"name": "Gaucho Horse", "effect": "Cavalry costs 15% less to recruit.", "modifiers": {"recruit_cost": {"cavalry": 0.85}}},
-      {"name": "Open Plains", "effect": "Land units pay 10% less movement on plains.", "modifiers": {"movement_terrain": {"plains": 0.9}}}
+      {
+        "name": "Sugar and Coffee",
+        "effect": "15% more food.",
+        "modifiers": {"production": {"food": 1.15}}
+      },
+      {
+        "name": "River Fleets",
+        "effect": "Land units pay 20% less movement in forests.",
+        "modifiers": {"movement_terrain": {"forest": 0.8}}
+      }
     ]
   },
   "f7": {
-    "capital": "Bahía Blanca",
-    "ruler": "Consul Rafael Montero",
-    "government": "Republic of southern settlements under two Consuls",
-    "founded": 1792,
-    "motto": "Hold what we build",
-    "summary": "The hardy republic of Patagonia and the southern islands, provisioned for long winters and stubborn in defence.",
+    "capital": "Buenos Aires",
+    "ruler": "Governor Juan Manuel de Rosas",
+    "government": "Confederation of provinces, led by Buenos Aires",
+    "founded": 1831,
+    "motto": "¡Viva la Santa Federación!",
+    "summary": "The provinces of the River Plate under Rosas, allied here with Chile against Santa Cruz.",
     "history": [
-      "The Austral Republic began as an expedition. In 1792 a company of settlers, whalers and soldiers founded Bahía Blanca at the edge of the southern plains and declared a republic, electing two Consuls in the Roman manner. Comodoro Rivadavia and the island settlement of Fox Bay followed.",
-      "The Republic's lands are cold, windy and far from everyone. Its settlers learned to keep great storehouses against the winters, and its militia to hold its forts against raiders from every direction. It is the smallest of the eight nations in people, but the hardest to dislodge.",
-      "Consul Montero, the senior of the two, is a former expedition captain with an eye on the rich plains to the north. His colleague counsels patience; Montero believes the Republic must grow or be swallowed."
+      "The provinces of the old viceroyalty of the Río de la Plata declared independence in 1816 and then fought each other for twenty years. The Federal Pact of 1831 bound them into a loose confederation, and in 1835 Buenos Aires gave its governor, Juan Manuel de Rosas, the sum of public power. Rosas conducts the confederation's foreign affairs and rules through the gauchos and the mazorca.",
+      "Across the Andes, Chile's minister Diego Portales has built a strong conservative state and regards Santa Cruz's confederation as a threat to its existence; Chile declares war on it in 1836, and Rosas follows in 1837. In this scenario Chile and the Argentine provinces fight as one.",
+      "The confederation's strength is its cavalry: gauchos of the pampas, and the Colorados del Monte raised on Rosas' own estates. Beyond the frontier forts, Patagonia belongs to the Tehuelche and the Mapuche."
     ],
     "traits": [
-      {"name": "Expedition Stores", "effect": "Stockpiles hold 50 more of each resource.", "modifiers": {"storage": 50}},
-      {"name": "Stubborn Defence", "effect": "Units defend 10% better in the Republic's own provinces.", "modifiers": {"defense_home": 1.1}}
+      {
+        "name": "Gaucho Horse",
+        "effect": "Cavalry costs 15% less to recruit.",
+        "modifiers": {"recruit_cost": {"cavalry": 0.85}}
+      },
+      {
+        "name": "Open Pampas",
+        "effect": "Land units pay 10% less movement on plains.",
+        "modifiers": {"movement_terrain": {"plains": 0.9}}
+      }
     ]
   }
 }

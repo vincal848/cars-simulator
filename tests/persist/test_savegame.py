@@ -94,7 +94,7 @@ class RoundTripTests(SaveTestCase):
         restored, *_ = self.round_trip(state, shapes, seas)
         self.assertEqual(restored.units[unit_id].kind, "scout")
         self.assertEqual(restored.recruited, [city])
-        self.assertEqual(restored.factions["f1"].style, "atlantic")
+        self.assertEqual(restored.factions["f1"].style, "mexican")
         self.assertIsNone(recruit(restored, city, "artillery")[0])
 
     def test_city_locations_and_styles(self):
@@ -265,7 +265,7 @@ class SaveLibraryTests(unittest.TestCase):
             library.path(1).write_text("not json")
             self.assertIn("Unreadable", library.describe(1))
             save_game(state, shapes, seas, "f0", library.path(0))
-            self.assertIn("Spring 1800", library.describe(0))
+            self.assertIn("Spring 1836", library.describe(0))
             self.assertTrue(library.has_save())
             with self.assertRaises(ValueError):
                 library.path(4)

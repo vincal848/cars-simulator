@@ -9,7 +9,7 @@ from cars.sim.entities import Unit
 from cars.sim.movement import hostile_zoc, reachable
 from cars.sim.objectives import begin
 from cars.sim.orders import issue_move
-from tests.support import compact
+from tests.support import compact, detailed
 
 
 class DiplomacyTests(unittest.TestCase):
@@ -65,6 +65,19 @@ class DiplomacyTests(unittest.TestCase):
         self.assertIn("declares war", messages[0])
         self.assertTrue(self.state.at_war("f0", "f1"))
 
+    def test_rivals_only_declare_war_on_a_neighbour(self):
+        propose_peace(self.state, "f0", "f7")
+        self.state.round = truce_ends(self.state, "f0", "f7")
+        for i in range(10):
+            self.state.units[f"horde{i}"] = Unit(f"horde{i}", "f0", "yukon")
+        self.assertFalse(wants_war(self.state, "f0", "f7"))  # Yukon is nowhere near the pampas.
+
+    def test_the_1836_campaign_opens_with_the_wars_of_the_period(self):
+        state, _, _ = detailed()
+        wars = {(a, b) for a in state.factions for b in state.factions if a < b and state.at_war(a, b)}
+        self.assertEqual(wars, {("f1", "f2"), ("f5", "f7")})
+        self.assertEqual(truce_ends(state, "f0", "f3"), 1 + 6)
+
     def test_diplomacy_is_recorded_and_replayed(self):
         campaign = Campaign(self.state)
         campaign.choose("f0")
@@ -95,7 +108,7 @@ class CoalitionTests(unittest.TestCase):
     def test_rivals_make_peace_with_each_other_but_not_the_player_or_leader(self):
         self.state.active_index = 2
         messages = [message for _, _, message in faction_actions(self.state)]
-        self.assertIn("join forces against Atlantic League", messages[0])
+        self.assertIn("join forces against Mexico", messages[0])
         self.assertFalse(self.state.at_war("f2", "f3"))
         self.assertTrue(self.state.at_war("f2", "f1"))
         self.assertTrue(self.state.at_war("f2", "f0"))

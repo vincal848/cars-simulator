@@ -140,20 +140,20 @@ class CalendarTests(unittest.TestCase):
         for player in ("f0", "f3", "f7"):
             state, _, _ = compact()
             Campaign(state).choose(player)
-            self.assertEqual(date_label(state.clock), "Spring 1800")
+            self.assertEqual(date_label(state.clock), "Spring 1836")
             for i in range(7):
                 end_turn(state)
-                self.assertEqual(date_label(state.clock), "Spring 1800")
+                self.assertEqual(date_label(state.clock), "Spring 1836")
                 self.assertEqual(turn_phase(state)[1], i)
             end_turn(state)
-            self.assertEqual(date_label(state.clock), "Summer 1800")
+            self.assertEqual(date_label(state.clock), "Summer 1836")
             self.assertEqual(turn_phase(state)[0], "Your orders")
 
     def test_year_boundary_and_look_ahead(self):
         state, _, _ = compact()
         state.clock["elapsed"] = 3
-        self.assertEqual(date_label(state.clock), "Winter 1800")
-        self.assertEqual(date_label(state.clock, 1), "Spring 1801")
+        self.assertEqual(date_label(state.clock), "Winter 1836")
+        self.assertEqual(date_label(state.clock, 1), "Spring 1837")
         self.assertEqual(state.clock["elapsed"], 3)
 
     def test_stages_follow_control_through_to_dominion(self):

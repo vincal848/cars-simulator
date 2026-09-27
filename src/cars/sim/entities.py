@@ -68,7 +68,7 @@ class Faction:
     id: str
     name: str
     color: list[int]
-    style: str = "northern"
+    style: str = "american"
     gold: int = 100
     resources: dict = field(default_factory=lambda: dict(wood=0, food=0, iron=0))
 

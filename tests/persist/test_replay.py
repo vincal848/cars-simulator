@@ -45,6 +45,7 @@ class ReplayTests(unittest.TestCase):
 
     def test_every_command_type_including_a_failed_attack(self):
         state, shapes, seas = detailed()
+        state.relations.clear()  # At war with everyone, so the attack goes ahead.
         campaign = Campaign(state)
         campaign.choose("f0")
         state.factions["f0"].resources = dict(wood=100, food=100, iron=100)
