@@ -109,7 +109,8 @@ never leaves a half-written save.
 ui/app.py          window, active screen, frame loop
 ui/screens/        TitleScreen, GameScreen (input and turn flow), ReplayScreen
 ui/renderer.py     GameRenderer: map plus HUD for a GameState; drawing and hit testing only
-ui/map/            MapView (projection, hit testing, drawing), labels, relief, march animation
+ui/map/            MapView (camera, hit testing, overlays), Atlas (the painted base map),
+                   border geometry, labels, relief, march animation
 ui/hud/            council, province window, objectives, menu, market, forecast card, faction picker
 ui/dialogs/        modal dialogs sharing one frame: library, roster, chronicle, settings, music,
                    calendar, CARSapedia, strategy atlas, replay studio
@@ -124,6 +125,22 @@ and read-only replays; the replay screen simply gives it a different state.
 
 A left press on the map is held until release, so dragging to pan can never issue
 an order. Moves resolve immediately; the march animation only replays the result.
+
+### The map
+
+The base map is painted in world space, where one degree is `scale` pixels, by an
+`Atlas` for each zoom level. It paints 256-pixel tiles on first use and keeps
+them, so panning only blits cached tiles; the three most recent zoom levels are
+kept. When a province changes hands, only the tiles it touches are repainted.
+
+Each tile is painted in layers: the Natural Earth relief, graded into a dark sea
+wash; lighter shallows along the coasts; each nation's land as relief dyed and
+tinted in its colour, with a glow along its frontiers; engraved forest and
+mountain symbols; then faint province borders, strong nation borders and the
+coastline. Borders come from `geometry.borders`, which classifies every outline
+segment by the provinces on either side of it. Fog of war is a separate tile
+layer, cached per set of hidden provinces. Pins, units, routes and labels are
+drawn over the atlas in screen space every frame.
 
 ## Content and modding
 

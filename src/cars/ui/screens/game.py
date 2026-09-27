@@ -312,7 +312,7 @@ class GameScreen:
                 if self._travelled(event.pos) > DRAG_THRESHOLD:
                     self.map_dragged = True
                 if self.map_dragged:
-                    self.renderer.map.pan(*event.rel)
+                    self.renderer.map.pan(*event.rel, dragging=True)
                 return True
             if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
                 press = self.map_press
@@ -483,7 +483,7 @@ class GameScreen:
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 2 and not self._blocked(event.pos):
             self.panning = True
         if event.type == pygame.MOUSEMOTION and self.panning and not self.view.animation:
-            map_view.pan(*event.rel)
+            map_view.pan(*event.rel, dragging=True)
         if event.type == pygame.MOUSEWHEEL and not self.view.animation:
             point = self.context.mouse_pos()
             if not self._blocked(point):

@@ -15,7 +15,6 @@ GREEN = (145, 194, 140)
 WELL = (23, 19, 23)
 
 # Map overlays.
-OCEAN = (15, 30, 43)
 MAP_TEXT = (229, 233, 221)
 MAP_MUTED = (149, 171, 181)
 ROUTE_GOLD = (245, 207, 115)

@@ -4,7 +4,7 @@ import pygame
 
 from cars.ui.camera import Camera, point_in_polygon
 from cars.ui.map.labels import layout_labels
-from cars.ui.map.map_view import MapView
+from cars.ui.map.map_view import MapView, Scene
 from cars.ui.map.relief import relief_image
 from cars.ui.palette import MAP_AREA
 from cars.ui.theme import Theme
@@ -42,12 +42,48 @@ class MapViewTests(unittest.TestCase):
         province = self.state.units["infantry0_0"].location
         self.assertEqual(self.map.node_at(self.map.anchors[province], "land"), province)
 
-    def test_relief_is_georeferenced(self):
+    def paint(self) -> pygame.Surface:
+        screen = self.theme.screen
+        self.map.atlas.draw(screen, self.map.origin, self.map.camera.period, MAP_AREA)
+        return screen
+
+    def test_the_painted_map_is_georeferenced(self):
         self.assertEqual(relief_image().get_size(), (4500, 4200))
         point = (-110, 40)
-        before = self.map.relief_surface.get_at(self.map.camera.project(point))
+        before = self.paint().get_at(self.map.camera.project(point))
         self.map.pan(30, 0)
-        self.assertEqual(before, self.map.relief_surface.get_at(self.map.camera.project(point)))
+        self.assertEqual(before, self.paint().get_at(self.map.camera.project(point)))
+
+    def test_panning_reuses_painted_tiles(self):
+        self.paint()
+        tiles = dict(self.map.atlas._tiles)
+        self.map.pan(40, 25)
+        self.paint()
+        self.assertTrue(tiles)
+        self.assertTrue(all(self.map.atlas._tiles[key] is tile for key, tile in tiles.items()))
+
+    def test_labels_slide_while_dragging_and_settle_afterwards(self):
+        self.map.zoom(3, (600, 370))
+        screen = self.theme.screen
+        self.map.draw(screen, Scene("land"), "", [], [])
+        labels = self.map.labels
+        first = labels[0].rect.copy()
+        self.map.pan(12, 5, dragging=True)
+        self.map.draw(screen, Scene("land"), "", [], [])
+        self.assertIs(self.map.labels, labels)
+        self.assertEqual(labels[0].rect.topleft, (first.x + 12, first.y + 5))
+        self.map.draw(screen, Scene("land"), "", [], [])  # The drag has stopped.
+        self.assertIsNot(self.map.labels, labels)
+
+    def test_a_captured_province_is_repainted(self):
+        province = self.state.provinces[self.state.units["infantry0_0"].location]
+        point = self.map.anchors[province.id]
+        self.paint()
+        before = self.theme.screen.get_at(point)
+        province.controller = next(f for f in self.state.factions if f != province.controller)
+        self.assertEqual(before, self.paint().get_at(point))  # Tiles are cached...
+        self.map.draw(self.theme.screen, Scene("land"), "", [], [])  # ...until the map notices.
+        self.assertNotEqual(before, self.paint().get_at(point))
 
     def test_labels_fit_inside_their_polygons_for_every_font(self):
         self.map.zoom(3, self.map.anchors[next(iter(self.state.provinces))])

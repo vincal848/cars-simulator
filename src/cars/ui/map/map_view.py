@@ -1,7 +1,11 @@
-"""The map layer: province geometry projected through the camera, hit testing and drawing."""
+"""The map layer: the painted atlas, hit testing and everything drawn over it.
 
-import math
-from collections import Counter
+The base map is painted in world space by an Atlas per zoom level, so panning
+only moves cached tiles. Pins, units, routes and labels are drawn in screen
+space each frame.
+"""
+
+from collections import OrderedDict
 from dataclasses import dataclass, field
 from itertools import pairwise
 from typing import TYPE_CHECKING
@@ -19,15 +23,15 @@ from cars.ui.art.lighting import contact_shadow
 from cars.ui.art.regiments import UnitSprites
 from cars.ui.camera import Camera, point_in_polygon
 from cars.ui.map.animation import MoveAnimation
+from cars.ui.map.atlas import OPEN_SEA, Atlas
+from cars.ui.map.geometry import Rings, borders, centroid, province_polygons
 from cars.ui.map.labels import Label, draw_labels, layout_labels
-from cars.ui.map.relief import illustration_layer, project_relief
+from cars.ui.map.relief import RASTER_NORTH, RASTER_WEST
 from cars.ui.palette import (
-    CANVAS_SIZE,
     HOSTILE,
     MAP_AREA,
     MAP_MUTED,
     MAP_TEXT,
-    OCEAN,
     ROUTE_GOLD,
     SUPPLY_GREEN,
     TARGET_RED,
@@ -39,23 +43,16 @@ if TYPE_CHECKING:
     from cars.sim.state import GameState
     from cars.ui.theme import Theme
 
-GRATICULE = (30, 53, 64)
 SEA_LABEL = (109, 143, 151)
 DEBUG_EDGE = (80, 111, 120)
 CITY_LABEL = (247, 228, 187)
 CITY_LABEL_BACK = (43, 35, 32)
-TERRAIN_TINT_ALPHA = 120
-BORDER_SHADE = 0.70
 CITY_PIN_RADIUS = 11
 SEA_HIT_RADIUS = 28
 CLOSE_SCALE = 8  # Larger sprites and buildings from this zoom level.
 UNIT_CLOSE_SCALE = 6
 CITY_NAMES_SCALE = 10
-FOG = (8, 14, 20, 105)
-COASTLINE = [(8, (26, 43, 46, 95)), (4, (184, 170, 118, 120)), (1, (58, 64, 51, 160))]
-
-# rings[0] is a polygon's outline and rings[1:] its holes, in screen coordinates.
-Rings = list[list[tuple[float, float]]]
+ATLAS_CACHE = 3  # Zoom levels whose painted tiles are kept.
 
 
 @dataclass
@@ -98,42 +95,45 @@ class MapView:
         self.camera = Camera()
         self.sprites = UnitSprites()
         self.sea_font = pygame.font.SysFont("georgia", 15, italic=True)
-        self.ocean = _ocean_gradient()
         self.geometry: dict[str, list[Rings]] = {}
         self.world_anchors: dict[str, tuple[float, float]] = {}
         for province in state.provinces.values():
             shape = shapes[province.shape_id]
-            polygons = [shape["coordinates"]] if shape["type"] == "Polygon" else shape["coordinates"]
+            polygons = province_polygons(shape)
             self.geometry[province.id] = polygons
-            self.world_anchors[province.id] = shape.get("anchor") or _centroid(polygons)
-        self.coast = _coastline(self.geometry)
+            self.world_anchors[province.id] = shape.get("anchor") or centroid(polygons)
+        self.borders = borders(self.geometry)
         self.seas = {sea["id"]: sea for sea in seas}
         self.world_anchors.update({sea["id"]: sea["anchor"] for sea in seas})
-        self._terrain: dict[tuple[str, str], tuple[pygame.Surface, pygame.Rect]] = {}
+        self._atlases: OrderedDict[float, Atlas] = OrderedDict()
+        self._controllers = {p.id: p.controller for p in state.provinces.values()}
         self.labels: list[Label] | None = None
+        # Labels slide with the map while it is dragged and are laid out again once it stops.
+        self._panned = self._labels_moved = False
         self.reproject()
 
     # Projection -----------------------------------------------------------------------
 
+    @property
+    def atlas(self) -> Atlas:
+        """The painted map at the current zoom level."""
+        scale = self.camera.scale
+        if scale not in self._atlases:
+            self._atlases[scale] = Atlas(self.state, self.geometry, self.borders, scale)
+            while len(self._atlases) > ATLAS_CACHE:
+                self._atlases.popitem(last=False)
+        self._atlases.move_to_end(scale)
+        return self._atlases[scale]
+
+    @property
+    def origin(self) -> tuple[int, int]:
+        """Where the atlas's world pixel (0, 0) falls on screen."""
+        return self.camera.project((RASTER_WEST, RASTER_NORTH))
+
     def reproject(self) -> None:
-        """Recompute every screen-space cache after the camera moves."""
+        """Recompute screen positions of anchors and city pins after the camera moves."""
         camera = self.camera
-        self.labels = None
-        self.parts: dict[str, list[Rings]] = {}
-        for province, polygons in self.geometry.items():
-            projected = [[[camera.project(c) for c in ring] for ring in polygon] for polygon in polygons]
-            xs = [x for polygon in projected for x, _ in polygon[0]]
-            shifts = range(
-                math.ceil(-max(xs) / camera.period),
-                math.floor((CANVAS_SIZE[0] - min(xs)) / camera.period) + 1,
-            )
-            copies = [
-                [[(x + k * camera.period, y) for x, y in ring] for ring in polygon]
-                for k in shifts
-                for polygon in projected
-            ]
-            self.parts[province] = copies or projected
-        self.bounds = {province: _bounds(polygons) for province, polygons in self.parts.items()}
+        self._screen_polygons: dict[str, list[Rings]] = {}
         self.anchors = {node: camera.nearest(camera.project(c)) for node, c in self.world_anchors.items()}
         self.city_markers = []
         for city in self.state.cities.values():
@@ -143,35 +143,51 @@ class MapView:
                 if MAP_AREA.collidepoint(point):
                     rect = pygame.Rect(point[0] - CITY_PIN_RADIUS, point[1] - CITY_PIN_RADIUS, 22, 22)
                     self.city_markers.append(CityMarker(city.id, point, rect))
-        self._terrain.clear()
-        self._fog: tuple[frozenset, pygame.Surface] | None = None
-        self.relief_surface = project_relief(camera)
-        self.illustration_surface = illustration_layer(self.state, self.parts, camera.scale)
-        self.coast_surface = self._draw_coast()
 
-    def _draw_coast(self) -> pygame.Surface:
-        surface = pygame.Surface(MAP_AREA.size, pygame.SRCALPHA)
-        period = self.camera.period
-        for width, color in COASTLINE:
-            for a, b in self.coast:
-                pa, pb = self.camera.project(a), self.camera.project(b)
-                for offset in (-period, 0, period):
-                    start, end = (pa[0] + offset, pa[1]), (pb[0] + offset, pb[1])
-                    if max(start[0], end[0]) >= 0 and min(start[0], end[0]) < CANVAS_SIZE[0]:
-                        pygame.draw.line(surface, color, start, end, width)
-        return surface
+    def polygons_on_screen(self, province: str) -> list[Rings]:
+        """``province``'s outlines in screen coordinates, one set per visible wrapped copy."""
+        if province not in self._screen_polygons:
+            atlas, (x0, y0) = self.atlas, self.origin
+            projected = []
+            for shift in range(-2, 3):
+                left = x0 + round(shift * self.camera.period)
+                if not atlas.bounds[province].move(left, y0).colliderect(MAP_AREA):
+                    continue
+                for rings in atlas.polygons[province]:
+                    projected.append([[(x + left, y + y0) for x, y in ring] for ring in rings])
+            self._screen_polygons[province] = projected
+        return self._screen_polygons[province]
 
-    def pan(self, dx: float, dy: float) -> None:
+    @property
+    def parts(self) -> dict[str, list[Rings]]:
+        return {province: self.polygons_on_screen(province) for province in self.geometry}
+
+    def pan(self, dx: float, dy: float, dragging: bool = False) -> None:
+        """Move the camera. While the map is being ``dragging``, labels slide with it and are
+        laid out again once it stops, instead of on every mouse movement."""
+        before = self.origin
         self.camera.pan(dx, dy)
         self.reproject()
+        if not dragging or not self.labels:
+            self.labels = None
+            return
+        after = self.origin
+        period = self.camera.period
+        shift_x = after[0] - before[0]
+        shift_x -= round(shift_x / period) * period
+        for label in self.labels:
+            label.rect.move_ip(shift_x, after[1] - before[1])
+        self._panned = True
 
     def zoom(self, factor: float, point: tuple[float, float]) -> None:
         self.camera.zoom(factor, point)
         self.reproject()
+        self.labels = None
 
     def reset_camera(self) -> None:
         self.camera = Camera()
         self.reproject()
+        self.labels = None
 
     def center_on(self, node: str, screen_point: tuple[int, int]) -> None:
         """Pan so that ``node`` appears at ``screen_point``."""
@@ -180,6 +196,17 @@ class MapView:
 
     def invalidate_labels(self) -> None:
         self.labels = None
+
+    def _repaint_changed_provinces(self) -> None:
+        state = self.state
+        changed = {p.id for p in state.provinces.values() if self._controllers[p.id] != p.controller}
+        if not changed:
+            return
+        # The borders of neighbouring provinces change weight too.
+        touched = changed | {n for p in changed for n, _ in state.land.neighbors(p)}
+        for atlas in self._atlases.values():
+            atlas.invalidate(touched)
+        self._controllers.update({p: state.provinces[p].controller for p in changed})
 
     # Hit testing ----------------------------------------------------------------------
 
@@ -200,12 +227,14 @@ class MapView:
                 for x, y in self.camera.copies(self.anchors[sea]):
                     if (point[0] - x) ** 2 + (point[1] - y) ** 2 < SEA_HIT_RADIUS**2:
                         return sea
-        for province, polygons in self.parts.items():
-            if not self.bounds[province].collidepoint(point):
+        atlas, (x0, y0) = self.atlas, self.origin
+        world = ((point[0] - x0) % self.camera.period, point[1] - y0)
+        for province, polygons in atlas.polygons.items():
+            if not atlas.bounds[province].collidepoint(world):
                 continue
             for rings in polygons:
-                if point_in_polygon(point, rings[0]) and not any(
-                    point_in_polygon(point, h) for h in rings[1:]
+                if point_in_polygon(world, rings[0]) and not any(
+                    point_in_polygon(world, h) for h in rings[1:]
                 ):
                     return province
         return None
@@ -217,14 +246,14 @@ class MapView:
 
         ``reserved`` panels are kept free of labels; labels under ``covered`` panels are hidden.
         """
-        screen.blit(self.ocean, (0, 0))
+        screen.fill(OPEN_SEA)
         screen.set_clip(MAP_AREA)
-        self._draw_graticule(screen)
-        screen.blit(self.coast_surface, (0, 0))
-        self._draw_provinces(screen, scene)
+        self._repaint_changed_provinces()
+        atlas, origin, period = self.atlas, self.origin, self.camera.period
+        atlas.draw(screen, origin, period, MAP_AREA)
         if scene.visible is not None:
-            screen.blit(self._fog_surface(scene.visible), (0, 0))
-        screen.blit(self.illustration_surface, (0, 0))
+            atlas.draw_fog(screen, origin, period, MAP_AREA, set(self.state.provinces) - scene.visible)
+        self._draw_province_marks(screen, scene)
         self._draw_sea_zones(screen, scene)
         if scene.debug:
             self._draw_graph(screen, scene.layer)
@@ -238,8 +267,9 @@ class MapView:
         if scene.layer == "air" and scene.unit:
             message = self._draw_air_targets(screen, scene) or message
         message = self._draw_city_pins(screen, scene.city_hover) or message
-        if self.labels is None:
+        if self.labels is None or (self._labels_moved and not self._panned):
             self.labels = layout_labels(self, self.theme.font, reserved)
+        self._labels_moved, self._panned = self._panned, False
         draw_labels(screen, self.labels, covered)
         screen.set_clip(None)
         return message
@@ -260,66 +290,28 @@ class MapView:
         for offset in (-period, 0, period):
             _arrow(screen, [(x + offset, y) for x, y in points], color)
 
-    def _draw_graticule(self, screen) -> None:
-        project = self.camera.project
-        for longitude in range(-180, -10, 15):
-            pygame.draw.line(screen, GRATICULE, project((longitude, 80)), project((longitude, -60)))
-        for latitude in range(-60, 90, 15):
-            pygame.draw.line(screen, GRATICULE, project((-180, latitude)), project((-20, latitude)))
-
-    def _terrain_surface(self, province) -> tuple[pygame.Surface | None, pygame.Rect]:
-        """The relief clipped to ``province`` and tinted in its controller's colour."""
-        key = (province.id, province.controller)
-        if key not in self._terrain:
-            rect = self.bounds[province.id].clip(MAP_AREA)
-            if rect.width < 1 or rect.height < 1:
-                return None, rect
-            surface = pygame.Surface(rect.size, pygame.SRCALPHA)
-            surface.blit(self.relief_surface, (-rect.x, -rect.y))
-            tint = pygame.Surface(rect.size, pygame.SRCALPHA)
-            tint.fill((*self.state.factions[province.controller].color, TERRAIN_TINT_ALPHA))
-            surface.blit(tint, (0, 0))
-            mask = pygame.Surface(rect.size, pygame.SRCALPHA)
-            for rings in self.parts[province.id]:
-                pygame.draw.polygon(
-                    mask, (255, 255, 255, 255), [(x - rect.x, y - rect.y) for x, y in rings[0]]
-                )
-                for hole in rings[1:]:
-                    pygame.draw.polygon(mask, (0, 0, 0, 0), [(x - rect.x, y - rect.y) for x, y in hole])
-            surface.blit(mask, (0, 0), special_flags=pygame.BLEND_RGBA_MULT)
-            self._terrain[key] = (surface, rect)
-        return self._terrain[key]
-
-    def _draw_provinces(self, screen, scene: Scene) -> None:
+    def _draw_province_marks(self, screen, scene: Scene) -> None:
+        """Highlights, buildings and occupation marks over the painted provinces."""
         state = self.state
         close = self.camera.scale >= CLOSE_SCALE
         highlight = SUPPLY_GREEN if scene.layer == "supply" else ROUTE_GOLD
         for province in state.provinces.values():
-            if not self.bounds[province.id].colliderect(MAP_AREA):
-                continue
-            color = state.factions[province.controller].color
-            surface, rect = self._terrain_surface(province)
-            if surface:
-                screen.blit(surface, rect)
-            border = tuple(int(c * BORDER_SHADE) for c in color)
-            for rings in self.parts[province.id]:
-                outline = rings[0]
-                pygame.draw.lines(screen, border, True, outline, 1)
-                for hole in rings[1:]:
-                    pygame.draw.polygon(screen, OCEAN, hole)
-                if province.id in scene.highlights:
-                    pygame.draw.lines(screen, highlight, True, outline, 2)
-                if province.id in (scene.inspected, scene.hover):
-                    pygame.draw.lines(screen, MAP_TEXT, True, outline, 2)
-            x, y = self.anchors[province.id]
-            if province.buildings:
+            outlines = []
+            if province.id in scene.highlights:
+                outlines.append(highlight)
+            if province.id in (scene.inspected, scene.hover):
+                outlines.append(MAP_TEXT)
+            for color in outlines:
+                for rings in self.polygons_on_screen(province.id):
+                    pygame.draw.lines(screen, color, True, rings[0], 2)
+            for x, y in self.camera.copies(self.anchors[province.id]):
                 for i, kind in enumerate(province.buildings):
                     draw_building(screen, kind, (x + 18 + i * 17, y + 8), 34 if close else 24, scene.time)
                 if province.id in scene.build_effects:
                     celebration(screen, (x, y), scene.time - scene.build_effects[province.id])
-            if province.owner != province.controller:
-                # A small dot in the rightful owner's colour marks occupied land.
-                pygame.draw.circle(screen, state.factions[province.owner].color, (x + 12, y - 8), 3)
+                if province.owner != province.controller:
+                    # A small dot in the rightful owner's colour marks occupied land.
+                    pygame.draw.circle(screen, state.factions[province.owner].color, (x + 12, y - 8), 3)
 
     def _draw_sea_zones(self, screen, scene: Scene) -> None:
         # Waterways come from the relief artwork; province borders are never drawn as rivers.
@@ -391,18 +383,6 @@ class MapView:
             for unit in self.state.units.values()
             if (unit.is_land if land_view else unit.kind == layer_kind) and scene.shows(unit)
         ]
-
-    def _fog_surface(self, visible: set[str]) -> pygame.Surface:
-        """Shade every province the viewer cannot see, cached until vision changes."""
-        key = frozenset(visible)
-        if self._fog is None or self._fog[0] != key:
-            surface = pygame.Surface(MAP_AREA.size, pygame.SRCALPHA)
-            for province, polygons in self.parts.items():
-                if province not in key:
-                    for rings in polygons:
-                        pygame.draw.polygon(surface, FOG, rings[0])
-            self._fog = (key, surface)
-        return self._fog[1]
 
     def _draw_units(self, screen, scene: Scene) -> None:
         """One sprite per stack, with the selected unit's stack drawn first."""
@@ -516,37 +496,3 @@ def _arrow(screen: pygame.Surface, points, color) -> None:
             color,
             [head + direction * 8, head - direction * 5 + side * 5, head - direction * 5 - side * 5],
         )
-
-
-def _ocean_gradient() -> pygame.Surface:
-    surface = pygame.Surface(CANVAS_SIZE)
-    height = CANVAS_SIZE[1]
-    for y in range(height):
-        t = y / height
-        color = (int(24 - 8 * t), int(49 - 12 * t), int(60 - 14 * t))
-        pygame.draw.line(surface, color, (0, y), (CANVAS_SIZE[0], y))
-    return surface
-
-
-def _centroid(polygons: list[Rings]) -> tuple[float, float]:
-    """Mean vertex of the most detailed outline; a fallback when no label anchor is stored."""
-    ring = max(polygons, key=lambda rings: len(rings[0]))[0][:-1]
-    return sum(v[0] for v in ring) / len(ring), sum(v[1] for v in ring) / len(ring)
-
-
-def _coastline(geometry: dict[str, list[Rings]]) -> list[tuple]:
-    """Polygon edges that belong to exactly one province are coastline."""
-    segments: Counter = Counter()
-    for polygons in geometry.values():
-        for rings in polygons:
-            for ring in rings:
-                for a, b in pairwise(ring):
-                    key = tuple(sorted((tuple(round(v, 6) for v in a), tuple(round(v, 6) for v in b))))
-                    segments[key] += 1
-    return [segment for segment, count in segments.items() if count == 1]
-
-
-def _bounds(polygons: list[Rings]) -> pygame.Rect:
-    xs = [x for rings in polygons for x, _ in rings[0]]
-    ys = [y for rings in polygons for _, y in rings[0]]
-    return pygame.Rect(min(xs), min(ys), max(xs) - min(xs) + 1, max(ys) - min(ys) + 1)

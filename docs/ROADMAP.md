@@ -1,10 +1,23 @@
 # Roadmap
 
-## Known issues
+## Art direction
 
-- **Panning is slow on large windows.** Every drag event re-projects the relief
-  raster at full resolution. It should be scaled once per zoom level and shifted
-  while panning.
+The goal is the look of a grand-strategy atlas in the manner of Europa Universalis,
+Victoria and Civilization V, reached in sprints that each land as their own commits:
+
+1. **The map** (done): relief under translucent nation colours, frontier glow,
+   two border weights, a dark sea with depths and shallows, cached tiles.
+2. **The interface layout:** a full-width top bar for date, treasury and
+   stockpiles; a large End Turn button and unit controls bottom right; the
+   province window docked to the left edge; objectives as a collapsible tab;
+   less ornament, textured panels and stronger text contrast.
+3. **Army markers:** one marker per stack with the nation's colour and emblem, a
+   regiment count and a strength bar, simplified when zoomed out.
+4. **Names on the map:** each nation's name lettered across its territory,
+   sea names in a light italic.
+5. **Painted artwork:** specifications for event illustrations and leader
+   portraits, to be produced with an image generator or taken from public-domain
+   sources.
 
 ## Next
 
