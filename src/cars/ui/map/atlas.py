@@ -21,6 +21,7 @@ import pygame
 from cars.ui.art.lighting import light_field
 from cars.ui.camera import point_in_polygon
 from cars.ui.map.geometry import Border, Point, Rings
+from cars.ui.map.nation_labels import NationNames, render
 from cars.ui.map.relief import (
     DETAIL_SCALE,
     RASTER_HEIGHT_DEGREES,
@@ -51,14 +52,22 @@ NATION_LINE = (34, 27, 23)
 COAST_LINE = (26, 38, 40, 210)
 FOG = (8, 14, 20, 105)
 SYMBOLS_PER_PROVINCE = 3
+NAMES_BELOW_SCALE = 8  # Zoomed in further, province names take over from nation names.
 
 
 class Atlas:
     def __init__(
-        self, state: "GameState", geometry: dict[str, list[Rings]], borders: list[Border], scale: float
+        self,
+        state: "GameState",
+        geometry: dict[str, list[Rings]],
+        borders: list[Border],
+        scale: float,
+        names: NationNames | None = None,
     ) -> None:
         self.state = state
         self.scale = scale
+        self.names = names if scale < NAMES_BELOW_SCALE else None
+        self._lettering: list[tuple[pygame.Surface, pygame.Rect]] | None = None
         self.size = (math.ceil(RASTER_WIDTH_DEGREES * scale), math.ceil(RASTER_HEIGHT_DEGREES * scale))
         self.columns = math.ceil(self.size[0] / TILE)
         self.rows = math.ceil(self.size[1] / TILE)
@@ -119,12 +128,35 @@ class Atlas:
                     yield left + column * TILE, origin[1] + row * TILE, (column, row)
 
     def invalidate(self, provinces: set[str]) -> None:
-        """Forget the tiles ``provinces`` touch, so they are repainted in new colours."""
+        """Forget the tiles ``provinces`` touch, so they are repainted in new colours, and
+        letter the nations' names afresh."""
         margin = self._glow_width() + 2
         for province in provinces:
             area = self.bounds[province].inflate(margin * 2, margin * 2)
             for key in [key for key in self._tiles if _tile_rect(*key).colliderect(area)]:
                 del self._tiles[key]
+        self._lettering = None
+
+    def draw_names(
+        self, screen: pygame.Surface, origin: tuple[int, int], period: float, area: pygame.Rect
+    ) -> None:
+        """Nation names, drawn over the tiles and the fog so they stay legible."""
+        for shift in range(-2, 3):
+            left = origin[0] + round(shift * period)
+            for lettering, rect in self.lettering():
+                placed = rect.move(left, origin[1])
+                if placed.colliderect(area):
+                    screen.blit(lettering, placed)
+
+    def lettering(self) -> list[tuple[pygame.Surface, pygame.Rect]]:
+        """Each nation's name, rendered for this zoom, with its world-pixel rectangle."""
+        if self._lettering is None:
+            self._lettering = []
+            for nation, curve in self.names.curves() if self.names else []:
+                name = render(self.state.factions[nation].name, curve, self.scale, self.names.font)
+                if name:
+                    self._lettering.append(name)
+        return self._lettering
 
     # Painting -------------------------------------------------------------------------
 

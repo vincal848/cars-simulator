@@ -27,6 +27,7 @@ from cars.ui.map.atlas import OPEN_SEA, Atlas
 from cars.ui.map.geometry import Rings, borders, centroid, province_polygons
 from cars.ui.map.labels import Label, draw_labels, layout_labels
 from cars.ui.map.markers import PLATE_SIZE, draw_army
+from cars.ui.map.nation_labels import NationNames
 from cars.ui.map.relief import RASTER_NORTH, RASTER_WEST
 from cars.ui.palette import (
     HOSTILE,
@@ -44,7 +45,8 @@ if TYPE_CHECKING:
     from cars.sim.state import GameState
     from cars.ui.theme import Theme
 
-SEA_LABEL = (109, 143, 151)
+SEA_LABEL = (150, 184, 192)
+SEA_LABEL_ALPHA = 190
 DEBUG_EDGE = (80, 111, 120)
 CITY_LABEL = (247, 228, 187)
 CITY_LABEL_BACK = (43, 35, 32)
@@ -95,7 +97,8 @@ class MapView:
         self.theme = theme
         self.camera = Camera()
         self.sprites = UnitSprites()
-        self.sea_font = pygame.font.SysFont("georgia", 15, italic=True)
+        self.sea_font = pygame.font.SysFont("georgia", 13, italic=True)
+        self._sea_labels: dict[tuple, pygame.Surface] = {}
         self.geometry: dict[str, list[Rings]] = {}
         self.world_anchors: dict[str, tuple[float, float]] = {}
         for province in state.provinces.values():
@@ -104,6 +107,7 @@ class MapView:
             self.geometry[province.id] = polygons
             self.world_anchors[province.id] = shape.get("anchor") or centroid(polygons)
         self.borders = borders(self.geometry)
+        self.names = NationNames(state, self.geometry)
         self.seas = {sea["id"]: sea for sea in seas}
         self.world_anchors.update({sea["id"]: sea["anchor"] for sea in seas})
         self._atlases: OrderedDict[float, Atlas] = OrderedDict()
@@ -120,7 +124,7 @@ class MapView:
         """The painted map at the current zoom level."""
         scale = self.camera.scale
         if scale not in self._atlases:
-            self._atlases[scale] = Atlas(self.state, self.geometry, self.borders, scale)
+            self._atlases[scale] = Atlas(self.state, self.geometry, self.borders, scale, self.names)
             while len(self._atlases) > ATLAS_CACHE:
                 self._atlases.popitem(last=False)
         self._atlases.move_to_end(scale)
@@ -254,6 +258,7 @@ class MapView:
         atlas.draw(screen, origin, period, MAP_AREA)
         if scene.visible is not None:
             atlas.draw_fog(screen, origin, period, MAP_AREA, set(self.state.provinces) - scene.visible)
+        atlas.draw_names(screen, origin, period, MAP_AREA)
         self._draw_province_marks(screen, scene)
         self._draw_sea_zones(screen, scene)
         if scene.debug:
@@ -295,6 +300,7 @@ class MapView:
         """Highlights, buildings and occupation marks over the painted provinces."""
         state = self.state
         close = self.camera.scale >= CLOSE_SCALE
+        detailed = self.camera.scale >= UNIT_CLOSE_SCALE
         highlight = SUPPLY_GREEN if scene.layer == "supply" else ROUTE_GOLD
         for province in state.provinces.values():
             outlines = []
@@ -306,7 +312,8 @@ class MapView:
                 for rings in self.polygons_on_screen(province.id):
                     pygame.draw.lines(screen, color, True, rings[0], 2)
             for x, y in self.camera.copies(self.anchors[province.id]):
-                for i, kind in enumerate(province.buildings):
+                # Zoomed out, construction is left to the province window.
+                for i, kind in enumerate(province.buildings if detailed else ()):
                     draw_building(screen, kind, (x + 18 + i * 17, y + 8), 34 if close else 24, scene.time)
                 if province.id in scene.build_effects:
                     celebration(screen, (x, y), scene.time - scene.build_effects[province.id])
@@ -319,11 +326,26 @@ class MapView:
         for sea, data in self.seas.items():
             lit = sea in scene.highlights
             for x, y in self.camera.copies(self.anchors[sea]):
-                self._plain_text(
-                    screen, data["name"], (x - 32, y + 24), ROUTE_GOLD if lit else SEA_LABEL, self.sea_font
-                )
+                label = self._sea_label(data["name"], ROUTE_GOLD if lit else SEA_LABEL)
+                screen.blit(label, label.get_rect(midtop=(x, y + 22)))
                 if scene.layer in ("naval", "air"):
                     pygame.draw.ellipse(screen, ROUTE_GOLD if lit else MAP_MUTED, (x - 24, y - 16, 48, 32), 1)
+
+    def _sea_label(self, name: str, color) -> pygame.Surface:
+        """A sea's name in spaced italic capitals, as engraved on period charts."""
+        key = (name, color)
+        if key not in self._sea_labels:
+            letters = [self.sea_font.render(letter, True, color) for letter in name.upper()]
+            spacing = 3
+            width = sum(letter.get_width() for letter in letters) + spacing * (len(letters) - 1)
+            label = pygame.Surface((width, self.sea_font.get_height()), pygame.SRCALPHA)
+            x = 0
+            for letter in letters:
+                label.blit(letter, (x, 0))
+                x += letter.get_width() + spacing
+            label.fill((255, 255, 255, SEA_LABEL_ALPHA), special_flags=pygame.BLEND_RGBA_MULT)
+            self._sea_labels[key] = label
+        return self._sea_labels[key]
 
     def _draw_graph(self, screen, layer: str) -> None:
         for a, b, _ in self.state.graph(layer).edges():

@@ -12,6 +12,10 @@
   on the left; and the objectives panel is narrower and collapses to a tab. The
   title plaque, compass and panel wallpaper are gone, leaving more of the map
   visible.
+- **Names on the map:** zoomed out, each nation's name is lettered along a gentle
+  curve across its territory, on two lines where one will not fit, and follows
+  its conquests; province names take over when zoomed in. Sea names are set in
+  spaced italic capitals.
 - **Army markers:** each stack is one plate in its nation's colour with a
   map symbol for its leading arm, a unit count and a strength bar, stepping
   aside from city pins. Zoomed in, the leading unit's figure stands on the plate;

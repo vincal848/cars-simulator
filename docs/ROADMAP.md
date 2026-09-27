@@ -13,7 +13,7 @@ Victoria and Civilization V, reached in sprints that each land as their own comm
    less ornament, textured panels and stronger text contrast.
 3. **Army markers** (done): one marker per stack with the nation's colour and emblem, a
    regiment count and a strength bar, simplified when zoomed out.
-4. **Names on the map:** each nation's name lettered across its territory,
+4. **Names on the map** (done): each nation's name lettered across its territory,
    sea names in a light italic.
 5. **Painted artwork:** specifications for event illustrations and leader
    portraits, to be produced with an image generator or taken from public-domain

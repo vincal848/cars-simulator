@@ -144,6 +144,14 @@ layer, cached per set of hidden provinces. Pins, units, routes and labels are
 drawn over the atlas in screen space every frame. Each stack is one plate
 (`map/markers.py`); zoomed out, plates and city pins replace figures and towns.
 
+Zoomed out, nation names replace province names (`map/nation_labels.py`). Each
+nation's land is rasterised at two pixels per degree and split into connected
+territories; the principal axis of a territory and the midline of its land along
+that axis give a gently bent curve. The name is set along it at the largest size,
+and position, at which every letter stands on the territory, on two lines if one
+will not fit. Curves are cached per territory and only recomputed for nations
+whose land changed.
+
 ## Content and modding
 
 Everything a designer would tune is data under `src/cars/content/`:
