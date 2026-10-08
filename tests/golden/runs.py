@@ -42,11 +42,12 @@ from cars.ui.map.map_view import MAP_MODES
 from cars.ui.screens.game import GameScreen
 from cars.ui.screens.replay import ReplayScreen
 from cars.ui.screens.title import TitleScreen
-from cars.ui.typography import FONT_CHOICES, load_font
+from cars.ui.typography import FONT_CHOICES, TEXT, TITLE, load_font
 
 EXAMPLE_REPLAY = Path(__file__).resolve().parents[2] / "examples" / "opening.json"
 RECRUIT_KINDS = ("infantry", "scout", "cavalry", "artillery", "fleet", "balloon", "regional", "bogus")
 OFF_SCREEN = (-100, -100)
+FONT_SAMPLE_SIZES = range(8, 81)  # every pixel size the interface can ask for, at up to 200% scale
 
 
 def fingerprint(payload) -> str:
@@ -342,8 +343,18 @@ def environment(screen_font) -> dict:
     """What screenshot pixels depend on besides our code: pygame, SDL and system fonts."""
     samples = {}
     for index, (name, *_) in enumerate(FONT_CHOICES):
-        rendered = load_font(index, 15).render("Qg The Americas 1836", True, (255, 255, 255))
-        samples[name] = fingerprint(pygame.image.tobytes(rendered, "RGBA").hex())
+        # Glyph rasterisation differs between platforms at some pixel sizes only, so sample them all.
+        samples[name] = fingerprint(
+            [
+                pygame.image.tobytes(
+                    load_font(index, size, role, bold).render("Qg The Americas 1836", True, (255, 255, 255)),
+                    "RGBA",
+                ).hex()
+                for size in FONT_SAMPLE_SIZES
+                for role in (TEXT, TITLE)
+                for bold in (False, True)
+            ]
+        )
     rendered = screen_font.render("North Pacific", True, (255, 255, 255))
     samples["georgia"] = fingerprint(pygame.image.tobytes(rendered, "RGBA").hex())
     return dict(pygame=pygame.version.ver, sdl=".".join(map(str, pygame.get_sdl_version())), fonts=samples)

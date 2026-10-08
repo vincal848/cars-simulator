@@ -3,9 +3,9 @@
   "pygame": "2.5.8",
   "sdl": "2.32.10",
   "fonts": {
-   "Modern": "a54cb8664f404f54b24e19b54df9c377be5656a6e86dcc5fdbe08867d1a35613",
-   "Classic": "12fc8ddf9e21515a036c91b26f27dc7b59b712e7ee9b7da8e34342037f56dcac",
-   "Plain": "a54cb8664f404f54b24e19b54df9c377be5656a6e86dcc5fdbe08867d1a35613",
+   "Modern": "cdbcc0ebacabb2415a8cb0d70feb6bb8d9ebb9472e8447e6ca4e7890401971cd",
+   "Classic": "dde274c69d84d888e2fa2779bdd0e1701a05615b06e05fe0be0b880af3902919",
+   "Plain": "8cc20cefe5480893a5c848a7d8b3092e51b189e4973e13893d6f9d271e6eb5b7",
    "georgia": "aba0a6902811bd3b4d2fbf97a1d14fbbbae33688c5badc28d71374b57795d39a"
   }
  },
